@@ -1,0 +1,23 @@
+<resources>
+        <string name="title_activity_register">Register</string>
+
+    <!-- Strings related to register -->
+
+    <string name="data_tablet">Tablet</string>
+    <string name="data_server">Server</string>
+    <string name="prompt_ip_tablet">IP Tablet</string>
+    <string name="prompt_number_tablet">Number Tablet</string>
+    <string name="prompt_port_tablet">Port Tablet</string>
+    <string name="prompt_ip_server">IP Server</string>
+    <string name="prompt_port_server">Port Server</string>
+    <string name="action_register">Register</string>
+
+    <!-- Strings related to register -->
+    <string name="data_coin">Coin</string>
+    <string name="data_attendant">Attendant</string>
+
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+</resources>
