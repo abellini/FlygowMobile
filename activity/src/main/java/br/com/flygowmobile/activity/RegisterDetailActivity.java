@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -41,6 +42,11 @@ public class RegisterDetailActivity extends Activity {
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
 
     private Spinner spinnerCoin, spinnerAttendant;
+    private Map<Integer, String> spinnerCoinValues = new HashMap<Integer, String>();
+    private Map<Integer, String> spinnerAttendantValues = new HashMap<Integer, String>();
+    private int coinId;
+    private int attendantId;
+
     private View mProgressDetailView;
     private View mRegisterFormDetailView;
 
@@ -55,14 +61,16 @@ public class RegisterDetailActivity extends Activity {
 
         spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
         spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
+        mRegisterFormDetailView = findViewById(R.id.register_detail_form);
+        mProgressDetailView = findViewById(R.id.register_detail_progress);
         try {
             if (json != null) {
                 JSONObject jsonObject = new JSONObject(json);
                 JSONArray jsonCoins = jsonObject.getJSONArray("coins");
-                this.populateSpinner(jsonCoins, spinnerCoin);
+                this.populateSpinner("Coin", jsonCoins, spinnerCoin, spinnerCoinValues);
 
                 JSONArray jsonAttendants = jsonObject.getJSONArray("attendants");
-                this.populateSpinner(jsonAttendants, spinnerAttendant);
+                this.populateSpinner("Attendant", jsonAttendants, spinnerAttendant, spinnerAttendantValues);
 
             }
         } catch (Exception e) {
@@ -87,21 +95,47 @@ public class RegisterDetailActivity extends Activity {
         mRegisterDetailsTask.execute((Void) null);
     }
 
-    private void populateSpinner(JSONArray jsonArray, Spinner spinner) {
-        HashMap<Integer, String> list = new HashMap<Integer, String>();
+    private void populateSpinner(final String type, JSONArray jsonArray, Spinner spinner, final Map<Integer, String> store) {
+        List<String> list = new ArrayList<String>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
-                String name = obj.getString("name");
                 Integer id = obj.getInt("id");
-                list.put(id, name);
+                String name = obj.getString("name");
+                list.add(name);
+                store.put(id, name);
             }
 
-            ArrayAdapter<HashMap<Integer, String>> dataAdapter = new ArrayAdapter<HashMap<Integer, String>>(this,
-                    android.R.layout.simple_spinner_item);
-            dataAdapter.add(list);
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+
             dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             spinner.setAdapter(dataAdapter);
+            spinner.setOnItemSelectedListener(
+                    new AdapterView.OnItemSelectedListener() {
+                        public void onItemSelected(
+                                AdapterView<?> parent,
+                                View view,
+                                int position,
+                                long id) {
+                            int i = 0;
+                            for(Integer key : store.keySet()){
+                                if(i == position){
+                                    if(type.equals("Coin")){
+                                        coinId = key;
+                                    }else if (type.equals("Attendant")){
+                                        attendantId = key;
+                                    }
+                                }
+                                i++;
+                            }
+
+                        }
+
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    }
+            );
         } catch (Exception e) {
 
         }
@@ -186,7 +220,7 @@ public class RegisterDetailActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                String tabletDetailsJson = "{coin: \"" + coin + "\", attendant: \" " + attendant + "\"}";
+                String tabletDetailsJson = "{coin: " + coinId + ", attendant: " + attendantId + "}";
                 NameValuePair valuePair = new BasicNameValuePair("tabletDetailsJson", tabletDetailsJson);
                 return ServiceHandler.makeServiceCall(URL, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
