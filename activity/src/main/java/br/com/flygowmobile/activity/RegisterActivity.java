@@ -173,14 +173,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             cancel = true;
         }
 
-
-        // Check for a valid password, if the user entered one.
-        //if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
-        //   mPasswordView.setError(getString(R.string.error_invalid_password));
-        //    focusView = mPasswordView;
-        //    cancel = true;
-        //}
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -199,15 +191,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         }
 
     }
-    //private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        //return email.contains("@");
-    //}
-
-    //private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        //return password.length() > 4;
-    //}
 
     /**
      * Shows the progress UI and hides the login form.
@@ -264,19 +247,10 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<String>();
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
-            cursor.moveToNext();
-        }
-
-        //addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
     }
 
     private interface ProfileQuery {
@@ -288,18 +262,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
-
-    /**
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(RegisterActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
-    */
 
     /**
      * Represents an asynchronous registration task used to salve Tablet
