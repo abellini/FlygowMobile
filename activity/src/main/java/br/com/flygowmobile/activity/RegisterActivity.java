@@ -269,7 +269,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     public class RegisterTabletTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet tablet;
-        private final static String URL = "http://192.168.1.101:8082/flygow/webservice/connect";
+        private final static String URL = "http://192.168.1.34:8080/flygow/webservice/connect";
 
         RegisterTabletTask(Tablet tablet) {
             this.tablet = tablet;

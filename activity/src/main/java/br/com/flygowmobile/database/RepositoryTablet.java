@@ -116,6 +116,24 @@ public class RepositoryTablet extends Repository<Tablet> {
         return null;
     }
 
+    public Tablet findFirst() {
+        Cursor c = db.query(true, Tablets.TABLE_NAME, Tablet.columns, null, null, null, null, null, null);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            Tablet tablet = new Tablet();
+            tablet.setTabletId(c.getLong(0));
+            tablet.setNumber(c.getInt(1));
+            tablet.setCoinId(c.getInt(2));
+            tablet.setIp(c.getString(3));
+            tablet.setPort(c.getInt(4));
+            tablet.setServerIP(c.getString(5));
+            tablet.setServerPort(c.getInt(6));
+            tablet.setAttendantId(c.getInt(7));
+            return tablet;
+        }
+        return null;
+    }
+
     @Override
     public Cursor getCursor() {
         return db.query(Tablets.TABLE_NAME, Tablet.columns, null, null, null, null, null, null);

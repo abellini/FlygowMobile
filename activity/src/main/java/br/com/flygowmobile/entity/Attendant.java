@@ -12,8 +12,7 @@ public class Attendant implements Serializable {
     private String lastName;
     private String address;
     private Date birthDate;
-    private Date registrationDate;
-    private String photoName;
+    private String photo;
     private String login;
     private String password;
     private String email;
@@ -24,8 +23,7 @@ public class Attendant implements Serializable {
             RepositoryAttendant.Attendants.COLUMN_NAME_LAST_NAME,
             RepositoryAttendant.Attendants.COLUMN_NAME_ADDRESS,
             RepositoryAttendant.Attendants.COLUMN_NAME_BIRTH_DATE,
-            RepositoryAttendant.Attendants.COLUMN_NAME_REGISTRATION_DATE,
-            RepositoryAttendant.Attendants.COLUMN_NAME_PHOTO_NAME,
+            RepositoryAttendant.Attendants.COLUMN_NAME_PHOTO,
             RepositoryAttendant.Attendants.COLUMN_NAME_LOGIN,
             RepositoryAttendant.Attendants.COLUMN_NAME_PASSWORD,
             RepositoryAttendant.Attendants.COLUMN_NAME_EMAIL
@@ -33,14 +31,13 @@ public class Attendant implements Serializable {
 
     public Attendant() {}
 
-    public Attendant(long attendantId, String name, String lastName, String address, Date birthDate, Date registrationDate, String photoName, String login, String password, String email) {
+    public Attendant(long attendantId, String name, String lastName, String address, Date birthDate, String photoName, String login, String password, String email) {
         this.setAttendantId(attendantId);
         this.setName(name);
         this.setLastName(lastName);
         this.setAddress(address);
         this.setBirthDate(birthDate);
-        this.setRegistrationDate(registrationDate);
-        this.setPhotoName(photoName);
+        this.setPhoto(photoName);
         this.setLogin(login);
         this.setPassword(password);
         this.setEmail(email);
@@ -78,20 +75,12 @@ public class Attendant implements Serializable {
         this.birthDate = birthDate;
     }
 
-    public Date getRegistrationDate() {
-        return registrationDate;
+    public String getPhoto() {
+        return photo;
     }
 
-    public void setRegistrationDate(Date registrationDate) {
-        this.registrationDate = registrationDate;
-    }
-
-    public String getPhotoName() {
-        return photoName;
-    }
-
-    public void setPhotoName(String photoName) {
-        this.photoName = photoName;
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 
     public String getLogin() {
@@ -133,8 +122,7 @@ public class Attendant implements Serializable {
                 "\"lastName\": " + getLastName() + ", " +
                 "\"address\": " + getAddress() + ", " +
                 "\"birthDate\": " + getBirthDate() + ", " +
-                "\"registrationDate\": " + getRegistrationDate() + ", " +
-                "\"photoName\": " + getPhotoName() + ", " +
+                "\"photo\": " + getPhoto() + ", " +
                 "\"login\": " + getLogin() + ", " +
                 "\"password\": " + getPassword() + ", " +
                 "\"email\": " + "\"" + getEmail() +

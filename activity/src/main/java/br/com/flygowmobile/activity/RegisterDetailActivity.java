@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,12 +24,19 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.flygowmobile.Utils.StringUtils;
+import br.com.flygowmobile.database.RepositoryAttendant;
+import br.com.flygowmobile.database.RepositoryCoin;
+import br.com.flygowmobile.database.RepositoryTablet;
+import br.com.flygowmobile.entity.Attendant;
+import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.service.ServiceHandler;
 
@@ -39,7 +44,9 @@ import br.com.flygowmobile.service.ServiceHandler;
 public class RegisterDetailActivity extends Activity {
 
     private static final String REGISTER_DETAIL_ACTIVITY = "RegisterDetailActivity";
+
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
+    final SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
 
     private Spinner spinnerCoin, spinnerAttendant;
     private Map<Integer, String> spinnerCoinValues = new HashMap<Integer, String>();
@@ -50,14 +57,26 @@ public class RegisterDetailActivity extends Activity {
     private View mProgressDetailView;
     private View mRegisterFormDetailView;
 
+    public static RepositoryCoin repositoryCoin;
+    public static RepositoryAttendant repositoryAttendant;
+    public static RepositoryTablet repositoryTablet;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_detail);
 
+
+
         // Get Params
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("jsonObject");
+
+        // Repositories
+        repositoryCoin = new RepositoryCoin(this);
+        repositoryAttendant = new RepositoryAttendant(this);
+        repositoryTablet = new RepositoryTablet(this);
 
         spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
         spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
@@ -66,12 +85,12 @@ public class RegisterDetailActivity extends Activity {
         try {
             if (json != null) {
                 JSONObject jsonObject = new JSONObject(json);
+
                 JSONArray jsonCoins = jsonObject.getJSONArray("coins");
-                this.populateSpinner("Coin", jsonCoins, spinnerCoin, spinnerCoinValues);
+                this.populateSpinnerCoin(jsonCoins, spinnerCoin, spinnerCoinValues);
 
                 JSONArray jsonAttendants = jsonObject.getJSONArray("attendants");
-                this.populateSpinner("Attendant", jsonAttendants, spinnerAttendant, spinnerAttendantValues);
-
+                this.populateSpinnerAttendant(jsonAttendants, spinnerAttendant, spinnerAttendantValues);
             }
         } catch (Exception e) {
 
@@ -95,13 +114,22 @@ public class RegisterDetailActivity extends Activity {
         mRegisterDetailsTask.execute((Void) null);
     }
 
-    private void populateSpinner(final String type, JSONArray jsonArray, Spinner spinner, final Map<Integer, String> store) {
+    private void populateSpinnerCoin(JSONArray jsonArray, Spinner spinner, final Map<Integer, String> store) {
         List<String> list = new ArrayList<String>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject obj = jsonArray.getJSONObject(i);
+
                 Integer id = obj.getInt("id");
                 String name = obj.getString("name");
+
+                Coin coin = new Coin();
+                coin.setCoinId(obj.getInt("id"));
+                coin.setName(obj.getString("name"));
+                coin.setSymbol(obj.getString("symbol"));
+                coin.setConversion(obj.getDouble("conversion"));
+                repositoryCoin.save(coin);
+
                 list.add(name);
                 store.put(id, name);
             }
@@ -119,13 +147,66 @@ public class RegisterDetailActivity extends Activity {
                                 int position,
                                 long id) {
                             int i = 0;
-                            for(Integer key : store.keySet()){
-                                if(i == position){
-                                    if(type.equals("Coin")){
-                                        coinId = key;
-                                    }else if (type.equals("Attendant")){
-                                        attendantId = key;
-                                    }
+                            for (Integer key : store.keySet()) {
+                                if (i == position) {
+                                    coinId = key;
+                                }
+                            }
+                            i++;
+                        }
+
+                        public void onNothingSelected(AdapterView<?> parent) {
+                        }
+                    }
+            );
+        } catch (Exception e) {
+            Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
+        }
+    }
+
+    private void populateSpinnerAttendant(JSONArray jsonArray, Spinner spinner, final Map<Integer, String> store) {
+        List<String> list = new ArrayList<String>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                Integer id = obj.getInt("id");
+                String name = obj.getString("name");
+
+                Attendant attendant = new Attendant();
+
+                attendant.setAttendantId(obj.getInt("id"));
+                attendant.setName(obj.getString("name"));
+                attendant.setLastName(obj.getString("lastName"));
+                attendant.setAddress(obj.getString("address"));
+                attendant.setBirthDate(parser.parse(obj.getString("birthDate")));
+                attendant.setPhoto(obj.getString("photo"));
+                attendant.setLogin(obj.getString("login"));
+                attendant.setPassword(obj.getString("password"));
+                attendant.setEmail(obj.getString("email"));
+
+                repositoryAttendant.save(attendant);
+
+                list.add(name);
+                store.put(id, name);
+            }
+
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, list);
+
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(dataAdapter);
+            spinner.setOnItemSelectedListener(
+                    new AdapterView.OnItemSelectedListener() {
+                        public void onItemSelected(
+                                AdapterView<?> parent,
+                                View view,
+                                int position,
+                                long id) {
+                            int i = 0;
+                            for (Integer key : store.keySet()) {
+                                if (i == position) {
+                                    attendantId = key;
                                 }
                                 i++;
                             }
@@ -137,7 +218,7 @@ public class RegisterDetailActivity extends Activity {
                     }
             );
         } catch (Exception e) {
-
+            Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
         }
     }
 
@@ -198,6 +279,18 @@ public class RegisterDetailActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void saveCoins(JSONArray jsonCoins) {
+        try {
+            for (int i = 0; i < jsonCoins.length(); i++) {
+                JSONObject obj = jsonCoins.getJSONObject(i);
+
+            }
+        } catch (Exception e) {
+
+        }
+
+    }
+
 
     /**
      * Represents an asynchronous registration task used to salve Tablet
@@ -207,7 +300,7 @@ public class RegisterDetailActivity extends Activity {
         private String coin;
         private String attendant;
         private List<String> promotions;
-        private final static String URL = "http://192.168.1.101:8082/flygow/webservice/registerDetails";
+        private final static String URL = "http://192.168.1.34:8080/flygow/webservice/registerDetails";
 
 
         public RegisterDetailsTabletTask(String coin, String attendant, List<String> promotions) {
@@ -220,7 +313,9 @@ public class RegisterDetailActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                String tabletDetailsJson = "{coin: " + coinId + ", attendant: " + attendantId + "}";
+                Tablet tablet
+                 = repositoryTablet.findFirst();
+                String tabletDetailsJson = "{tablet: "+ tablet.getNumber() + "coin: " + coinId + ", attendant: " + attendantId + "}";
                 NameValuePair valuePair = new BasicNameValuePair("tabletDetailsJson", tabletDetailsJson);
                 return ServiceHandler.makeServiceCall(URL, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
@@ -265,4 +360,7 @@ public class RegisterDetailActivity extends Activity {
             showProgress(false);
         }
     }
+
+
+
 }
