@@ -39,10 +39,14 @@ public class RepositoryCoin extends Repository<Coin> {
     @Override
     public long save(Coin coin) {
         long id = coin.getCoinId();
-        if (id != 0) {
-            update(coin);
+
+        Coin c = findById(id);
+        if (c != null) {
+            if (c.getCoinId() != 0) {
+                this.update(coin);
+            }
         } else {
-            id = insert(coin);
+            id = this.insert(coin);
         }
         return id;
     }
@@ -60,7 +64,7 @@ public class RepositoryCoin extends Repository<Coin> {
     }
 
     @Override
-    public long insert(Coin coin) {
+    protected long insert(Coin coin) {
 
         ContentValues values = populateContentValues(coin);
         long id = db.insert(Coins.TABLE_NAME, "", values);
@@ -69,7 +73,7 @@ public class RepositoryCoin extends Repository<Coin> {
     }
 
     @Override
-    public int update(Coin coin) {
+    protected int update(Coin coin) {
 
         ContentValues values = populateContentValues(coin);
         String _id = String.valueOf(coin.getCoinId());

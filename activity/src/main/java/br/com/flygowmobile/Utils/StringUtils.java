@@ -1,16 +1,21 @@
 package br.com.flygowmobile.Utils;
 
 
+import android.util.Log;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
 
 public class StringUtils {
 
-    final SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-ddTHH:mm:ss.sss");
+    public static final String parseDate(Date date) {
 
-    public final String parseDate(Date date) {
+        final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 
-        return parser.format(date);
+        return df.format(date);
     }
 
 }

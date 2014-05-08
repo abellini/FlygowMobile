@@ -1,5 +1,6 @@
 package br.com.flygowmobile.database;
 
+import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -44,10 +45,14 @@ public class RepositoryTablet extends Repository<Tablet> {
     @Override
     public long save(Tablet tablet) {
         long id = tablet.getTabletId();
-        if (id != 0) {
-            update(tablet);
+
+        Tablet tab = findById(id);
+        if (tab != null) {
+            if (tab.getTabletId() != 0) {
+                update(tablet);
+            }
         } else {
-          id = insert(tablet);
+            id = insert(tablet);
         }
         return id;
     }
@@ -68,7 +73,7 @@ public class RepositoryTablet extends Repository<Tablet> {
     }
 
     @Override
-    public long insert(Tablet tablet) {
+    protected long insert(Tablet tablet) {
 
         ContentValues values = populateContentValues(tablet);
         long id = db.insert(Tablets.TABLE_NAME, "", values);
@@ -77,7 +82,7 @@ public class RepositoryTablet extends Repository<Tablet> {
     }
 
     @Override
-    public int update(Tablet tablet) {
+    protected int update(Tablet tablet) {
         ContentValues values = populateContentValues(tablet);
         String _id = String.valueOf(tablet.getTabletId());
         String where = Tablets.COLUMN_NAME_TABLET_ID + "=?";

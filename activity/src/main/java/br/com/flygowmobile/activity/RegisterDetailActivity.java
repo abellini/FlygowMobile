@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.impl.cookie.DateUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -129,6 +130,7 @@ public class RegisterDetailActivity extends Activity {
                 coin.setName(obj.getString("name"));
                 coin.setSymbol(obj.getString("symbol"));
                 coin.setConversion(obj.getDouble("conversion"));
+                repositoryCoin.save(coin);
 
                 list.add(name);
                 store.put(id, name);
@@ -179,10 +181,13 @@ public class RegisterDetailActivity extends Activity {
                 attendant.setName(obj.getString("name"));
                 attendant.setLastName(obj.getString("lastName"));
                 attendant.setAddress(obj.getString("address"));
-                attendant.setBirthDate(parser.parse(obj.getString("birthDate")));
+                attendant.setBirthDate(DateUtils.parseDate(obj.getString("birthDate")));
+                attendant.setPhoto(obj.getString("photo"));
                 attendant.setLogin(obj.getString("login"));
                 attendant.setPassword(obj.getString("password"));
                 attendant.setEmail(obj.getString("email"));
+
+                repositoryAttendant.save(attendant);
 
                 list.add(name);
                 store.put(id, name);

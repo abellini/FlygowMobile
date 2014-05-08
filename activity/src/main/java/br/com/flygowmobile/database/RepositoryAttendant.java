@@ -47,12 +47,15 @@ public class RepositoryAttendant extends Repository<Attendant> {
 
     @Override
     public long save(Attendant attendant) {
-
         long id = attendant.getAttendantId();
-        if (id != 0) {
-            update(attendant);
+
+        Attendant attend = findById(id);
+        if (attend != null) {
+            if (attend.getAttendantId() != 0) {
+                this.update(attendant);
+            }
         } else {
-            id = insert(attendant);
+            id = this.insert(attendant);
         }
         return id;
     }
@@ -75,7 +78,7 @@ public class RepositoryAttendant extends Repository<Attendant> {
     }
 
     @Override
-    public long insert(Attendant attendant) {
+    protected long insert(Attendant attendant) {
 
         ContentValues values = populateContentValues(attendant);
         long id = db.insert(Attendants.TABLE_NAME, "", values);
@@ -84,7 +87,7 @@ public class RepositoryAttendant extends Repository<Attendant> {
     }
 
     @Override
-    public int update(Attendant attendant) {
+    protected int update(Attendant attendant) {
 
         ContentValues values = populateContentValues(attendant);
         String _id = String.valueOf(attendant.getAttendantId());

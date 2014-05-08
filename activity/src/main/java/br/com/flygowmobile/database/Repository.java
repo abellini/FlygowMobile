@@ -15,9 +15,9 @@ public abstract class Repository<T> {
 
     abstract protected ContentValues populateContentValues(T obj);
 
-    abstract public long insert(T obj);
+    abstract protected long insert(T obj);
 
-    abstract public int update(T obj);
+    abstract protected int update(T obj);
 
     abstract public int delete(long id);
 
