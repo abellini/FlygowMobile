@@ -30,14 +30,14 @@ import org.json.JSONObject;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
+import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.service.ServiceHandler;
+import br.com.flygowmobile.Utils.FlygowServerUrl;
 
 public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor>{
 
@@ -183,6 +183,10 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             int nNumber = Integer.parseInt(numero);
             int nport = Integer.parseInt(port);
             int nserverPort = Integer.parseInt(serverPort);
+
+            FlygowServerUrl url = (FlygowServerUrl)getApplication();
+            url.setServerIp(serverIP);
+            url.setServerPort(serverPort);
             Tablet tablet = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
 
             showProgress(true);
@@ -269,7 +273,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     public class RegisterTabletTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet tablet;
-        private final static String URL = "http://192.168.1.34:8080/flygow/webservice/connect";
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
+        String url = serverAddressObj.getServerUrl(ServerController.CONNECT);
 
         RegisterTabletTask(Tablet tablet) {
             this.tablet = tablet;
@@ -280,7 +285,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             try {
                 String tabletJson = tablet.toJSONInitialConfig();
                 NameValuePair valuePair = new BasicNameValuePair("tabletJson", tabletJson);
-                return ServiceHandler.makeServiceCall(URL, ServiceHandler.POST, Arrays.asList(valuePair));
+                Log.i(REGISTER_ACTIVITY, "URL -->>>>>>>> " + url);
+                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
                 Log.i(REGISTER_ACTIVITY, "Timeout");
             } catch (Exception e) {

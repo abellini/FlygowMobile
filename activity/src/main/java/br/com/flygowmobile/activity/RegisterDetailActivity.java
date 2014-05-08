@@ -31,14 +31,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Attendant;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Tablet;
+import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.service.ServiceHandler;
+import br.com.flygowmobile.Utils.FlygowServerUrl;
 
 
 public class RegisterDetailActivity extends Activity {
@@ -46,7 +47,7 @@ public class RegisterDetailActivity extends Activity {
     private static final String REGISTER_DETAIL_ACTIVITY = "RegisterDetailActivity";
 
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
-    final SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+    final SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
 
     private Spinner spinnerCoin, spinnerAttendant;
     private Map<Integer, String> spinnerCoinValues = new HashMap<Integer, String>();
@@ -128,7 +129,6 @@ public class RegisterDetailActivity extends Activity {
                 coin.setName(obj.getString("name"));
                 coin.setSymbol(obj.getString("symbol"));
                 coin.setConversion(obj.getDouble("conversion"));
-                repositoryCoin.save(coin);
 
                 list.add(name);
                 store.put(id, name);
@@ -180,12 +180,9 @@ public class RegisterDetailActivity extends Activity {
                 attendant.setLastName(obj.getString("lastName"));
                 attendant.setAddress(obj.getString("address"));
                 attendant.setBirthDate(parser.parse(obj.getString("birthDate")));
-                attendant.setPhoto(obj.getString("photo"));
                 attendant.setLogin(obj.getString("login"));
                 attendant.setPassword(obj.getString("password"));
                 attendant.setEmail(obj.getString("email"));
-
-                repositoryAttendant.save(attendant);
 
                 list.add(name);
                 store.put(id, name);
@@ -300,7 +297,8 @@ public class RegisterDetailActivity extends Activity {
         private String coin;
         private String attendant;
         private List<String> promotions;
-        private final static String URL = "http://192.168.1.34:8080/flygow/webservice/registerDetails";
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
+        String url = serverAddressObj.getServerUrl(ServerController.REGISTER_DETAILS);
 
 
         public RegisterDetailsTabletTask(String coin, String attendant, List<String> promotions) {
@@ -315,9 +313,10 @@ public class RegisterDetailActivity extends Activity {
             try {
                 Tablet tablet
                  = repositoryTablet.findFirst();
-                String tabletDetailsJson = "{tablet: "+ tablet.getNumber() + "coin: " + coinId + ", attendant: " + attendantId + "}";
+                String tabletDetailsJson = "{tabletNumber: "+ tablet.getNumber() + ", coinId: " + coinId + ", attendantId: " + attendantId + "}";
                 NameValuePair valuePair = new BasicNameValuePair("tabletDetailsJson", tabletDetailsJson);
-                return ServiceHandler.makeServiceCall(URL, ServiceHandler.POST, Arrays.asList(valuePair));
+                Log.i(REGISTER_DETAIL_ACTIVITY, "URL -->>>>>>>> " + url);
+                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
                 Log.i(REGISTER_DETAIL_ACTIVITY, "Timeout");
             } catch (Exception e) {

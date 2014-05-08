@@ -9,12 +9,15 @@ import android.util.Log;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.SimpleTimeZone;
+import java.util.TimeZone;
 
 import br.com.flygowmobile.entity.Attendant;
 
 public class RepositoryAttendant extends Repository<Attendant> {
 
-    final SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+    final SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
 
     private static final String REPOSITORY_ATTENDANT = "RepositoryAttendant";
 
