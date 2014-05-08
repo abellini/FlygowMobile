@@ -24,8 +24,6 @@ public class MainActivity extends Activity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    public FlygowServerUrl FlygowURL;
-
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
