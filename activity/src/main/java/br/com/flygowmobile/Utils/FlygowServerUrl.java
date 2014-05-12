@@ -15,14 +15,14 @@ public class FlygowServerUrl extends Application{
     private static String PATH_SEPARATOR = "/";
 
     private String serverIp;
-    private String serverPort;
+    private int serverPort;
 
     public FlygowServerUrl(){
         this.serverIp = "127.0.0.1";
-        this.serverPort = "8080";
+        this.serverPort = 8080;
     }
 
-    public FlygowServerUrl(String serverIp, String serverPort){
+    public FlygowServerUrl(String serverIp, int serverPort){
         this.serverIp = serverIp;
         this.serverPort = serverPort;
     }
@@ -35,11 +35,11 @@ public class FlygowServerUrl extends Application{
         this.serverIp = serverIp;
     }
 
-    public String getServerPort() {
+    public int getServerPort() {
         return serverPort;
     }
 
-    public void setServerPort(String serverPort) {
+    public void setServerPort(int serverPort) {
         this.serverPort = serverPort;
     }
 

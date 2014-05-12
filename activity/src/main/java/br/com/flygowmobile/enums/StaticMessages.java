@@ -3,15 +3,15 @@ package br.com.flygowmobile.enums;
 /**
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
-public enum ServerController {
-    PING("ping"),
-    CONNECT("connect"),
-    REGISTER_DETAILS("registerDetails")
+public enum StaticMessages {
+    TIMEOUT("ping"),
+    NOT_SERVICE("connect"),
+    WAIT("Wait...")
     ;
 
     private String name;
 
-    ServerController(String name) {
+    StaticMessages(String name) {
         this.name = name;
     }
 

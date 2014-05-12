@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.impl.cookie.DateUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -31,6 +30,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCoin;
@@ -39,6 +39,7 @@ import br.com.flygowmobile.entity.Attendant;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
+import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.service.ServiceHandler;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 
@@ -51,8 +52,8 @@ public class RegisterDetailActivity extends Activity {
     final SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
 
     private Spinner spinnerCoin, spinnerAttendant;
-    private Map<Integer, String> spinnerCoinValues = new HashMap<Integer, String>();
-    private Map<Integer, String> spinnerAttendantValues = new HashMap<Integer, String>();
+    private Map<Integer, String> spinnerCoinValues = new TreeMap<Integer, String>();
+    private Map<Integer, String> spinnerAttendantValues = new TreeMap<Integer, String>();
     private int coinId;
     private int attendantId;
 
@@ -73,7 +74,7 @@ public class RegisterDetailActivity extends Activity {
 
         // Get Params
         Bundle bundle = getIntent().getExtras();
-        String json = bundle.getString("jsonObject");
+        String json = bundle.getString("jsonDetailDomain");
 
         // Repositories
         repositoryCoin = new RepositoryCoin(this);
@@ -130,7 +131,6 @@ public class RegisterDetailActivity extends Activity {
                 coin.setName(obj.getString("name"));
                 coin.setSymbol(obj.getString("symbol"));
                 coin.setConversion(obj.getDouble("conversion"));
-                repositoryCoin.save(coin);
 
                 list.add(name);
                 store.put(id, name);
@@ -153,8 +153,8 @@ public class RegisterDetailActivity extends Activity {
                                 if (i == position) {
                                     coinId = key;
                                 }
+                                i++;
                             }
-                            i++;
                         }
 
                         public void onNothingSelected(AdapterView<?> parent) {
@@ -181,13 +181,10 @@ public class RegisterDetailActivity extends Activity {
                 attendant.setName(obj.getString("name"));
                 attendant.setLastName(obj.getString("lastName"));
                 attendant.setAddress(obj.getString("address"));
-                attendant.setBirthDate(DateUtils.parseDate(obj.getString("birthDate")));
-                attendant.setPhoto(obj.getString("photo"));
+                attendant.setBirthDate(parser.parse(obj.getString("birthDate")));
                 attendant.setLogin(obj.getString("login"));
                 attendant.setPassword(obj.getString("password"));
                 attendant.setEmail(obj.getString("email"));
-
-                repositoryAttendant.save(attendant);
 
                 list.add(name);
                 store.put(id, name);
@@ -212,7 +209,6 @@ public class RegisterDetailActivity extends Activity {
                                 }
                                 i++;
                             }
-
                         }
 
                         public void onNothingSelected(AdapterView<?> parent) {
@@ -316,16 +312,17 @@ public class RegisterDetailActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                Tablet tablet
-                 = repositoryTablet.findFirst();
+                Tablet tablet = repositoryTablet.findLast();
                 String tabletDetailsJson = "{tabletNumber: "+ tablet.getNumber() + ", coinId: " + coinId + ", attendantId: " + attendantId + "}";
                 NameValuePair valuePair = new BasicNameValuePair("tabletDetailsJson", tabletDetailsJson);
                 Log.i(REGISTER_DETAIL_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Timeout");
+                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.TIMEOUT.getName());
+                Toast.makeText(RegisterDetailActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Not Service");
+                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                Toast.makeText(RegisterDetailActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
             return "";
         }
@@ -349,12 +346,13 @@ public class RegisterDetailActivity extends Activity {
                     //it.putExtra("jsonObject", jsonObject.toString());
                     //startActivity(it);// TODO: Próxima tela
 
-                    finish();
+                    //finish();
                 } else {
                     Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Not Service");
+                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                Toast.makeText(RegisterDetailActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
         }
 

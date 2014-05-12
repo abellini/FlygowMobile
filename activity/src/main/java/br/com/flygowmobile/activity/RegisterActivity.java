@@ -26,6 +26,7 @@ import android.widget.Toast;
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.net.InetAddress;
@@ -36,6 +37,7 @@ import java.util.Enumeration;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
+import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.service.ServiceHandler;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 
@@ -72,22 +74,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         mserverIP = (EditText) findViewById(R.id.ip_server);
         mserverPort = (EditText) findViewById(R.id.port_server);
 
-        populateFields();
-
-        //populateAutoComplete();
-
-        //mPasswordView = (EditText) findViewById(R.id.password);
-        //mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-        //    @Override
-        //    public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-        //        if (id == R.id.login || id == EditorInfo.IME_NULL) {
-        //            attemptLogin();
-        //            return true;
-        //        }
-        //        return false;
-        //    }
-        //});
-
         Button mRegisterButton = (Button) findViewById(R.id.registger_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -98,10 +84,39 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
         mRegisterFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.register_progress);
+
+        Bundle bundle = getIntent().getExtras();
+        boolean hasConfigs = bundle.getBoolean("configs");
+        if(hasConfigs){
+            populateFields(bundle.getString("configData"));
+        }else{
+            populateFields(null);
+        }
     }
 
-    private void populateFields() {
+    private void populateFields(String configData) {
+        if(configData != null){
+            try {
+                JSONObject jsonConfigData = new JSONObject(configData);
+                mNumero.setText(jsonConfigData.getString("number"));
+                if(getCurrentTabletIP().equals(jsonConfigData.getString("ip"))){
+                    mip.setText(jsonConfigData.getString("ip"));
+                }else{
+                    mip.setText(getCurrentTabletIP());
+                }
+                mport.setText(jsonConfigData.getString("port"));
+                mserverIP.setText(jsonConfigData.getString("serverIP"));
+                mserverPort.setText(jsonConfigData.getString("serverPort"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            mip.setText(getCurrentTabletIP());
+        }
+    }
 
+    private String getCurrentTabletIP(){
+        String ipHost = "";
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
                  en.hasMoreElements();) {
@@ -109,14 +124,14 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
                 for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
-                        String ipHost = inetAddress.getHostAddress().toString();
-                        mip.setText(ipHost);
+                        ipHost = inetAddress.getHostAddress().toString();
                     }
                 }
             }
         } catch (Exception ex) {
             Log.e("IP Address", ex.toString());
         }
+        return ipHost;
     }
 
     private void populateAutoComplete() {
@@ -186,7 +201,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
             FlygowServerUrl url = (FlygowServerUrl)getApplication();
             url.setServerIp(serverIP);
-            url.setServerPort(serverPort);
+            url.setServerPort(Integer.parseInt(serverPort));
             Tablet tablet = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
 
             showProgress(true);
@@ -288,9 +303,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
                 Log.i(REGISTER_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
-                Log.i(REGISTER_ACTIVITY, "Timeout");
+                Log.i(REGISTER_ACTIVITY, StaticMessages.TIMEOUT.getName());
+                Toast.makeText(RegisterActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Log.i(REGISTER_ACTIVITY, "Not Service");
+                Log.i(REGISTER_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                Toast.makeText(RegisterActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
             return "";
         }
@@ -311,7 +328,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
                     Log.i(REGISTER_ACTIVITY, "Salved record(s)");
 
                     Intent it = new Intent(RegisterActivity.this, RegisterDetailActivity.class);
-                    it.putExtra("jsonObject", jsonObject.toString());
+                    it.putExtra("jsonDetailDomain", jsonObject.toString());
                     startActivity(it);
 
                     finish();
@@ -319,7 +336,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
                     mNumero.requestFocus();
                 }
             } catch (Exception e) {
-                Log.i(REGISTER_ACTIVITY, "Not Service");
+                Log.i(REGISTER_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                Toast.makeText(RegisterActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
         }
 
