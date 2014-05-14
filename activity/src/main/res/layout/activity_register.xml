@@ -51,6 +51,14 @@
                     android:singleLine="true"
                     />
 
+                <TextView
+                    android:id="@+id/textTabletIP"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/prompt_ip_tablet"
+                    />
+
                 <EditText
                     android:id="@+id/ip_tablet"
                     android:layout_width="match_parent"
@@ -59,6 +67,14 @@
                     android:maxLines="1"
                     android:ems="10"
                     android:singleLine="true"
+                    />
+
+                <TextView
+                    android:id="@+id/textTabletPort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/prompt_port_tablet"
                     />
 
                 <EditText
@@ -71,7 +87,7 @@
                     android:singleLine="true"/>
 
                 <TextView
-                    android:id="@+id/textServer"
+                    android:id="@+id/textServerIP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
@@ -86,6 +102,14 @@
                     android:maxLines="1"
                     android:ems="10"
                     android:singleLine="true"
+                    />
+
+                <TextView
+                    android:id="@+id/textServerPort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="@string/prompt_port_server"
                     />
 
                 <EditText

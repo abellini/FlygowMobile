@@ -59,6 +59,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     private View mProgressView;
     private View mRegisterFormView;
 
+    private Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +87,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         mRegisterFormView = findViewById(R.id.register_form);
         mProgressView = findViewById(R.id.register_progress);
 
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
         boolean hasConfigs = bundle.getBoolean("configs");
         if(hasConfigs){
             populateFields(bundle.getString("configData"));
@@ -299,9 +301,11 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         protected String doInBackground(Void... params) {
             try {
                 String tabletJson = tablet.toJSONInitialConfig();
-                NameValuePair valuePair = new BasicNameValuePair("tabletJson", tabletJson);
+                String isReconnect = bundle.getString("isReconnect");
+                NameValuePair tabletJsonPair = new BasicNameValuePair("tabletJson", tabletJson);
+                NameValuePair isReconnectPair = new BasicNameValuePair("isReconnect", isReconnect);
                 Log.i(REGISTER_ACTIVITY, "URL -->>>>>>>> " + url);
-                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
+                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(tabletJsonPair, isReconnectPair));
             } catch (HttpHostConnectException ex) {
                 Log.i(REGISTER_ACTIVITY, StaticMessages.TIMEOUT.getName());
                 Toast.makeText(RegisterActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();

@@ -60,6 +60,19 @@
             android:layout_alignTop="@+id/register_detail_form"
             android:layout_centerHorizontal="true" />
 
+        <TextView
+            android:id="@+id/textAdvertisement"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/data_advertisements"
+            />
+
+        <br.com.flygowmobile.custom.MultiSelectionSpinner
+            android:id="@+id/spinnerAdvertisements"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
         <Button
             android:id="@+id/register_detail_button"
             style="?android:textAppearanceSmall"

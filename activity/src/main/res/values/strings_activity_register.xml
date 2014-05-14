@@ -15,6 +15,7 @@
     <!-- Strings related to register -->
     <string name="data_coin">Coin</string>
     <string name="data_attendant">Attendant</string>
+    <string name="data_advertisements">Advertisements</string>
 
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>

@@ -1,6 +1,7 @@
 package br.com.flygowmobile.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,12 +17,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Arrays;
 
+import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.database.RepositoryScript;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
+import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.ServiceHandler;
 
 
@@ -30,13 +33,16 @@ public class SplashScreen extends Activity implements Runnable {
     private final int DELAY = 1000;
     public static RepositoryTablet repositoryTablet;
     private static final String SPLASH_SCREEN_ACTIVITY = "SplashScreen";
+    private ProgressDialog progressDialog;
+    private ProgressDialog loadServerDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
         repositoryTablet = new RepositoryTablet(this);
-        Toast.makeText(SplashScreen.this, StaticMessages.WAIT.getName(), Toast.LENGTH_SHORT).show();
+        progressDialog = ProgressDialog.show(SplashScreen.this, StaticTitles.LOAD.getName(),
+              StaticMessages.WAIT.getName(), true);
         Handler h = new Handler();
         h.postDelayed(this, DELAY);
 
@@ -62,9 +68,13 @@ public class SplashScreen extends Activity implements Runnable {
         Intent it = new Intent(this, RegisterActivity.class);;
         if(configs == null){
             it.putExtra("configs", false);
+            progressDialog.dismiss();
             startActivity(it);
             finish();
         } else {
+            progressDialog.dismiss();
+            loadServerDialog = ProgressDialog.show(SplashScreen.this, StaticTitles.LOAD.getName(),
+                    StaticMessages.CALL_CONFIGURATION_FROM_SERVER.getName(), true);
             PingTask task = new PingTask(configs);
             task.execute((Void) null);
         }
@@ -95,32 +105,43 @@ public class SplashScreen extends Activity implements Runnable {
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePairJson, reconnect));
             } catch (HttpHostConnectException ex) {
                 Log.i(SPLASH_SCREEN_ACTIVITY, StaticMessages.TIMEOUT.getName());
-                Toast.makeText(SplashScreen.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
+                loadServerDialog.dismiss();
+                return StaticMessages.TIMEOUT.getName();
             } catch (Exception e) {
                 Log.i(SPLASH_SCREEN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
-                Toast.makeText(SplashScreen.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
+                loadServerDialog.dismiss();
+                return StaticMessages.NOT_SERVICE.getName();
             }
-            return "";
         }
 
         @Override
-        protected void onPostExecute(final String response) {
+        protected void onPostExecute(String response) {
             try {
+                if(StaticMessages.TIMEOUT.getName().equals(response)){
+                    response = "{success: false}";
+                }else if (StaticMessages.NOT_SERVICE.getName().equals(response)){
+                    response = "{success: false}";
+                }
                 JSONObject jsonObject = new JSONObject(response);
                 boolean success = jsonObject.getBoolean("success");
                 Intent it;
                 if (success) {
                     it = new Intent(SplashScreen.this, RegisterDetailActivity.class);
                     it.putExtra("jsonDetailDomain", jsonObject.toString());
+                    loadServerDialog.dismiss();
+                    startActivity(it);
+                    finish();
                 } else {
+                    loadServerDialog.dismiss();
                     it = new Intent(SplashScreen.this, RegisterActivity.class);
                     it.putExtra("configs", true);
+                    it.putExtra("isReconnect", "true");
                     it.putExtra("configData", configs.toJSONInitialConfig());
+                    FlygowAlertDialog.createWarningPopupWithIntent(SplashScreen.this, StaticTitles.WARNING, StaticMessages.TIMEOUT, it);
                 }
-                startActivity(it);
-                finish();
             } catch (Exception e) {
                 Log.i(SPLASH_SCREEN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                loadServerDialog.dismiss();
                 Toast.makeText(SplashScreen.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
         }

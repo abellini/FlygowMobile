@@ -32,9 +32,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import br.com.flygowmobile.custom.MultiSelectionSpinner;
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryTablet;
+import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Attendant;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Tablet;
@@ -52,8 +54,11 @@ public class RegisterDetailActivity extends Activity {
     final SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
 
     private Spinner spinnerCoin, spinnerAttendant;
+    private MultiSelectionSpinner spinnerAdvertisements;
     private Map<Integer, String> spinnerCoinValues = new TreeMap<Integer, String>();
     private Map<Integer, String> spinnerAttendantValues = new TreeMap<Integer, String>();
+    private Map<Integer, String> spinnerAdvertisementValues = new TreeMap<Integer, String>();
+
     private int coinId;
     private int attendantId;
 
@@ -70,8 +75,6 @@ public class RegisterDetailActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_detail);
 
-
-
         // Get Params
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("jsonDetailDomain");
@@ -83,6 +86,7 @@ public class RegisterDetailActivity extends Activity {
 
         spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
         spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
+        spinnerAdvertisements = (MultiSelectionSpinner) findViewById(R.id.spinnerAdvertisements);
         mRegisterFormDetailView = findViewById(R.id.register_detail_form);
         mProgressDetailView = findViewById(R.id.register_detail_progress);
         try {
@@ -94,6 +98,9 @@ public class RegisterDetailActivity extends Activity {
 
                 JSONArray jsonAttendants = jsonObject.getJSONArray("attendants");
                 this.populateSpinnerAttendant(jsonAttendants, spinnerAttendant, spinnerAttendantValues);
+
+                JSONArray jsonAdvertisements = jsonObject.getJSONArray("advertisements");
+                this.populateSpinnerAdvertisements(jsonAdvertisements, spinnerAdvertisements, spinnerAdvertisementValues);
             }
         } catch (Exception e) {
 
@@ -111,9 +118,8 @@ public class RegisterDetailActivity extends Activity {
     private void tabletRegisterDetails() {
         String coin = (String) spinnerCoin.getSelectedItem();
         String attendant = (String) spinnerAttendant.getSelectedItem();
-        List<String> promotions = new ArrayList<String>(); // TODO: Implementar a lista de promoções
         showProgress(true);
-        mRegisterDetailsTask = new RegisterDetailsTabletTask(coin, attendant, promotions);
+        mRegisterDetailsTask = new RegisterDetailsTabletTask(coin, attendant);
         mRegisterDetailsTask.execute((Void) null);
     }
 
@@ -127,8 +133,8 @@ public class RegisterDetailActivity extends Activity {
                 String name = obj.getString("name");
 
                 Coin coin = new Coin();
-                coin.setCoinId(obj.getInt("id"));
-                coin.setName(obj.getString("name"));
+                coin.setCoinId(id);
+                coin.setName(name);
                 coin.setSymbol(obj.getString("symbol"));
                 coin.setConversion(obj.getDouble("conversion"));
 
@@ -177,8 +183,8 @@ public class RegisterDetailActivity extends Activity {
 
                 Attendant attendant = new Attendant();
 
-                attendant.setAttendantId(obj.getInt("id"));
-                attendant.setName(obj.getString("name"));
+                attendant.setAttendantId(id);
+                attendant.setName(name);
                 attendant.setLastName(obj.getString("lastName"));
                 attendant.setAddress(obj.getString("address"));
                 attendant.setBirthDate(parser.parse(obj.getString("birthDate")));
@@ -215,6 +221,33 @@ public class RegisterDetailActivity extends Activity {
                         }
                     }
             );
+        } catch (Exception e) {
+            Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
+        }
+    }
+
+    private void populateSpinnerAdvertisements(JSONArray jsonArray, MultiSelectionSpinner spinner, final Map<Integer, String> store){
+        List<String> list = new ArrayList<String>();
+        try {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject obj = jsonArray.getJSONObject(i);
+
+                Integer id = obj.getInt("id");
+                String name = obj.getString("name");
+
+                Advertisement advertisement = new Advertisement();
+                advertisement.setAdvertisementId(id);
+                advertisement.setName(name);
+                advertisement.setInicialDate(parser.parse(obj.getString("inicialDate")));
+                advertisement.setFinalDate(parser.parse(obj.getString("finalDate")));
+                advertisement.setActive(obj.getBoolean("active"));
+
+
+                list.add(name);
+                store.put(id, name);
+            }
+
+            spinner.setItems(list);
         } catch (Exception e) {
             Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
         }
@@ -289,6 +322,21 @@ public class RegisterDetailActivity extends Activity {
 
     }
 
+    private String getAdvertisementIds(String choosedAdvertisements){
+        String advIds = "";
+        if(choosedAdvertisements != null && !"".equals(choosedAdvertisements)){
+            List<String> listNameAdv = Arrays.asList(choosedAdvertisements.split(","));
+            for(String name : listNameAdv){
+                for(int id : spinnerAdvertisementValues.keySet()){
+                    String advName = spinnerAdvertisementValues.get(id).trim();
+                    if(advName.equals(name.trim())){
+                        advIds += id + ",";
+                    }
+                }
+            }
+        }
+        return advIds.toString();
+    }
 
     /**
      * Represents an asynchronous registration task used to salve Tablet
@@ -297,32 +345,31 @@ public class RegisterDetailActivity extends Activity {
 
         private String coin;
         private String attendant;
-        private List<String> promotions;
         FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.REGISTER_DETAILS);
 
 
-        public RegisterDetailsTabletTask(String coin, String attendant, List<String> promotions) {
+        public RegisterDetailsTabletTask(String coin, String attendant) {
             Log.i(REGISTER_DETAIL_ACTIVITY, coin + " ::: " + attendant);
             this.coin = coin;
             this.attendant = attendant;
-            this.promotions = promotions;
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
                 Tablet tablet = repositoryTablet.findLast();
-                String tabletDetailsJson = "{tabletNumber: "+ tablet.getNumber() + ", coinId: " + coinId + ", attendantId: " + attendantId + "}";
+                String choosedAdvertisements = spinnerAdvertisements.getSelectedItemsAsString();
+                String arrayAdvertisements = getAdvertisementIds(choosedAdvertisements);
+                Log.i(REGISTER_DETAIL_ACTIVITY, "ADVERTISEMENTS -->>>>>>>> " + arrayAdvertisements);
+                String tabletDetailsJson = "{tabletNumber: "+ tablet.getNumber() + ", coinId: " + coinId + ", attendantId: " + attendantId + ", advertisements: " + (arrayAdvertisements.equals("") ? "\"\"" : "\"" + arrayAdvertisements + "\"")  + "}";
                 NameValuePair valuePair = new BasicNameValuePair("tabletDetailsJson", tabletDetailsJson);
                 Log.i(REGISTER_DETAIL_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
                 Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.TIMEOUT.getName());
-                Toast.makeText(RegisterDetailActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
-                Toast.makeText(RegisterDetailActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
             return "";
         }
@@ -362,7 +409,4 @@ public class RegisterDetailActivity extends Activity {
             showProgress(false);
         }
     }
-
-
-
 }
