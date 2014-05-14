@@ -13,7 +13,6 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Arrays;
 
 import br.com.flygowmobile.Utils.FlygowServerUrl;
