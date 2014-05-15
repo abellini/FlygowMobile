@@ -35,6 +35,7 @@ import java.util.TreeMap;
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.database.RepositoryAttendant;
+import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Advertisement;
@@ -247,8 +248,8 @@ public class RegisterDetailActivity extends Activity {
                 Advertisement advertisement = new Advertisement();
                 advertisement.setAdvertisementId(id);
                 advertisement.setName(name);
-                advertisement.setInicialDate(parser.parse(obj.getString("inicialDate")));
-                advertisement.setFinalDate(parser.parse(obj.getString("finalDate")));
+                advertisement.setInicialDate(StringUtils.parseDate(obj.getString("inicialDate")));
+                advertisement.setFinalDate(StringUtils.parseDate(obj.getString("finalDate")));
                 advertisement.setActive(obj.getBoolean("active"));
 
 
