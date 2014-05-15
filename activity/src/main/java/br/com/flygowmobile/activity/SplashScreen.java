@@ -139,9 +139,9 @@ public class SplashScreen extends Activity implements Runnable {
                     FlygowAlertDialog.createWarningPopupWithIntent(SplashScreen.this, StaticTitles.WARNING, StaticMessages.TIMEOUT, it);
                 }
             } catch (Exception e) {
-                Log.i(SPLASH_SCREEN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                Log.i(SPLASH_SCREEN_ACTIVITY, StaticMessages.EXCEPTION.getName());
                 loadServerDialog.dismiss();
-                Toast.makeText(SplashScreen.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(SplashScreen.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }
     }

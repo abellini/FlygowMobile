@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -45,6 +46,7 @@ import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
+import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.ServiceHandler;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 
@@ -68,6 +70,9 @@ public class RegisterDetailActivity extends Activity {
 
     private View mProgressDetailView;
     private View mRegisterFormDetailView;
+
+    private ProgressDialog progressRegisterDialog;
+    private ProgressDialog progressLocalRegisterDialog;
 
     public static RepositoryCoin repositoryCoin;
     public static RepositoryAttendant repositoryAttendant;
@@ -122,9 +127,10 @@ public class RegisterDetailActivity extends Activity {
     }
 
     private void tabletRegisterDetails() {
+        progressRegisterDialog = ProgressDialog.show(RegisterDetailActivity.this, StaticTitles.LOAD.getName(),
+                StaticMessages.REGISTER_FROM_SERVER.getName(), true);
         String coin = (String) spinnerCoin.getSelectedItem();
         String attendant = (String) spinnerAttendant.getSelectedItem();
-        showProgress(true);
         mRegisterDetailsTask = new RegisterDetailsTabletTask(coin, attendant);
         mRegisterDetailsTask.execute((Void) null);
     }
@@ -265,75 +271,6 @@ public class RegisterDetailActivity extends Activity {
         }
     }
 
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mRegisterFormDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRegisterFormDetailView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mRegisterFormDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressDetailView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressDetailView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressDetailView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressDetailView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRegisterFormDetailView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.register_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent it = new Intent(RegisterDetailActivity.this, MainActivity.class);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    public void saveCoins(JSONArray jsonCoins) {
-        try {
-            for (int i = 0; i < jsonCoins.length(); i++) {
-                JSONObject obj = jsonCoins.getJSONObject(i);
-
-            }
-        } catch (Exception e) {
-
-        }
-
-    }
-
     private String getAdvertisementIds(String choosedAdvertisements){
         String advIds = "";
         if(choosedAdvertisements != null && !"".equals(choosedAdvertisements)){
@@ -379,8 +316,10 @@ public class RegisterDetailActivity extends Activity {
                 Log.i(REGISTER_DETAIL_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
             } catch (HttpHostConnectException ex) {
+                progressRegisterDialog.dismiss();
                 Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.TIMEOUT.getName());
             } catch (Exception e) {
+                progressRegisterDialog.dismiss();
                 Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
             }
             return "";
@@ -389,21 +328,23 @@ public class RegisterDetailActivity extends Activity {
         @Override
         protected void onPostExecute(final String response) {
             mRegisterDetailsTask = null;
-            showProgress(false);
 
             Log.i(REGISTER_DETAIL_ACTIVITY, "Service: " + response);
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 Boolean success = jsonObject.getBoolean("success");
-                Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 if (success) {
-
+                    progressRegisterDialog.dismiss();
+                    Toast.makeText(RegisterDetailActivity.this, StaticMessages.SUCCESS_SAVE_IN_SERVER.getName(), Toast.LENGTH_SHORT).show();
+                    progressLocalRegisterDialog = ProgressDialog.show(RegisterDetailActivity.this, StaticTitles.LOAD.getName(),
+                            StaticMessages.LOCAL_LOAD.getName(), true);
                     //Salva
                     saveTabletDetails();
-
                     //TODO: Salvar informações na volta do server
                     JSONObject initialData = jsonObject.getJSONObject("initialData");
                     saveMenuInformations(initialData);
+                    progressLocalRegisterDialog.dismiss();
+                    Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     //Log.i(REGISTER_DETAIL_ACTIVITY, "Salved record(s)");
 
                     //Intent it = new Intent(RegisterDetailActivity.this, PrincipalMenu.class);
@@ -412,18 +353,21 @@ public class RegisterDetailActivity extends Activity {
 
                     //finish();
                 } else {
+                    progressRegisterDialog.dismiss();
                     Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
-                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
-                Toast.makeText(RegisterDetailActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
+                progressRegisterDialog.dismiss();
+                progressLocalRegisterDialog.dismiss();
+                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Toast.makeText(RegisterDetailActivity.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
         protected void onCancelled() {
+            progressRegisterDialog.dismiss();
             mRegisterDetailsTask = null;
-            showProgress(false);
         }
     }
 

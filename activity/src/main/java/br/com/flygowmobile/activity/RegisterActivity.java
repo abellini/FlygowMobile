@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -38,10 +39,11 @@ import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
+import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.ServiceHandler;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 
-public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor>{
+public class RegisterActivity extends Activity {
 
     private RegisterTabletTask mRegisterTask = null;
     private static final String REGISTER_ACTIVITY = "RegisterActivity";
@@ -56,8 +58,10 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     private EditText mport;
     private EditText mserverIP;
     private EditText mserverPort;
-    private View mProgressView;
     private View mRegisterFormView;
+
+    private ProgressDialog progressRegisterDialog;
+    private ProgressDialog progressLocalRegisterDialog;
 
     private Bundle bundle;
 
@@ -85,7 +89,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         });
 
         mRegisterFormView = findViewById(R.id.register_form);
-        mProgressView = findViewById(R.id.register_progress);
 
         bundle = getIntent().getExtras();
         boolean hasConfigs = bundle.getBoolean("configs");
@@ -136,9 +139,6 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         return ipHost;
     }
 
-    private void populateAutoComplete() {
-        getLoaderManager().initLoader(0, null, this);
-    }
 
 
     public void tabletRegister() {
@@ -206,60 +206,14 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             url.setServerPort(Integer.parseInt(serverPort));
             Tablet tablet = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
 
-            showProgress(true);
+            //LOADING
+            progressRegisterDialog = ProgressDialog.show(RegisterActivity.this, StaticTitles.LOAD.getName(),
+                    StaticMessages.REGISTER_FROM_SERVER.getName(), true);
+
             mRegisterTask = new RegisterTabletTask(tablet);
             mRegisterTask.execute((Void) null);
         }
 
-    }
-
-    /**
-     * Shows the progress UI and hides the login form.
-     */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public void showProgress(final boolean show) {
-        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
-        // for very easy animations. If available, use these APIs to fade-in
-        // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
-
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mRegisterFormView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
-
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressView.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader) {
     }
 
     /**
@@ -297,17 +251,23 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         @Override
         protected void onPostExecute(final String response) {
             mRegisterTask = null;
-            showProgress(false);
 
             Log.i(REGISTER_ACTIVITY, "Service: " + response);
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 Boolean success = jsonObject.getBoolean("success");
-                Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 if (success) {
+                    progressRegisterDialog.dismiss();
+                    Toast.makeText(RegisterActivity.this, StaticMessages.SUCCESS_SAVE_IN_SERVER.getName(), Toast.LENGTH_LONG).show();
+                    progressLocalRegisterDialog = ProgressDialog.show(RegisterActivity.this, StaticTitles.LOAD.getName(),
+                            StaticMessages.LOCAL_LOAD.getName(), true);
 
                     saveTablet(tablet);
                     Log.i(REGISTER_ACTIVITY, "Salved record(s)");
+
+                    //FINISH LOADING...
+                    progressLocalRegisterDialog.dismiss();
+                    Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
                     Intent it = new Intent(RegisterActivity.this, RegisterDetailActivity.class);
                     it.putExtra("jsonDetailDomain", jsonObject.toString());
@@ -315,18 +275,24 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
                     finish();
                 } else {
+                    //FINISH LOADING...
+                    progressRegisterDialog.dismiss();
+                    Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                     mNumero.requestFocus();
                 }
             } catch (Exception e) {
-                Log.i(REGISTER_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
-                Toast.makeText(RegisterActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
+                //FINISH LOADING...
+                progressRegisterDialog.dismiss();
+                progressLocalRegisterDialog.dismiss();
+                Log.i(REGISTER_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Toast.makeText(RegisterActivity.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
         protected void onCancelled() {
             mRegisterTask = null;
-            showProgress(false);
+            //FINISH LOADING...
         }
     }
 
@@ -334,6 +300,3 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         repositoryTablet.save(tablet);
     }
 }
-
-
-
