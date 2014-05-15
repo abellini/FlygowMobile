@@ -23,4 +23,9 @@ public class StringUtils {
         return null;
     }
 
+    public static final String parseString(Date date) {
+        final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        return df.format(date);
+    }
+
 }

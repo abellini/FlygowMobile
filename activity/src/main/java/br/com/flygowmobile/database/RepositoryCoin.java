@@ -101,7 +101,7 @@ public class RepositoryCoin extends Repository<Coin> {
         Cursor c = db.query(true, Coins.TABLE_NAME, Coin.columns, Coins.COLUMN_NAME_COIN_ID + "=" + id, null, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
-            Coin coin = new Coin(c.getLong(0), c.getString(1), c.getString(2), c.getDouble(3));
+            Coin coin = new Coin(c.getInt(0), c.getString(1), c.getString(2), c.getDouble(3));
             return coin;
         }
         return null;
@@ -121,7 +121,7 @@ public class RepositoryCoin extends Repository<Coin> {
                 Coin coin = new Coin();
                 coins.add(coin);
                 // recupera os atributos de coin
-                coin.setCoinId(c.getLong(idxId));
+                coin.setCoinId(c.getInt(idxId));
                 coin.setName(c.getString(idxName));
                 coin.setSymbol(c.getString(idxSymbol));
                 coin.setConversion(c.getDouble(idxConversion));

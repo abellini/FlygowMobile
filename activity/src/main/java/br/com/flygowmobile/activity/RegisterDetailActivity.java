@@ -61,9 +61,8 @@ public class RegisterDetailActivity extends Activity {
     private Map<Integer, String> spinnerCoinValues = new TreeMap<Integer, String>();
     private Map<Integer, String> spinnerAttendantValues = new TreeMap<Integer, String>();
     private Map<Integer, String> spinnerAdvertisementValues = new TreeMap<Integer, String>();
-
-    private Map<Long, Coin> listCoins = new Hashtable<Long, Coin>();
-    private Map<Long, Attendant> listAttendant = new Hashtable<Long, Attendant>();
+    private Map<Integer, Coin> listCoins = new Hashtable<Integer, Coin>();
+    private Map<Integer, Attendant> listAttendant = new Hashtable<Integer, Attendant>();
     private int coinId;
     private int attendantId;
 
@@ -144,6 +143,9 @@ public class RegisterDetailActivity extends Activity {
                 coin.setName(name);
                 coin.setSymbol(obj.getString("symbol"));
                 coin.setConversion(obj.getDouble("conversion"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "listCoins: " + coin.getCoinId());
+                listCoins.put(coin.getCoinId(), coin);
 
                 list.add(name);
                 store.put(id, name);
@@ -449,14 +451,10 @@ public class RegisterDetailActivity extends Activity {
 
         Log.i(REGISTER_DETAIL_ACTIVITY, "saveTabletDetails");
 
-        Log.i(REGISTER_DETAIL_ACTIVITY, "coinId: " + coinId);
         Coin coin = listCoins.get(coinId);
-        Log.i(REGISTER_DETAIL_ACTIVITY, "Save: " + coin.getCoinId());
         repositoryCoin.save(coin);
 
-        Log.i(REGISTER_DETAIL_ACTIVITY, "attendantId: "+ attendantId);
         Attendant attendant = listAttendant.get(attendantId);
-        Log.i(REGISTER_DETAIL_ACTIVITY, "Save: " + attendant.getAttendantId());
         repositoryAttendant.save(attendant);
     }
 

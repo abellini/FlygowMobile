@@ -7,7 +7,7 @@ import br.com.flygowmobile.database.RepositoryAttendant;
 
 public class Attendant implements Serializable {
 
-    private long attendantId;
+    private int attendantId;
     private String name;
     private String lastName;
     private String address;
@@ -31,7 +31,7 @@ public class Attendant implements Serializable {
 
     public Attendant() {}
 
-    public Attendant(long attendantId, String name, String lastName, String address, Date birthDate, String photoName, String login, String password, String email) {
+    public Attendant(int attendantId, String name, String lastName, String address, Date birthDate, String photoName, String login, String password, String email) {
         this.setAttendantId(attendantId);
         this.setName(name);
         this.setLastName(lastName);
@@ -43,11 +43,11 @@ public class Attendant implements Serializable {
         this.setEmail(email);
     }
 
-    public long getAttendantId() {
+    public int getAttendantId() {
         return attendantId;
     }
 
-    public void setAttendantId(long attendantId) {
+    public void setAttendantId(int attendantId) {
         this.attendantId = attendantId;
     }
 

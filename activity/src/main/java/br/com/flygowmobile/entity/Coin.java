@@ -13,14 +13,14 @@ public class Coin implements Serializable {
             RepositoryCoin.Coins.COLUMN_NAME_CONVERSION
     };
 
-    private long coinId;
+    private int coinId;
     private String name;
     private String symbol;
     private double conversion;
 
     public Coin() {}
 
-    public Coin(long coinId, String name, String symbol, double conversion) {
+    public Coin(int coinId, String name, String symbol, double conversion) {
         this.setCoinId(coinId);
         this.setName(name);
         this.setSymbol(symbol);
@@ -28,11 +28,11 @@ public class Coin implements Serializable {
     }
 
 
-    public long getCoinId() {
+    public int getCoinId() {
         return coinId;
     }
 
-    public void setCoinId(long coinId) {
+    public void setCoinId(int coinId) {
         this.coinId = coinId;
     }
 

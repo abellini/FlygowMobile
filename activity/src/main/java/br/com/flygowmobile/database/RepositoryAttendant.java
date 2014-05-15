@@ -13,11 +13,10 @@ import java.util.Locale;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 
+import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.entity.Attendant;
 
 public class RepositoryAttendant extends Repository<Attendant> {
-
-    final SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
 
     private static final String REPOSITORY_ATTENDANT = "RepositoryAttendant";
 
@@ -68,7 +67,7 @@ public class RepositoryAttendant extends Repository<Attendant> {
         values.put(Attendants.COLUMN_NAME_NAME, attendant.getName());
         values.put(Attendants.COLUMN_NAME_LAST_NAME, attendant.getLastName());
         values.put(Attendants.COLUMN_NAME_ADDRESS, attendant.getAddress());
-        values.put(Attendants.COLUMN_NAME_BIRTH_DATE, parser.format(attendant.getBirthDate()));
+        values.put(Attendants.COLUMN_NAME_BIRTH_DATE, StringUtils.parseString(attendant.getBirthDate()));
         values.put(Attendants.COLUMN_NAME_PHOTO, attendant.getPhoto());
         values.put(Attendants.COLUMN_NAME_LOGIN, attendant.getLogin());
         values.put(Attendants.COLUMN_NAME_PASSWORD, attendant.getPassword());
@@ -116,11 +115,11 @@ public class RepositoryAttendant extends Repository<Attendant> {
             Cursor c = db.query(true, Attendants.TABLE_NAME, Attendant.columns, Attendants.COLUMN_NAME_ATTENDANT_ID + "=" + id, null, null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                Attendant attendant = new Attendant(c.getLong(0), c.getString(1), c.getString(2), c.getString(3), parser.parse(c.getString(4)), c.getString(6), c.getString(7), c.getString(8), c.getString(9));
+                Attendant attendant = new Attendant(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), StringUtils.parseDate(c.getString(4)), c.getString(6), c.getString(7), c.getString(8), c.getString(9));
                 return attendant;
             }
         } catch (Exception e) {
-
+            Log.e(REPOSITORY_ATTENDANT, "Error [" + e.getMessage() + "]");
         }
         return null;
     }
@@ -145,12 +144,12 @@ public class RepositoryAttendant extends Repository<Attendant> {
                     Attendant attendant = new Attendant();
                     attendants.add(attendant);
                     // recupera os atributos de coin
-                    attendant.setAttendantId(c.getLong(idxId));
+                    attendant.setAttendantId(c.getInt(idxId));
                     attendant.setName(c.getString(idxName));
                     attendant.setLastName(c.getString(idxLastName));
                     attendant.setAddress(c.getString(idxAddress));
 
-                    attendant.setBirthDate(parser.parse(c.getString(idxBirthDate)));
+                    attendant.setBirthDate(StringUtils.parseDate(c.getString(idxBirthDate)));
 
                     attendant.setPhoto(c.getString(idxPhotoName));
                     attendant.setLogin(c.getString(idxLogin));
@@ -160,7 +159,7 @@ public class RepositoryAttendant extends Repository<Attendant> {
             }
         return attendants;
         } catch (Exception e) {
-
+            Log.e(REPOSITORY_ATTENDANT, "Error [" + e.getMessage() + "]");
         }
         return null;
     }
