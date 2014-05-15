@@ -22,22 +22,24 @@ import org.apache.http.NameValuePair;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
+import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Attendant;
+import br.com.flygowmobile.entity.Category;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
@@ -51,7 +53,7 @@ public class RegisterDetailActivity extends Activity {
     private static final String REGISTER_DETAIL_ACTIVITY = "RegisterDetailActivity";
 
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
-    final SimpleDateFormat parser = new SimpleDateFormat("dd/MM/yyyy");
+
 
     private Spinner spinnerCoin, spinnerAttendant;
     private MultiSelectionSpinner spinnerAdvertisements;
@@ -59,6 +61,8 @@ public class RegisterDetailActivity extends Activity {
     private Map<Integer, String> spinnerAttendantValues = new TreeMap<Integer, String>();
     private Map<Integer, String> spinnerAdvertisementValues = new TreeMap<Integer, String>();
 
+    private Map<Long, Coin> listCoins = new Hashtable<Long, Coin>();
+    private Map<Long, Attendant> listAttendant = new Hashtable<Long, Attendant>();
     private int coinId;
     private int attendantId;
 
@@ -68,6 +72,7 @@ public class RegisterDetailActivity extends Activity {
     public static RepositoryCoin repositoryCoin;
     public static RepositoryAttendant repositoryAttendant;
     public static RepositoryTablet repositoryTablet;
+    public static RepositoryCategory repositoryCategory;
 
 
     @Override
@@ -83,6 +88,7 @@ public class RegisterDetailActivity extends Activity {
         repositoryCoin = new RepositoryCoin(this);
         repositoryAttendant = new RepositoryAttendant(this);
         repositoryTablet = new RepositoryTablet(this);
+        repositoryCategory = new RepositoryCategory(this);
 
         spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
         spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
@@ -187,10 +193,13 @@ public class RegisterDetailActivity extends Activity {
                 attendant.setName(name);
                 attendant.setLastName(obj.getString("lastName"));
                 attendant.setAddress(obj.getString("address"));
-                attendant.setBirthDate(parser.parse(obj.getString("birthDate")));
+                attendant.setBirthDate(StringUtils.parseDate(obj.getString("birthDate")));
                 attendant.setLogin(obj.getString("login"));
                 attendant.setPassword(obj.getString("password"));
                 attendant.setEmail(obj.getString("email"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "listAttendant: " + attendant.getAttendantId());
+                listAttendant.put(attendant.getAttendantId(), attendant);
 
                 list.add(name);
                 store.put(id, name);
@@ -386,7 +395,12 @@ public class RegisterDetailActivity extends Activity {
                 Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 if (success) {
 
-                    //saveTabletDetails(coin, attendant, promotions); TODO: Salvar informações na volta do server
+                    //Salva
+                    saveTabletDetails();
+
+                    //TODO: Salvar informações na volta do server
+                    JSONObject initialData = jsonObject.getJSONObject("initialData");
+                    saveMenuInformations(initialData);
                     //Log.i(REGISTER_DETAIL_ACTIVITY, "Salved record(s)");
 
                     //Intent it = new Intent(RegisterDetailActivity.this, PrincipalMenu.class);
@@ -409,4 +423,41 @@ public class RegisterDetailActivity extends Activity {
             showProgress(false);
         }
     }
+
+    private void saveMenuInformations(JSONObject initialData) {
+
+        try {
+            JSONArray categories  = initialData.getJSONArray("category");
+
+            for (int i = 0; i < categories.length(); i++) {
+                JSONObject obj = categories.getJSONObject(i);
+                Category category = new Category();
+                category.setCategoryId(obj.getInt("id"));
+                category.setName(obj.getString("name"));
+                category.setDescription(obj.getString("description"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save: " + category);
+                repositoryCategory.save(category);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveTabletDetails() {
+
+        Log.i(REGISTER_DETAIL_ACTIVITY, "saveTabletDetails");
+
+        Log.i(REGISTER_DETAIL_ACTIVITY, "coinId: " + coinId);
+        Coin coin = listCoins.get(coinId);
+        Log.i(REGISTER_DETAIL_ACTIVITY, "Save: " + coin.getCoinId());
+        repositoryCoin.save(coin);
+
+        Log.i(REGISTER_DETAIL_ACTIVITY, "attendantId: "+ attendantId);
+        Attendant attendant = listAttendant.get(attendantId);
+        Log.i(REGISTER_DETAIL_ACTIVITY, "Save: " + attendant.getAttendantId());
+        repositoryAttendant.save(attendant);
+    }
+
+
 }
