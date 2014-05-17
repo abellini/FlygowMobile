@@ -233,7 +233,7 @@ public class RegisterActivity extends Activity {
         protected String doInBackground(Void... params) {
             try {
                 String tabletJson = tablet.toJSONInitialConfig();
-                String isReconnect = bundle.getString("isReconnect");
+                String isReconnect = bundle.getString("isReconnect") != null ? bundle.getString("isReconnect") : "false";
                 NameValuePair tabletJsonPair = new BasicNameValuePair("tabletJson", tabletJson);
                 NameValuePair isReconnectPair = new BasicNameValuePair("isReconnect", isReconnect);
                 Log.i(REGISTER_ACTIVITY, "URL -->>>>>>>> " + url);

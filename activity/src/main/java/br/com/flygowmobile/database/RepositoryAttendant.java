@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.TimeZone;
 
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.entity.Attendant;
+import br.com.flygowmobile.entity.Coin;
 
 public class RepositoryAttendant extends Repository<Attendant> {
 
@@ -61,13 +63,13 @@ public class RepositoryAttendant extends Repository<Attendant> {
 
     @Override
     protected ContentValues populateContentValues(Attendant attendant) {
-
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         ContentValues values = new ContentValues();
         values.put(Attendants.COLUMN_NAME_ATTENDANT_ID, attendant.getAttendantId());
         values.put(Attendants.COLUMN_NAME_NAME, attendant.getName());
         values.put(Attendants.COLUMN_NAME_LAST_NAME, attendant.getLastName());
         values.put(Attendants.COLUMN_NAME_ADDRESS, attendant.getAddress());
-        values.put(Attendants.COLUMN_NAME_BIRTH_DATE, StringUtils.parseString(attendant.getBirthDate()));
+        values.put(Attendants.COLUMN_NAME_BIRTH_DATE, fm.format(attendant.getBirthDate()));
         values.put(Attendants.COLUMN_NAME_PHOTO, attendant.getPhoto());
         values.put(Attendants.COLUMN_NAME_LOGIN, attendant.getLogin());
         values.put(Attendants.COLUMN_NAME_PASSWORD, attendant.getPassword());
@@ -110,12 +112,37 @@ public class RepositoryAttendant extends Repository<Attendant> {
 
     @Override
     public Attendant findById(long id) {
-
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Cursor c = db.query(true, Attendants.TABLE_NAME, Attendant.columns, Attendants.COLUMN_NAME_ATTENDANT_ID + "=" + id, null, null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
-                Attendant attendant = new Attendant(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), StringUtils.parseDate(c.getString(4)), c.getString(6), c.getString(7), c.getString(8), c.getString(9));
+                int idxId = c.getColumnIndex(Attendants.COLUMN_NAME_ATTENDANT_ID);
+                int idxName = c.getColumnIndex(Attendants.COLUMN_NAME_NAME);
+                int idxLastName =  c.getColumnIndex(Attendants.COLUMN_NAME_LAST_NAME);
+                int idxAddress =  c.getColumnIndex(Attendants.COLUMN_NAME_ADDRESS);
+                int idxBirthDate =  c.getColumnIndex(Attendants.COLUMN_NAME_BIRTH_DATE);
+                int idxPhotoName =  c.getColumnIndex(Attendants.COLUMN_NAME_PHOTO);
+                int idxLogin =  c.getColumnIndex(Attendants.COLUMN_NAME_LOGIN);
+                int idxPassword =  c.getColumnIndex(Attendants.COLUMN_NAME_PASSWORD);
+                int idxEmail =  c.getColumnIndex(Attendants.COLUMN_NAME_EMAIL);
+
+
+                Attendant attendant = new Attendant();
+                attendant.setAttendantId(c.getInt(idxId));
+                attendant.setName(c.getString(idxName));
+                attendant.setLastName(c.getString(idxLastName));
+                attendant.setAddress(c.getString(idxAddress));
+
+                attendant.setBirthDate(fm.parse(c.getString(idxBirthDate)));
+
+                attendant.setPhoto(c.getString(idxPhotoName));
+                attendant.setLogin(c.getString(idxLogin));
+                attendant.setPassword(c.getString(idxPassword));
+                attendant.setEmail(c.getString(idxEmail));
+
+
+
                 return attendant;
             }
         } catch (Exception e) {
@@ -126,6 +153,7 @@ public class RepositoryAttendant extends Repository<Attendant> {
 
     @Override
     public List<Attendant> listAll() {
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Cursor c = getCursor();
             List<Attendant> attendants = new ArrayList<Attendant>();
@@ -143,13 +171,12 @@ public class RepositoryAttendant extends Repository<Attendant> {
                 do {
                     Attendant attendant = new Attendant();
                     attendants.add(attendant);
-                    // recupera os atributos de coin
                     attendant.setAttendantId(c.getInt(idxId));
                     attendant.setName(c.getString(idxName));
                     attendant.setLastName(c.getString(idxLastName));
                     attendant.setAddress(c.getString(idxAddress));
 
-                    attendant.setBirthDate(StringUtils.parseDate(c.getString(idxBirthDate)));
+                    attendant.setBirthDate(fm.parse(c.getString(idxBirthDate)));
 
                     attendant.setPhoto(c.getString(idxPhotoName));
                     attendant.setLogin(c.getString(idxLogin));
@@ -164,14 +191,44 @@ public class RepositoryAttendant extends Repository<Attendant> {
         return null;
     }
 
-//    @Override
-//    public Cursor query(SQLiteQueryBuilder queryBuilder, String[] projection, String selection, String[] selectionArgs, String groupBy, String having, String orderBy) {
-//        return null;
-//    }
 
     @Override
     public Cursor getCursor() {
 
         return db.query(Attendants.TABLE_NAME, Attendant.columns, null, null, null, null, null, null);
+    }
+
+    public Attendant findLast() {
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+        Cursor c = getCursor();
+        try{
+            if (c.getCount() > 0) {
+                c.moveToLast();
+                int idxId = c.getColumnIndex(Attendants.COLUMN_NAME_ATTENDANT_ID);
+                int idxName = c.getColumnIndex(Attendants.COLUMN_NAME_NAME);
+                int idxLastName =  c.getColumnIndex(Attendants.COLUMN_NAME_LAST_NAME);
+                int idxAddress =  c.getColumnIndex(Attendants.COLUMN_NAME_ADDRESS);
+                int idxBirthDate =  c.getColumnIndex(Attendants.COLUMN_NAME_BIRTH_DATE);
+                int idxPhotoName =  c.getColumnIndex(Attendants.COLUMN_NAME_PHOTO);
+                int idxLogin =  c.getColumnIndex(Attendants.COLUMN_NAME_LOGIN);
+                int idxPassword =  c.getColumnIndex(Attendants.COLUMN_NAME_PASSWORD);
+                int idxEmail =  c.getColumnIndex(Attendants.COLUMN_NAME_EMAIL);
+                Attendant attendant = new Attendant();
+                attendant.setAttendantId(c.getInt(idxId));
+                attendant.setName(c.getString(idxName));
+                attendant.setLastName(c.getString(idxLastName));
+                attendant.setAddress(c.getString(idxAddress));
+
+                attendant.setBirthDate(fm.parse(c.getString(idxBirthDate)));
+
+                attendant.setPhoto(c.getString(idxPhotoName));
+                attendant.setLogin(c.getString(idxLogin));
+                attendant.setPassword(c.getString(idxPassword));
+                attendant.setEmail(c.getString(idxEmail));
+            }
+        } catch(Exception e) {
+            Log.e(REPOSITORY_ATTENDANT, "Error [" + e.getMessage() + "]");
+        }
+        return null;
     }
 }

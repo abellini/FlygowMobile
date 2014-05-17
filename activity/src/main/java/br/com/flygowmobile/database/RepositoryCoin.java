@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.entity.Coin;
+import br.com.flygowmobile.entity.Tablet;
 
 
 public class RepositoryCoin extends Repository<Coin> {
@@ -134,5 +135,23 @@ public class RepositoryCoin extends Repository<Coin> {
     public Cursor getCursor() {
 
         return db.query(Coins.TABLE_NAME, Coin.columns, null, null, null, null, null, null);
+    }
+
+    public Coin findLast() {
+        Cursor c = getCursor();
+        if (c.getCount() > 0) {
+            c.moveToLast();
+            int idxId = c.getColumnIndex(Coins.COLUMN_NAME_COIN_ID);
+            int idxName = c.getColumnIndex(Coins.COLUMN_NAME_NAME);
+            int idxSymbol =  c.getColumnIndex(Coins.COLUMN_NAME_SYMBOL);
+            int idxConversion =  c.getColumnIndex(Coins.COLUMN_NAME_CONVERSION);
+            Coin coin = new Coin();
+            coin.setCoinId(c.getInt(idxId));
+            coin.setName(c.getString(idxName));
+            coin.setSymbol(c.getString(idxSymbol));
+            coin.setConversion(c.getDouble(idxConversion));
+            return coin;
+        }
+        return null;
     }
 }

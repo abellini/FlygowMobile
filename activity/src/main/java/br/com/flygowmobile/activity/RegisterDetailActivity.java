@@ -26,6 +26,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
@@ -185,9 +187,19 @@ public class RegisterDetailActivity extends Activity {
         } catch (Exception e) {
             Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
         }
+        //Verificando se já existe configurações salvas para esse campo
+        Coin savedCoin = repositoryCoin.findLast();
+        if(savedCoin != null){
+            ArrayAdapter myAdap = (ArrayAdapter) spinnerCoin.getAdapter();
+            int spinnerPosition = myAdap.getPosition(savedCoin.getName());
+            spinnerCoin.setSelection(spinnerPosition, true);
+        }else{
+            spinnerCoin.setSelection(-1);
+        }
     }
 
     private void populateSpinnerAttendant(JSONArray jsonArray, Spinner spinner, final Map<Integer, String> store) {
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         List<String> list = new ArrayList<String>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -202,7 +214,7 @@ public class RegisterDetailActivity extends Activity {
                 attendant.setName(name);
                 attendant.setLastName(obj.getString("lastName"));
                 attendant.setAddress(obj.getString("address"));
-                attendant.setBirthDate(StringUtils.parseDate(obj.getString("birthDate")));
+                attendant.setBirthDate(fm.parse(obj.getString("birthDate")));
                 attendant.setLogin(obj.getString("login"));
                 attendant.setPassword(obj.getString("password"));
                 attendant.setEmail(obj.getString("email"));
@@ -242,6 +254,15 @@ public class RegisterDetailActivity extends Activity {
         } catch (Exception e) {
             Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
         }
+        //Verificando se já existe configurações salvas para esse campo
+        Attendant savedAttendant = repositoryAttendant.findById(repositoryTablet.findLast().getAttendantId());
+        if(savedAttendant != null){
+            ArrayAdapter myAdap = (ArrayAdapter) spinnerAttendant.getAdapter();
+            int spinnerPosition = myAdap.getPosition(savedAttendant.getName());
+            spinnerAttendant.setSelection(spinnerPosition, true);
+        }else{
+            spinnerAttendant.setSelection(-1);
+        }
     }
 
     private void populateSpinnerAdvertisements(JSONArray jsonArray, MultiSelectionSpinner spinner, final Map<Integer, String> store){
@@ -269,6 +290,16 @@ public class RegisterDetailActivity extends Activity {
         } catch (Exception e) {
             Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
         }
+        //Verificando se já existe configurações salvas para esse campo
+        //TODO: Implementar a gravação e a leitura de advertisements
+        /*List<Advertisement> savedAdvertisements = reposi;
+        if(savedAttendant != null){
+            ArrayAdapter myAdap = (ArrayAdapter) spinnerAttendant.getAdapter();
+            int spinnerPosition = myAdap.getPosition(savedAttendant.getName());
+            spinnerAttendant.setSelection(spinnerPosition, true);
+        }else{
+            spinnerAttendant.setSelection(-1);
+        }*/
     }
 
     private String getAdvertisementIds(String choosedAdvertisements){
@@ -400,6 +431,9 @@ public class RegisterDetailActivity extends Activity {
 
         Attendant attendant = listAttendant.get(attendantId);
         repositoryAttendant.save(attendant);
+        Tablet tablet = repositoryTablet.findLast();
+        tablet.setAttendantId(attendant.getAttendantId());
+        repositoryTablet.save(tablet);
     }
 
 

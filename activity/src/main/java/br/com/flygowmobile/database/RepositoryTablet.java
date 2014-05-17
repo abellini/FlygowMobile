@@ -107,15 +107,27 @@ public class RepositoryTablet extends Repository<Tablet> {
         Cursor c = db.query(true, Tablets.TABLE_NAME, Tablet.columns, Tablets.COLUMN_NAME_TABLET_ID + "=" + id, null, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
+            int idxId = c.getColumnIndex(Tablets.COLUMN_NAME_TABLET_ID);
+            int idxStatus = c.getColumnIndex(Tablets.COLUMN_NAME_STATUS_ID);
+            int idxCoinId =  c.getColumnIndex(Tablets.COLUMN_NAME_COIN_ID);
+            int idxNumber =  c.getColumnIndex(Tablets.COLUMN_NAME_NUMBER);
+            int idxIp =  c.getColumnIndex(Tablets.COLUMN_NAME_IP);
+            int idxPort =  c.getColumnIndex(Tablets.COLUMN_NAME_PORT);
+            int idxServerIP =  c.getColumnIndex(Tablets.COLUMN_NAME_SERVER_IP);
+            int idxServerPort =  c.getColumnIndex(Tablets.COLUMN_NAME_SERVER_PORT);
+            int idxAttendantId =  c.getColumnIndex(Tablets.COLUMN_NAME_ATTENDANT_ID);
+
+
             Tablet tablet = new Tablet();
-            tablet.setTabletId(c.getLong(0));
-            tablet.setNumber(c.getInt(1));
-            tablet.setCoinId(c.getInt(2));
-            tablet.setIp(c.getString(3));
-            tablet.setPort(c.getInt(4));
-            tablet.setServerIP(c.getString(5));
-            tablet.setServerPort(c.getInt(6));
-            tablet.setAttendantId(c.getInt(7));
+            tablet.setTabletId(c.getLong(idxId));
+            tablet.setNumber(c.getInt(idxNumber));
+            tablet.setCoinId(c.getInt(idxCoinId));
+            tablet.setIp(c.getString(idxIp));
+            tablet.setPort(c.getInt(idxPort));
+            tablet.setServerIP(c.getString(idxServerIP));
+            tablet.setServerPort(c.getInt(idxServerPort));
+            tablet.setAttendantId(c.getInt(idxAttendantId));
+            tablet.setStatusId(c.getInt(idxStatus));
             return tablet;
         }
         return null;
