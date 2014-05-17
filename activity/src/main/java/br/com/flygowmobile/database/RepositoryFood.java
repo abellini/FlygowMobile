@@ -51,8 +51,18 @@ public class RepositoryFood extends Repository<Food> {
     }
 
     @Override
-    protected ContentValues populateContentValues(Food obj) {
-        return null;
+    protected ContentValues populateContentValues(Food food) {
+
+        ContentValues values = new ContentValues();
+        values.put(Foods.COLUMN_NAME_FOOD_ID, food.getFoodId());
+        values.put(Foods.COLUMN_NAME_NAME, food.getName());
+        values.put(Foods.COLUMN_NAME_VALUE, food.getValue());
+        values.put(Foods.COLUMN_NAME_DESCRIPTION, food.getDescription());
+        values.put(Foods.COLUMN_NAME_NUTRITIONAL_INFO, food.getNutritionalInfo());
+        values.put(Foods.COLUMN_NAME_IS_ACTIVE, food.isActive());
+        values.put(Foods.COLUMN_NAME_CATEGORY_ID, food.getCategoryId());
+
+        return values;
     }
 
     @Override
