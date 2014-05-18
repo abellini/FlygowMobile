@@ -4,7 +4,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.entity.Food;
@@ -66,32 +68,82 @@ public class RepositoryFood extends Repository<Food> {
     }
 
     @Override
-    protected long insert(Food obj) {
-        return 0;
+    protected long insert(Food food) {
+
+        ContentValues values = populateContentValues(food);
+        long id = db.insert(Foods.TABLE_NAME, "", values);
+        Log.i(REPOSITORY_FOOD, "Insert [" + id + "] record");
+        return id;
     }
 
     @Override
-    protected int update(Food obj) {
-        return 0;
+    protected int update(Food food) {
+
+        ContentValues values = populateContentValues(food);
+        String _id = String.valueOf(food.getFoodId());
+        String where = Foods.COLUMN_NAME_FOOD_ID + "=?";
+        String[] whereArgs = new String[] { _id };
+        int count = db.update(Foods.TABLE_NAME, values, where, whereArgs);
+        Log.i(REPOSITORY_FOOD, "Update [" + count + "] record(s)");
+        return count;
     }
 
     @Override
     public int delete(long id) {
-        return 0;
+
+        String where = Foods.COLUMN_NAME_FOOD_ID + "=?";
+        String _id = String.valueOf(id);
+        String[] whereArgs = new String[] { _id };
+        int count = db.delete(Foods.TABLE_NAME, where, whereArgs);
+        Log.i(REPOSITORY_FOOD, "Delete [" + count + "] record(s)");
+        return count;
     }
 
     @Override
     public Food findById(long id) {
+
+        Cursor c = db.query(true, Foods.TABLE_NAME, Food.columns, Foods.COLUMN_NAME_FOOD_ID+ "=" + id, null, null, null, null, null);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            Food food = new Food(c.getLong(0), c.getString(1), c.getDouble(2), c.getString(3), c.getString(4), Boolean.parseBoolean(c.getString(5)), c.getInt(5));
+            return food;
+        }
         return null;
     }
 
     @Override
     public List<Food> listAll() {
-        return null;
+
+        Cursor c = getCursor();
+        List<Food> foods = new ArrayList<Food>();
+        if (c.moveToFirst()) {
+            int idxId = c.getColumnIndex(Foods.COLUMN_NAME_FOOD_ID);
+            int idxName = c.getColumnIndex(Foods.COLUMN_NAME_NAME);
+            int idxValue =  c.getColumnIndex(Foods.COLUMN_NAME_VALUE);
+            int idxDescription =  c.getColumnIndex(Foods.COLUMN_NAME_DESCRIPTION);
+            int idxNutrionalInfo =  c.getColumnIndex(Foods.COLUMN_NAME_NUTRITIONAL_INFO);
+            int idxIsActive =  c.getColumnIndex(Foods.COLUMN_NAME_IS_ACTIVE);
+            int idxCategory =  c.getColumnIndex(Foods.COLUMN_NAME_CATEGORY_ID);
+
+            do {
+                Food food = new Food();
+                foods.add(food);
+                // recupera os atributos de food
+                food.setFoodId(c.getInt(idxId));
+                food.setName(c.getString(idxName));
+                food.setValue(c.getDouble(idxValue));
+                food.setDescription(c.getString(idxDescription));
+                food.setNutritionalInfo(c.getString(idxNutrionalInfo));
+                food.setActive(Boolean.parseBoolean(c.getString(idxIsActive)));
+                food.setCategoryId(c.getInt(idxCategory));
+            } while (c.moveToNext());
+        }
+        return foods;
     }
 
     @Override
     public Cursor getCursor() {
-        return null;
+
+        return db.query(Foods.TABLE_NAME, Food.columns, null, null, null, null, null, null);
     }
 }

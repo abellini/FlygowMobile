@@ -51,9 +51,9 @@ public class Category implements Serializable {
 
     public String toJSONInitialConfig() {
         return "{" +
-                "\"id\": "+ getCategoryId() + ", " +
+                "\"categoryId\": "+ getCategoryId() + ", " +
                 "\"name\": " + "\"" + getName() + "\", " +
-                "\"description\": " + getDescription() +
+                "\"description\": " + "\"" + getDescription() + "\"" +
                 "}";
     }
 }

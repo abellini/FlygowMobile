@@ -40,11 +40,15 @@ import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
+import br.com.flygowmobile.database.RepositoryFood;
+import br.com.flygowmobile.database.RepositoryPaymentForm;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Attendant;
 import br.com.flygowmobile.entity.Category;
 import br.com.flygowmobile.entity.Coin;
+import br.com.flygowmobile.entity.Food;
+import br.com.flygowmobile.entity.PaymentForm;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -80,6 +84,8 @@ public class RegisterDetailActivity extends Activity {
     public static RepositoryAttendant repositoryAttendant;
     public static RepositoryTablet repositoryTablet;
     public static RepositoryCategory repositoryCategory;
+    public static RepositoryFood repositoryFood;
+    public static RepositoryPaymentForm repositoryPaymentForm;
 
 
     @Override
@@ -96,6 +102,8 @@ public class RegisterDetailActivity extends Activity {
         repositoryAttendant = new RepositoryAttendant(this);
         repositoryTablet = new RepositoryTablet(this);
         repositoryCategory = new RepositoryCategory(this);
+        repositoryFood = new RepositoryFood(this);
+        repositoryPaymentForm = new RepositoryPaymentForm(this);
 
         spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
         spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
@@ -404,19 +412,52 @@ public class RegisterDetailActivity extends Activity {
 
     private void saveMenuInformations(JSONObject initialData) {
 
+        JSONObject obj = null;
         try {
-            JSONArray categories  = initialData.getJSONArray("category");
 
+            // Categories
+            JSONArray categories  = initialData.getJSONArray("category");
             for (int i = 0; i < categories.length(); i++) {
-                JSONObject obj = categories.getJSONObject(i);
+                obj = categories.getJSONObject(i);
                 Category category = new Category();
                 category.setCategoryId(obj.getInt("id"));
                 category.setName(obj.getString("name"));
                 category.setDescription(obj.getString("description"));
 
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Save: " + category);
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Category(ies): " + category);
                 repositoryCategory.save(category);
             }
+
+            // Foods
+            JSONArray foods  = initialData.getJSONArray("foods");
+            for (int i = 0; i < foods.length(); i++) {
+                obj = foods.getJSONObject(i);
+                Food food = new Food();
+                food.setFoodId(obj.getInt("id"));
+                food.setName(obj.getString("name"));
+                food.setValue(obj.getDouble("value"));
+                food.setDescription(obj.getString("description"));
+                food.setNutritionalInfo(obj.getString("nutritionalInfo"));
+                food.setActive(Boolean.parseBoolean(obj.getString("active")));
+                food.setCategoryId(obj.getInt("categoryId"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
+                repositoryFood.save(food);
+            }
+
+            //paymentForms
+            JSONArray paymentForms  = initialData.getJSONArray("paymentForms");
+            for (int i = 0; i < paymentForms.length(); i++) {
+                obj = paymentForms.getJSONObject(i);
+                PaymentForm paymentForm = new PaymentForm();
+                paymentForm.setPaymentFormId(obj.getInt("id"));
+                paymentForm.setName(obj.getString("name"));
+                paymentForm.setDescription(obj.getString("description"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Payment Form(s): " + paymentForm);
+                repositoryPaymentForm.save(paymentForm);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -431,9 +472,12 @@ public class RegisterDetailActivity extends Activity {
 
         Attendant attendant = listAttendant.get(attendantId);
         repositoryAttendant.save(attendant);
+
         Tablet tablet = repositoryTablet.findLast();
         tablet.setAttendantId(attendant.getAttendantId());
         repositoryTablet.save(tablet);
+
+
     }
 
 

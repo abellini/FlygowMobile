@@ -26,6 +26,17 @@ public class Food {
 
     }
 
+    public Food(long foodId, String name, Double value, String description, String nutritionalInfo,boolean isActive, int categoryId){
+        this.foodId = foodId;
+        this.name = name;
+        this.value = value;
+        this.description = description;
+        this.nutritionalInfo = nutritionalInfo;
+        this.isActive = isActive;
+        this.categoryId = categoryId;
+    }
+
+
     public long getFoodId() {
         return foodId;
     }
@@ -80,5 +91,17 @@ public class Food {
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    public String toJSON() {
+        return "{" +
+                "\"foodId\": "+ getFoodId() + ", " +
+                "\"name\": " + "\"" + getName() + "\", " +
+                "\"value\": " + getValue() + ", " +
+                "\"description\": " + "\"" + getDescription() + " " +
+                "\"nutritionalInfo\": " + "\"" + getNutritionalInfo() + " " +
+                "\"isActive\": " + "\"" + isActive() + " " +
+                "\"categoryId\": " + "\"" + getCategoryId() + " " +
+                "}";
     }
 }
