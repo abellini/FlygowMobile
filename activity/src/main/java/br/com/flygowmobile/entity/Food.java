@@ -1,8 +1,10 @@
 package br.com.flygowmobile.entity;
 
+import java.io.Serializable;
+
 import br.com.flygowmobile.database.RepositoryFood;
 
-public class Food {
+public class Food implements Serializable {
 
     public static String[] columns = new String[] {
             RepositoryFood.Foods.COLUMN_NAME_FOOD_ID,

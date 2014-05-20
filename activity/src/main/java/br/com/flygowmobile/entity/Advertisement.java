@@ -4,16 +4,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 import br.com.flygowmobile.database.RepositoryAdvertisement;
-import br.com.flygowmobile.database.RepositoryAttendant;
 
-public class Advertisement implements Serializable{
-    private long advertisementId;
-    private String name;
-    private Date inicialDate;
-    private Date finalDate;
-    private boolean active;
-    private String photoName;
-    private String videoName;
+public class Advertisement implements Serializable {
 
     public static String[] columns = new String[] {
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_ADVERTISEMENT_ID,
@@ -24,6 +16,13 @@ public class Advertisement implements Serializable{
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO,
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO
     };
+    private long advertisementId;
+    private String name;
+    private Date inicialDate;
+    private Date finalDate;
+    private boolean active;
+    private String photoName;
+    private String videoName;
 
     public Advertisement() { }
 
