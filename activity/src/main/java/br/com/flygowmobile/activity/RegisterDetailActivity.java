@@ -386,12 +386,12 @@ public class RegisterDetailActivity extends Activity {
                             StaticMessages.LOCAL_LOAD.getName(), true);
                     //Salva
                     saveTabletDetails();
-                    //TODO: Salvar informações na volta do server
+
                     JSONObject initialData = jsonObject.getJSONObject("initialData");
                     saveMenuInformations(initialData);
+
                     progressLocalRegisterDialog.dismiss();
                     Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                    //Log.i(REGISTER_DETAIL_ACTIVITY, "Salved record(s)");
 
                     //Intent it = new Intent(RegisterDetailActivity.this, PrincipalMenu.class);
                     //it.putExtra("jsonObject", jsonObject.toString());
@@ -471,6 +471,9 @@ public class RegisterDetailActivity extends Activity {
     }
 
     private void saveTabletDetails() {
+        repositoryCoin.removeAll();
+        repositoryAttendant.removeAll();
+        repositoryAdvertisement.removeAll();
 
         Log.i(REGISTER_DETAIL_ACTIVITY, "saveTabletDetails");
         Tablet tablet = repositoryTablet.findLast();

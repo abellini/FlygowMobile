@@ -110,6 +110,12 @@ public class RepositoryAttendant extends Repository<Attendant> {
         return count;
     }
 
+    public int removeAll() {
+        int count = db.delete(Attendants.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_ATTENDANT, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     public Attendant findById(long id) {
         DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");

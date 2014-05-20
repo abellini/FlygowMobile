@@ -96,6 +96,12 @@ public class RepositoryCoin extends Repository<Coin> {
         return count;
     }
 
+    public int removeAll() {
+        int count = db.delete(Coins.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_COIN, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     public Coin findById(long id) {
 

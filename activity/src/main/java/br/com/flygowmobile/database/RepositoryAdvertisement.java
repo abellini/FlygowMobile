@@ -44,10 +44,10 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         Advertisement adv = findById(id);
         if (adv != null) {
             if (adv.getAdvertisementId() != 0) {
-                this.update(adv);
+                this.update(advertisement);
             }
         } else {
-            id = this.insert(adv);
+            id = this.insert(advertisement);
         }
         return id;
     }
@@ -100,6 +100,12 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         return count;
     }
 
+    public int removeAll() {
+        int count = db.delete(Advertisements.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_ADVERTISEMENT, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     public Advertisement findById(long id) {
         DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,9 +144,9 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
     @Override
     public List<Advertisement> listAll() {
         DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+        List<Advertisement> advertisements = new ArrayList<Advertisement>();
         try {
             Cursor c = getCursor();
-            List<Advertisement> advertisements = new ArrayList<Advertisement>();
             if (c.moveToFirst()) {
                 int idxId = c.getColumnIndex(Advertisements.COLUMN_NAME_ADVERTISEMENT_ID);
                 int idxName = c.getColumnIndex(Advertisements.COLUMN_NAME_NAME);
@@ -165,17 +171,16 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
                     advertisements.add(advertisement);
                 } while (c.moveToNext());
             }
-            return advertisements;
         } catch (Exception e) {
             Log.e(REPOSITORY_ADVERTISEMENT, "Error [" + e.getMessage() + "]");
         }
-        return null;
+        return advertisements;
     }
 
 
     @Override
     public Cursor getCursor() {
 
-        return db.query(Advertisements.TABLE_NAME, Attendant.columns, null, null, null, null, null, null);
+        return db.query(Advertisements.TABLE_NAME, Advertisement.columns, null, null, null, null, null, null);
     }
 }
