@@ -4,19 +4,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import br.com.flygowmobile.database.RepositoryAdvertisement;
+import br.com.flygowmobile.database.RepositoryAttendant;
 
-public class Advertisement implements Serializable {
-
-    public static String[] columns = new String[] {
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_ADVERTISEMENT_ID,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_NAME,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_INITIAL_DATE,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_FINAL_DATE,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_IS_ACTIVE,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO
-    };
-    private long advertisementId;
+public class Advertisement implements Serializable{
+    private int advertisementId;
+    private long tabletId;
     private String name;
     private Date inicialDate;
     private Date finalDate;
@@ -24,17 +16,29 @@ public class Advertisement implements Serializable {
     private String photoName;
     private String videoName;
 
+    public static String[] columns = new String[] {
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_ADVERTISEMENT_ID,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_TABLET_ID,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_NAME,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_INITIAL_DATE,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_FINAL_DATE,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_IS_ACTIVE,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO
+    };
+
     public Advertisement() { }
 
-    public Advertisement(long advertisementId, String name, Date inicialDate, Date finalDate, boolean active) {
+    public Advertisement(int advertisementId, long tabletId, String name, Date inicialDate, Date finalDate, boolean active) {
         this.advertisementId = advertisementId;
+        this.tabletId = tabletId;
         this.name = name;
         this.inicialDate = inicialDate;
         this.finalDate = finalDate;
         this.active = active;
     }
 
-    public Advertisement(long advertisementId, String name, Date inicialDate, Date finalDate, boolean active, String photoName, String videoName) {
+    public Advertisement(int advertisementId, String name, Date inicialDate, Date finalDate, boolean active, String photoName, String videoName) {
         this.advertisementId = advertisementId;
         this.name = name;
         this.inicialDate = inicialDate;
@@ -44,13 +48,17 @@ public class Advertisement implements Serializable {
         this.videoName = videoName;
     }
 
-    public long getAdvertisementId() {
+    public int getAdvertisementId() {
         return advertisementId;
     }
 
-    public void setAdvertisementId(long id) {
+    public void setAdvertisementId(int id) {
         this.advertisementId = id;
     }
+
+    public long getTabletId() {return tabletId; }
+
+    public void setTabletId(long tabletId) {this.tabletId = tabletId; }
 
     public String getName() {
         return name;

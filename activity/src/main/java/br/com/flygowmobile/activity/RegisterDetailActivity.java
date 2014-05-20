@@ -37,6 +37,7 @@ import java.util.TreeMap;
 
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
 import br.com.flygowmobile.Utils.StringUtils;
+import br.com.flygowmobile.database.RepositoryAdvertisement;
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
@@ -71,6 +72,7 @@ public class RegisterDetailActivity extends Activity {
     private Map<Integer, String> spinnerAdvertisementValues = new TreeMap<Integer, String>();
     private Map<Integer, Coin> listCoins = new Hashtable<Integer, Coin>();
     private Map<Integer, Attendant> listAttendant = new Hashtable<Integer, Attendant>();
+    private Map<Integer, Advertisement> listAdvertisements = new Hashtable<Integer, Advertisement>();
     private int coinId;
     private int attendantId;
 
@@ -82,6 +84,7 @@ public class RegisterDetailActivity extends Activity {
 
     public static RepositoryCoin repositoryCoin;
     public static RepositoryAttendant repositoryAttendant;
+    public static RepositoryAdvertisement repositoryAdvertisement;
     public static RepositoryTablet repositoryTablet;
     public static RepositoryCategory repositoryCategory;
     public static RepositoryFood repositoryFood;
@@ -101,6 +104,7 @@ public class RegisterDetailActivity extends Activity {
         repositoryCoin = new RepositoryCoin(this);
         repositoryAttendant = new RepositoryAttendant(this);
         repositoryTablet = new RepositoryTablet(this);
+        repositoryAdvertisement = new RepositoryAdvertisement(this);
         repositoryCategory = new RepositoryCategory(this);
         repositoryFood = new RepositoryFood(this);
         repositoryPaymentForm = new RepositoryPaymentForm(this);
@@ -124,7 +128,7 @@ public class RegisterDetailActivity extends Activity {
                 this.populateSpinnerAdvertisements(jsonAdvertisements, spinnerAdvertisements, spinnerAdvertisementValues);
             }
         } catch (Exception e) {
-
+            Log.i(REGISTER_DETAIL_ACTIVITY, "ERROR->>" + e.getStackTrace());
         }
 
         Button mRegisterButton = (Button) findViewById(R.id.register_detail_button);
@@ -274,6 +278,7 @@ public class RegisterDetailActivity extends Activity {
     }
 
     private void populateSpinnerAdvertisements(JSONArray jsonArray, MultiSelectionSpinner spinner, final Map<Integer, String> store){
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         List<String> list = new ArrayList<String>();
         try {
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -285,10 +290,11 @@ public class RegisterDetailActivity extends Activity {
                 Advertisement advertisement = new Advertisement();
                 advertisement.setAdvertisementId(id);
                 advertisement.setName(name);
-                advertisement.setInicialDate(StringUtils.parseDate(obj.getString("inicialDate")));
-                advertisement.setFinalDate(StringUtils.parseDate(obj.getString("finalDate")));
+                advertisement.setInicialDate(fm.parse(obj.getString("inicialDate")));
+                advertisement.setFinalDate(fm.parse(obj.getString("finalDate")));
                 advertisement.setActive(obj.getBoolean("active"));
 
+                listAdvertisements.put(advertisement.getAdvertisementId(), advertisement);
 
                 list.add(name);
                 store.put(id, name);
@@ -299,15 +305,16 @@ public class RegisterDetailActivity extends Activity {
             Log.i(REGISTER_DETAIL_ACTIVITY, "Error: " + e.getMessage());
         }
         //Verificando se já existe configurações salvas para esse campo
-        //TODO: Implementar a gravação e a leitura de advertisements
-        /*List<Advertisement> savedAdvertisements = reposi;
-        if(savedAttendant != null){
-            ArrayAdapter myAdap = (ArrayAdapter) spinnerAttendant.getAdapter();
-            int spinnerPosition = myAdap.getPosition(savedAttendant.getName());
-            spinnerAttendant.setSelection(spinnerPosition, true);
+        List<Advertisement> savedAdvertisements = repositoryAdvertisement.listAll();
+        if(savedAdvertisements != null && !savedAdvertisements.isEmpty()){
+            List<String> options = new ArrayList<String>();
+            for(Advertisement adv : savedAdvertisements){
+                options.add(adv.getName());
+            }
+            spinnerAdvertisements.setSelection(options);
         }else{
-            spinnerAttendant.setSelection(-1);
-        }*/
+            spinnerAdvertisements.setSelection(-1);
+        }
     }
 
     private String getAdvertisementIds(String choosedAdvertisements){
@@ -466,6 +473,7 @@ public class RegisterDetailActivity extends Activity {
     private void saveTabletDetails() {
 
         Log.i(REGISTER_DETAIL_ACTIVITY, "saveTabletDetails");
+        Tablet tablet = repositoryTablet.findLast();
 
         Coin coin = listCoins.get(coinId);
         repositoryCoin.save(coin);
@@ -473,12 +481,19 @@ public class RegisterDetailActivity extends Activity {
         Attendant attendant = listAttendant.get(attendantId);
         repositoryAttendant.save(attendant);
 
-        Tablet tablet = repositoryTablet.findLast();
+        List<String> selectedAdvertisementsString = spinnerAdvertisements.getSelectedStrings();
+        for(String selected : selectedAdvertisementsString){
+            for(Advertisement advertisement : listAdvertisements.values()){
+                if(selected.equals(advertisement.getName())){
+                    advertisement.setTabletId(tablet.getTabletId());
+                    repositoryAdvertisement.save(advertisement);
+                }
+            }
+        }
+
+
         tablet.setAttendantId(attendant.getAttendantId());
+        tablet.setCoinId(coin.getCoinId());
         repositoryTablet.save(tablet);
-
-
     }
-
-
 }
