@@ -16,16 +16,6 @@ public class RepositoryCategory extends Repository<Category> {
 
     private static final String REPOSITORY_CATEGORY = "RepositoryCategory";
 
-    public static abstract class Categories implements BaseColumns {
-
-        public static final String TABLE_NAME = "Category";
-
-        public static final String COLUMN_NAME_CATEGORY_ID = "categoryId";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_DESCRIPTION = "description";
-        public static final String COLUMN_NAME_PHOTO = "photo";
-    }
-
     public RepositoryCategory(Context ctx) {
         db = ctx.openOrCreateDatabase(RepositoryScript.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }
@@ -62,7 +52,7 @@ public class RepositoryCategory extends Repository<Category> {
 
         ContentValues values = populateContentValues(category);
         long id = db.insert(Categories.TABLE_NAME, "", values);
-        Log.i(REPOSITORY_CATEGORY, "Insert [" + id + "] record");
+        Log.i(REPOSITORY_CATEGORY, "Insert [" + id + "] Category record");
         return id;
     }
 
@@ -74,7 +64,7 @@ public class RepositoryCategory extends Repository<Category> {
         String where = Categories.COLUMN_NAME_CATEGORY_ID + "=?";
         String[] whereArgs = new String[] { _id };
         int count = db.update(Categories.TABLE_NAME, values, where, whereArgs);
-        Log.i(REPOSITORY_CATEGORY, "Update [" + count + "] record(s)");
+        Log.i(REPOSITORY_CATEGORY, "Update [" + count + "] Category record(s)");
         return count;
     }
 
@@ -85,7 +75,7 @@ public class RepositoryCategory extends Repository<Category> {
         String _id = String.valueOf(id);
         String[] whereArgs = new String[] { _id };
         int count = db.delete(Categories.TABLE_NAME, where, whereArgs);
-        Log.i(REPOSITORY_CATEGORY, "Delete [" + count + "] record(s)");
+        Log.i(REPOSITORY_CATEGORY, "Delete [" + count + "] Category record(s)");
         return count;
     }
 
@@ -129,5 +119,15 @@ public class RepositoryCategory extends Repository<Category> {
     public Cursor getCursor() {
 
         return db.query(Categories.TABLE_NAME, Tablet.columns, null, null, null, null, null, null);
+    }
+
+    public static abstract class Categories implements BaseColumns {
+
+        public static final String TABLE_NAME = "Category";
+
+        public static final String COLUMN_NAME_CATEGORY_ID = "categoryId";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_PHOTO = "photo";
     }
 }

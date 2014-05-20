@@ -3,7 +3,6 @@ package br.com.flygowmobile.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.provider.BaseColumns;
 import android.util.Log;
 
@@ -11,27 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.entity.Coin;
-import br.com.flygowmobile.entity.Tablet;
 
 
 public class RepositoryCoin extends Repository<Coin> {
 
     private static final String REPOSITORY_COIN = "RepositoryCoin";
-
-    public static abstract class Coins implements BaseColumns {
-
-        private Coins() {}
-
-        public static final String TABLE_NAME = "Coin";
-
-        public static final String DEFAULT_SORT_ORDER = "coinId ASC";
-
-        public static final String COLUMN_NAME_COIN_ID = "coinId";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_SYMBOL = "symbol";
-        public static final String COLUMN_NAME_CONVERSION = "conversion";
-
-    }
 
     public RepositoryCoin(Context ctx) {
         db = ctx.openOrCreateDatabase(RepositoryScript.DATABASE_NAME, Context.MODE_PRIVATE, null);
@@ -69,7 +52,7 @@ public class RepositoryCoin extends Repository<Coin> {
 
         ContentValues values = populateContentValues(coin);
         long id = db.insert(Coins.TABLE_NAME, "", values);
-        Log.i(REPOSITORY_COIN, "Insert [" + id + "] record");
+        Log.i(REPOSITORY_COIN, "Insert [" + id + "] Coin record");
         return id;
     }
 
@@ -81,7 +64,7 @@ public class RepositoryCoin extends Repository<Coin> {
         String where = Coins.COLUMN_NAME_COIN_ID + "=?";
         String[] whereArgs = new String[] { _id };
         int count = db.update(Coins.TABLE_NAME, values, where, whereArgs);
-        Log.i(REPOSITORY_COIN, "Update [" + count + "] record(s)");
+        Log.i(REPOSITORY_COIN, "Update [" + count + "] Coin record(s)");
         return count;
     }
 
@@ -92,7 +75,7 @@ public class RepositoryCoin extends Repository<Coin> {
         String _id = String.valueOf(id);
         String[] whereArgs = new String[] { _id };
         int count = db.delete(Coins.TABLE_NAME, where, whereArgs);
-        Log.i(REPOSITORY_COIN, "Delete [" + count + "] record(s)");
+        Log.i(REPOSITORY_COIN, "Delete [" + count + "] Coin record(s)");
         return count;
     }
 
@@ -159,5 +142,17 @@ public class RepositoryCoin extends Repository<Coin> {
             return coin;
         }
         return null;
+    }
+
+    public static abstract class Coins implements BaseColumns {
+
+        public static final String TABLE_NAME = "Coin";
+        public static final String DEFAULT_SORT_ORDER = "coinId ASC";
+        public static final String COLUMN_NAME_COIN_ID = "coinId";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_SYMBOL = "symbol";
+        public static final String COLUMN_NAME_CONVERSION = "conversion";
+        private Coins() {}
+
     }
 }

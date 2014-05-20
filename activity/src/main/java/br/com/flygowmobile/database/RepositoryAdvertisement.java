@@ -12,26 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.entity.Advertisement;
-import br.com.flygowmobile.entity.Attendant;
 
 public class RepositoryAdvertisement extends Repository<Advertisement> {
 
     private static final String REPOSITORY_ADVERTISEMENT = "RepositoryAdvertisement";
-
-    public static abstract class Advertisements implements BaseColumns {
-
-        public static final String TABLE_NAME = "Advertisement";
-
-        public static final String COLUMN_NAME_ADVERTISEMENT_ID = "advertisementId";
-        public static final String COLUMN_NAME_TABLET_ID = "tabletId";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_INITIAL_DATE = "initialDate";
-        public static final String COLUMN_NAME_FINAL_DATE = "finalDate";
-        public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
-        public static final String COLUMN_NAME_PHOTO = "photo";
-        public static final String COLUMN_NAME_VIDEO = "video";
-
-    }
 
     public RepositoryAdvertisement(Context ctx) {
         db = ctx.openOrCreateDatabase(RepositoryScript.DATABASE_NAME, Context.MODE_PRIVATE, null);
@@ -73,7 +57,7 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
 
         ContentValues values = populateContentValues(advertisement);
         long id = db.insert(Advertisements.TABLE_NAME, "", values);
-        Log.i(REPOSITORY_ADVERTISEMENT, "Insert [" + id + "] record");
+        Log.i(REPOSITORY_ADVERTISEMENT, "Insert [" + id + "] Advertisement record");
         return id;
     }
 
@@ -85,7 +69,7 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         String where = Advertisements.COLUMN_NAME_ADVERTISEMENT_ID + "=?";
         String[] whereArgs = new String[] { _id };
         int count = db.update(Advertisements.TABLE_NAME, values, where, whereArgs);
-        Log.i(REPOSITORY_ADVERTISEMENT, "Update [" + count + "] record(s)");
+        Log.i(REPOSITORY_ADVERTISEMENT, "Update [" + count + "] Advertisement record(s)");
         return count;
     }
 
@@ -96,7 +80,7 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         String _id = String.valueOf(id);
         String[] whereArgs = new String[] { _id };
         int count = db.delete(Advertisements.TABLE_NAME, where, whereArgs);
-        Log.i(REPOSITORY_ADVERTISEMENT, "Delete [" + count + "] record(s)");
+        Log.i(REPOSITORY_ADVERTISEMENT, "Delete [" + count + "] Advertisement record(s)");
         return count;
     }
 
@@ -110,7 +94,7 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
     public Advertisement findById(long id) {
         DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Cursor c = db.query(true, Advertisements.TABLE_NAME, Attendant.columns, Advertisements.COLUMN_NAME_ADVERTISEMENT_ID + "=" + id, null, null, null, null, null);
+            Cursor c = db.query(true, Advertisements.TABLE_NAME, Advertisement.columns, Advertisements.COLUMN_NAME_ADVERTISEMENT_ID + "=" + id, null, null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 int idxId = c.getColumnIndex(Advertisements.COLUMN_NAME_ADVERTISEMENT_ID);
@@ -177,10 +161,24 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         return advertisements;
     }
 
-
     @Override
     public Cursor getCursor() {
 
         return db.query(Advertisements.TABLE_NAME, Advertisement.columns, null, null, null, null, null, null);
+    }
+
+    public static abstract class Advertisements implements BaseColumns {
+
+        public static final String TABLE_NAME = "Advertisement";
+
+        public static final String COLUMN_NAME_ADVERTISEMENT_ID = "advertisementId";
+        public static final String COLUMN_NAME_TABLET_ID = "tabletId";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_INITIAL_DATE = "initialDate";
+        public static final String COLUMN_NAME_FINAL_DATE = "finalDate";
+        public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
+        public static final String COLUMN_NAME_PHOTO = "photo";
+        public static final String COLUMN_NAME_VIDEO = "video";
+
     }
 }

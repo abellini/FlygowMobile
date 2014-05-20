@@ -1,17 +1,10 @@
 package br.com.flygowmobile.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -35,8 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
-import br.com.flygowmobile.Utils.StringUtils;
+import br.com.flygowmobile.database.RepositoryAccompaniment;
 import br.com.flygowmobile.database.RepositoryAdvertisement;
 import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCategory;
@@ -44,6 +38,7 @@ import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryPaymentForm;
 import br.com.flygowmobile.database.RepositoryTablet;
+import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Attendant;
 import br.com.flygowmobile.entity.Category;
@@ -55,16 +50,20 @@ import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.ServiceHandler;
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 
 
 public class RegisterDetailActivity extends Activity {
 
     private static final String REGISTER_DETAIL_ACTIVITY = "RegisterDetailActivity";
-
+    public static RepositoryCoin repositoryCoin;
+    public static RepositoryAttendant repositoryAttendant;
+    public static RepositoryAdvertisement repositoryAdvertisement;
+    public static RepositoryTablet repositoryTablet;
+    public static RepositoryCategory repositoryCategory;
+    public static RepositoryFood repositoryFood;
+    public static RepositoryPaymentForm repositoryPaymentForm;
+    public static RepositoryAccompaniment repositoryAccompaniment;
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
-
-
     private Spinner spinnerCoin, spinnerAttendant;
     private MultiSelectionSpinner spinnerAdvertisements;
     private Map<Integer, String> spinnerCoinValues = new TreeMap<Integer, String>();
@@ -75,21 +74,10 @@ public class RegisterDetailActivity extends Activity {
     private Map<Integer, Advertisement> listAdvertisements = new Hashtable<Integer, Advertisement>();
     private int coinId;
     private int attendantId;
-
     private View mProgressDetailView;
     private View mRegisterFormDetailView;
-
     private ProgressDialog progressRegisterDialog;
     private ProgressDialog progressLocalRegisterDialog;
-
-    public static RepositoryCoin repositoryCoin;
-    public static RepositoryAttendant repositoryAttendant;
-    public static RepositoryAdvertisement repositoryAdvertisement;
-    public static RepositoryTablet repositoryTablet;
-    public static RepositoryCategory repositoryCategory;
-    public static RepositoryFood repositoryFood;
-    public static RepositoryPaymentForm repositoryPaymentForm;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +96,7 @@ public class RegisterDetailActivity extends Activity {
         repositoryCategory = new RepositoryCategory(this);
         repositoryFood = new RepositoryFood(this);
         repositoryPaymentForm = new RepositoryPaymentForm(this);
+        repositoryAccompaniment = new RepositoryAccompaniment(this);
 
         spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
         spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
@@ -333,15 +322,114 @@ public class RegisterDetailActivity extends Activity {
         return advIds.toString();
     }
 
+    private void saveMenuInformations(JSONObject initialData) {
+
+        JSONObject obj = null;
+        try {
+
+            // Categories
+            JSONArray categories  = initialData.getJSONArray("category");
+            for (int i = 0; i < categories.length(); i++) {
+                obj = categories.getJSONObject(i);
+                Category category = new Category();
+                category.setCategoryId(obj.getInt("id"));
+                category.setName(obj.getString("name"));
+                category.setDescription(obj.getString("description"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Category(ies): " + category);
+                repositoryCategory.save(category);
+            }
+
+            // Foods
+            JSONArray foods  = initialData.getJSONArray("foods");
+            for (int i = 0; i < foods.length(); i++) {
+                obj = foods.getJSONObject(i);
+                Food food = new Food();
+                food.setFoodId(obj.getInt("id"));
+                food.setName(obj.getString("name"));
+                food.setValue(obj.getDouble("value"));
+                food.setDescription(obj.getString("description"));
+                food.setNutritionalInfo(obj.getString("nutritionalInfo"));
+                food.setActive(Boolean.parseBoolean(obj.getString("active")));
+                food.setCategoryId(obj.getInt("categoryId"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
+                repositoryFood.save(food);
+            }
+
+            //paymentForms
+            JSONArray paymentForms  = initialData.getJSONArray("paymentForms");
+            for (int i = 0; i < paymentForms.length(); i++) {
+                obj = paymentForms.getJSONObject(i);
+                PaymentForm paymentForm = new PaymentForm();
+                paymentForm.setPaymentFormId(obj.getInt("id"));
+                paymentForm.setName(obj.getString("name"));
+                paymentForm.setDescription(obj.getString("description"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Payment Form(s): " + paymentForm);
+                repositoryPaymentForm.save(paymentForm);
+            }
+
+            //categoryAccompaniments
+            JSONArray categoryAccompaniments  = initialData.getJSONArray("categoryAccompaniments");
+            for (int i = 0; i < categoryAccompaniments.length(); i++) {
+                obj = categoryAccompaniments.getJSONObject(i);
+                Accompaniment accompaniment = new Accompaniment();
+                accompaniment.setAccompanimentId(obj.getInt("id"));
+                accompaniment.setName(obj.getString("name"));
+                accompaniment.setValue(obj.getDouble("value"));
+                accompaniment.setDescription(obj.getString("description"));
+                accompaniment.setActive(obj.getBoolean("active"));
+                accompaniment.setCategoryId(obj.getInt("categoryId"));
+
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Accompaniment(s): " + accompaniment);
+                repositoryAccompaniment.save(accompaniment);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveTabletDetails() {
+        repositoryCoin.removeAll();
+        repositoryAttendant.removeAll();
+        repositoryAdvertisement.removeAll();
+
+        Log.i(REGISTER_DETAIL_ACTIVITY, "saveTabletDetails");
+        Tablet tablet = repositoryTablet.findLast();
+
+        Coin coin = listCoins.get(coinId);
+        repositoryCoin.save(coin);
+
+        Attendant attendant = listAttendant.get(attendantId);
+        repositoryAttendant.save(attendant);
+
+        List<String> selectedAdvertisementsString = spinnerAdvertisements.getSelectedStrings();
+        for(String selected : selectedAdvertisementsString){
+            for(Advertisement advertisement : listAdvertisements.values()){
+                if(selected.equals(advertisement.getName())){
+                    advertisement.setTabletId(tablet.getTabletId());
+                    repositoryAdvertisement.save(advertisement);
+                }
+            }
+        }
+
+
+        tablet.setAttendantId(attendant.getAttendantId());
+        tablet.setCoinId(coin.getCoinId());
+        repositoryTablet.save(tablet);
+    }
+
     /**
      * Represents an asynchronous registration task used to salve Tablet
      */
     public class RegisterDetailsTabletTask extends AsyncTask<Void, Void, String> {
 
-        private String coin;
-        private String attendant;
         FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.REGISTER_DETAILS);
+        private String coin;
+        private String attendant;
 
 
         public RegisterDetailsTabletTask(String coin, String attendant) {
@@ -415,88 +503,5 @@ public class RegisterDetailActivity extends Activity {
             progressRegisterDialog.dismiss();
             mRegisterDetailsTask = null;
         }
-    }
-
-    private void saveMenuInformations(JSONObject initialData) {
-
-        JSONObject obj = null;
-        try {
-
-            // Categories
-            JSONArray categories  = initialData.getJSONArray("category");
-            for (int i = 0; i < categories.length(); i++) {
-                obj = categories.getJSONObject(i);
-                Category category = new Category();
-                category.setCategoryId(obj.getInt("id"));
-                category.setName(obj.getString("name"));
-                category.setDescription(obj.getString("description"));
-
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Category(ies): " + category);
-                repositoryCategory.save(category);
-            }
-
-            // Foods
-            JSONArray foods  = initialData.getJSONArray("foods");
-            for (int i = 0; i < foods.length(); i++) {
-                obj = foods.getJSONObject(i);
-                Food food = new Food();
-                food.setFoodId(obj.getInt("id"));
-                food.setName(obj.getString("name"));
-                food.setValue(obj.getDouble("value"));
-                food.setDescription(obj.getString("description"));
-                food.setNutritionalInfo(obj.getString("nutritionalInfo"));
-                food.setActive(Boolean.parseBoolean(obj.getString("active")));
-                food.setCategoryId(obj.getInt("categoryId"));
-
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
-                repositoryFood.save(food);
-            }
-
-            //paymentForms
-            JSONArray paymentForms  = initialData.getJSONArray("paymentForms");
-            for (int i = 0; i < paymentForms.length(); i++) {
-                obj = paymentForms.getJSONObject(i);
-                PaymentForm paymentForm = new PaymentForm();
-                paymentForm.setPaymentFormId(obj.getInt("id"));
-                paymentForm.setName(obj.getString("name"));
-                paymentForm.setDescription(obj.getString("description"));
-
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Payment Form(s): " + paymentForm);
-                repositoryPaymentForm.save(paymentForm);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveTabletDetails() {
-        repositoryCoin.removeAll();
-        repositoryAttendant.removeAll();
-        repositoryAdvertisement.removeAll();
-
-        Log.i(REGISTER_DETAIL_ACTIVITY, "saveTabletDetails");
-        Tablet tablet = repositoryTablet.findLast();
-
-        Coin coin = listCoins.get(coinId);
-        repositoryCoin.save(coin);
-
-        Attendant attendant = listAttendant.get(attendantId);
-        repositoryAttendant.save(attendant);
-
-        List<String> selectedAdvertisementsString = spinnerAdvertisements.getSelectedStrings();
-        for(String selected : selectedAdvertisementsString){
-            for(Advertisement advertisement : listAdvertisements.values()){
-                if(selected.equals(advertisement.getName())){
-                    advertisement.setTabletId(tablet.getTabletId());
-                    repositoryAdvertisement.save(advertisement);
-                }
-            }
-        }
-
-
-        tablet.setAttendantId(attendant.getAttendantId());
-        tablet.setCoinId(coin.getCoinId());
-        repositoryTablet.save(tablet);
     }
 }

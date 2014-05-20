@@ -15,23 +15,6 @@ public class RepositoryFood extends Repository<Food> {
 
     private static final String REPOSITORY_FOOD = "RepositoryFood";
 
-    public static abstract class Foods implements BaseColumns {
-
-        public static final String TABLE_NAME = "Food";
-
-        public static final String COLUMN_NAME_FOOD_ID = "foodId";
-        public static final String COLUMN_NAME_NAME = "name";
-        public static final String COLUMN_NAME_DESCRIPTION = "description";
-        public static final String COLUMN_NAME_VALUE = "value";
-        public static final String COLUMN_NAME_PHOTO = "photo";
-        public static final String COLUMN_NAME_VIDEO = "video";
-        public static final String COLUMN_NAME_CATEGORY_ID = "categoryId";
-        public static final String COLUMN_NAME_OPERATION_AREA_ID = "operationAreaId";
-        public static final String COLUMN_NAME_NUTRITIONAL_INFO = "nutritionalInfo";
-        public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
-
-    }
-
     public RepositoryFood(Context ctx) {
         db = ctx.openOrCreateDatabase(RepositoryScript.DATABASE_NAME, Context.MODE_PRIVATE, null);
     }
@@ -72,7 +55,7 @@ public class RepositoryFood extends Repository<Food> {
 
         ContentValues values = populateContentValues(food);
         long id = db.insert(Foods.TABLE_NAME, "", values);
-        Log.i(REPOSITORY_FOOD, "Insert [" + id + "] record");
+        Log.i(REPOSITORY_FOOD, "Insert [" + id + "] Food record");
         return id;
     }
 
@@ -84,7 +67,7 @@ public class RepositoryFood extends Repository<Food> {
         String where = Foods.COLUMN_NAME_FOOD_ID + "=?";
         String[] whereArgs = new String[] { _id };
         int count = db.update(Foods.TABLE_NAME, values, where, whereArgs);
-        Log.i(REPOSITORY_FOOD, "Update [" + count + "] record(s)");
+        Log.i(REPOSITORY_FOOD, "Update [" + count + "] Food record(s)");
         return count;
     }
 
@@ -95,7 +78,7 @@ public class RepositoryFood extends Repository<Food> {
         String _id = String.valueOf(id);
         String[] whereArgs = new String[] { _id };
         int count = db.delete(Foods.TABLE_NAME, where, whereArgs);
-        Log.i(REPOSITORY_FOOD, "Delete [" + count + "] record(s)");
+        Log.i(REPOSITORY_FOOD, "Delete [" + count + "] Food record(s)");
         return count;
     }
 
@@ -145,5 +128,22 @@ public class RepositoryFood extends Repository<Food> {
     public Cursor getCursor() {
 
         return db.query(Foods.TABLE_NAME, Food.columns, null, null, null, null, null, null);
+    }
+
+    public static abstract class Foods implements BaseColumns {
+
+        public static final String TABLE_NAME = "Food";
+
+        public static final String COLUMN_NAME_FOOD_ID = "foodId";
+        public static final String COLUMN_NAME_NAME = "name";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_VALUE = "value";
+        public static final String COLUMN_NAME_PHOTO = "photo";
+        public static final String COLUMN_NAME_VIDEO = "video";
+        public static final String COLUMN_NAME_CATEGORY_ID = "categoryId";
+        public static final String COLUMN_NAME_OPERATION_AREA_ID = "operationAreaId";
+        public static final String COLUMN_NAME_NUTRITIONAL_INFO = "nutritionalInfo";
+        public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
+
     }
 }

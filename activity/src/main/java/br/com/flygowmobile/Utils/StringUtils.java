@@ -1,20 +1,15 @@
 package br.com.flygowmobile.Utils;
 
 
-import android.util.Log;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class StringUtils {
 
     public static final Date parseDate(String date) {
 
-        final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         try {
             return df.parse(date);
         } catch (ParseException e) {
@@ -24,7 +19,7 @@ public class StringUtils {
     }
 
     public static final String parseString(Date date) {
-        final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         return df.format(date);
     }
 
