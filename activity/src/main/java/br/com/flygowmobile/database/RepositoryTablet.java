@@ -92,6 +92,12 @@ public class RepositoryTablet extends Repository<Tablet> {
         return count;
     }
 
+    public int removeAll() {
+        int count = db.delete(Tablets.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_TABLET, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     public int delete(long id) {
         String where = Tablets.COLUMN_NAME_TABLET_ID + "=?";

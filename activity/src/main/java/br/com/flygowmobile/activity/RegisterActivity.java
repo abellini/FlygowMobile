@@ -297,6 +297,7 @@ public class RegisterActivity extends Activity {
     }
 
     public void saveTablet(Tablet tablet) {
+        repositoryTablet.removeAll();
         repositoryTablet.save(tablet);
     }
 }

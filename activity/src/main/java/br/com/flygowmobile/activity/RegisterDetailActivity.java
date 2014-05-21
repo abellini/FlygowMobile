@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
 import br.com.flygowmobile.database.RepositoryAccompaniment;
@@ -72,8 +73,12 @@ public class RegisterDetailActivity extends Activity {
     private Map<Integer, Coin> listCoins = new Hashtable<Integer, Coin>();
     private Map<Integer, Attendant> listAttendant = new Hashtable<Integer, Attendant>();
     private Map<Integer, Advertisement> listAdvertisements = new Hashtable<Integer, Advertisement>();
+
     private int coinId;
     private int attendantId;
+
+    private boolean hasCoin, hasAttendant, hasAdvertisement;
+
     private View mProgressDetailView;
     private View mRegisterFormDetailView;
     private ProgressDialog progressRegisterDialog;
@@ -116,6 +121,27 @@ public class RegisterDetailActivity extends Activity {
                 JSONArray jsonAdvertisements = jsonObject.getJSONArray("advertisements");
                 this.populateSpinnerAdvertisements(jsonAdvertisements, spinnerAdvertisements, spinnerAdvertisementValues);
             }
+            if(!hasCoin || !hasAttendant || !hasAdvertisement){
+                String details = "";
+                if(!hasCoin){
+                    details += " - " + StaticMessages.COIN_CONFIGURATION.getName() + "\n";
+                }
+                if(!hasAttendant){
+                    details += " - " + StaticMessages.ATTENDANT_CONFIGURATION.getName() + "\n";
+                }
+                if(!hasAdvertisement){
+                    details += " - " + StaticMessages.ADVERTISEMENT_CONFIGURATION.getName() + "\n";
+                }
+                details += "\n" + StaticMessages.MANDATORY_CONFIGURATIONS.getName();
+                details += "\n" + StaticMessages.DEFINE_CHOICES.getName();
+                        StaticMessages generic = StaticMessages.getCustomMessage(StaticMessages.MISSING_CONFIGURATIONS.getName() + details);
+                FlygowAlertDialog.createWarningPopupWithIntent(this,
+                    StaticTitles.WARNING,
+                    generic,
+                    null
+                );
+            }
+
         } catch (Exception e) {
             Log.i(REGISTER_DETAIL_ACTIVITY, "ERROR->>" + e.getStackTrace());
         }
@@ -194,8 +220,9 @@ public class RegisterDetailActivity extends Activity {
             ArrayAdapter myAdap = (ArrayAdapter) spinnerCoin.getAdapter();
             int spinnerPosition = myAdap.getPosition(savedCoin.getName());
             spinnerCoin.setSelection(spinnerPosition, true);
+            hasCoin = true;
         }else{
-            spinnerCoin.setSelection(-1);
+            spinnerCoin.setSelection(0);
         }
     }
 
@@ -261,8 +288,9 @@ public class RegisterDetailActivity extends Activity {
             ArrayAdapter myAdap = (ArrayAdapter) spinnerAttendant.getAdapter();
             int spinnerPosition = myAdap.getPosition(savedAttendant.getName());
             spinnerAttendant.setSelection(spinnerPosition, true);
+            hasAttendant = true;
         }else{
-            spinnerAttendant.setSelection(-1);
+            spinnerAttendant.setSelection(0);
         }
     }
 
@@ -301,8 +329,11 @@ public class RegisterDetailActivity extends Activity {
                 options.add(adv.getName());
             }
             spinnerAdvertisements.setSelection(options);
+            hasAdvertisement = true;
         }else{
-            spinnerAdvertisements.setSelection(-1);
+            if(!listAdvertisements.isEmpty()){
+                spinnerAdvertisements.setSelection(Arrays.asList(listAdvertisements.values().iterator().next().getName()));
+            }
         }
     }
 
