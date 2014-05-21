@@ -1,6 +1,5 @@
 package br.com.flygowmobile.database;
 
-import android.app.ActionBar;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,26 +14,6 @@ import br.com.flygowmobile.entity.Tablet;
 public class RepositoryTablet extends Repository<Tablet> {
 
     private static final String REPOSITORY_TABLET = "RepositoryTablet";
-
-    public static abstract class Tablets implements BaseColumns {
-
-        private Tablets() {}
-
-        public static final String TABLE_NAME = "Tablet";
-
-        public static final String DEFAULT_SORT_ORDER = "tabletId ASC";
-
-        public static final String COLUMN_NAME_TABLET_ID = "tabletId";
-        public static final String COLUMN_NAME_STATUS_ID = "statusId";
-        public static final String COLUMN_NAME_COIN_ID = "coinId";
-        public static final String COLUMN_NAME_NUMBER = "number";
-        public static final String COLUMN_NAME_IP = "ip";
-        public static final String COLUMN_NAME_PORT = "port";
-        public static final String COLUMN_NAME_SERVER_IP = "serverIP";
-        public static final String COLUMN_NAME_SERVER_PORT = "serverPort";
-        public static final String COLUMN_NAME_ATTENDANT_ID = "attendantId";
-
-    }
 
     public RepositoryTablet(Context ctx) {
 
@@ -77,7 +56,7 @@ public class RepositoryTablet extends Repository<Tablet> {
 
         ContentValues values = populateContentValues(tablet);
         long id = db.insert(Tablets.TABLE_NAME, "", values);
-        Log.i(REPOSITORY_TABLET, "Insert [" + id + "] record");
+        Log.i(REPOSITORY_TABLET, "Insert [" + id + "] Tablet record");
         return id;
     }
 
@@ -88,7 +67,7 @@ public class RepositoryTablet extends Repository<Tablet> {
         String where = Tablets.COLUMN_NAME_TABLET_ID + "=?";
         String[] whereArgs = new String[] { _id };
         int count = db.update(Tablets.TABLE_NAME, values, where, whereArgs);
-        Log.i(REPOSITORY_TABLET, "Update [" + count + "] record(s)");
+        Log.i(REPOSITORY_TABLET, "Update [" + count + "] Tablet record(s)");
         return count;
     }
 
@@ -104,7 +83,7 @@ public class RepositoryTablet extends Repository<Tablet> {
         String _id = String.valueOf(id);
         String[] whereArgs = new String[] { _id };
         int count = db.delete(Tablets.TABLE_NAME, where, whereArgs);
-        Log.i(REPOSITORY_TABLET, "Delete [" + count + "] record(s)");
+        Log.i(REPOSITORY_TABLET, "Delete [" + count + "] Tablet record(s)");
         return count;
     }
 
@@ -211,6 +190,23 @@ public class RepositoryTablet extends Repository<Tablet> {
             } while (c.moveToNext());
         }
         return tablets;
+    }
+
+    public static abstract class Tablets implements BaseColumns {
+
+        public static final String TABLE_NAME = "Tablet";
+        public static final String DEFAULT_SORT_ORDER = "tabletId ASC";
+        public static final String COLUMN_NAME_TABLET_ID = "tabletId";
+        public static final String COLUMN_NAME_STATUS_ID = "statusId";
+        public static final String COLUMN_NAME_COIN_ID = "coinId";
+        public static final String COLUMN_NAME_NUMBER = "number";
+        public static final String COLUMN_NAME_IP = "ip";
+        public static final String COLUMN_NAME_PORT = "port";
+        public static final String COLUMN_NAME_SERVER_IP = "serverIP";
+        public static final String COLUMN_NAME_SERVER_PORT = "serverPort";
+        public static final String COLUMN_NAME_ATTENDANT_ID = "attendantId";
+        private Tablets() {}
+
     }
 
 //    @Override

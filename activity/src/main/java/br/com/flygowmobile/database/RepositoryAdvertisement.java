@@ -181,4 +181,6 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         public static final String COLUMN_NAME_VIDEO = "video";
 
     }
+
+
 }

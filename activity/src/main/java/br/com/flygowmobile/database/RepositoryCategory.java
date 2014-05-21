@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.entity.Category;
-import br.com.flygowmobile.entity.Tablet;
 
 public class RepositoryCategory extends Repository<Category> {
 
@@ -28,10 +27,10 @@ public class RepositoryCategory extends Repository<Category> {
         Category cat = findById(id);
         if (cat != null) {
             if (cat.getCategoryId() != 0) {
-                update(cat);
+                update(category);
             }
         } else {
-            id = insert(cat);
+            id = insert(category);
         }
         return id;
     }
@@ -82,7 +81,7 @@ public class RepositoryCategory extends Repository<Category> {
     @Override
     public Category findById(long id) {
 
-        Cursor c = db.query(true, Categories.TABLE_NAME, Tablet.columns, Categories.COLUMN_NAME_CATEGORY_ID + "=" + id, null, null, null, null, null);
+        Cursor c = db.query(true, Categories.TABLE_NAME, Category.columns, Categories.COLUMN_NAME_CATEGORY_ID + "=" + id, null, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
             Category category = new Category();
@@ -118,7 +117,7 @@ public class RepositoryCategory extends Repository<Category> {
     @Override
     public Cursor getCursor() {
 
-        return db.query(Categories.TABLE_NAME, Tablet.columns, null, null, null, null, null, null);
+        return db.query(Categories.TABLE_NAME, Category.columns, null, null, null, null, null, null);
     }
 
     public static abstract class Categories implements BaseColumns {
@@ -130,4 +129,6 @@ public class RepositoryCategory extends Repository<Category> {
         public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_PHOTO = "photo";
     }
+
+
 }

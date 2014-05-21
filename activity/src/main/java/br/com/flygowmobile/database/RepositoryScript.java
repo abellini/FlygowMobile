@@ -2,11 +2,10 @@ package br.com.flygowmobile.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
 
 public class RepositoryScript {
 
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "FlyGow.db";
 
     private static final String TEXT_TYPE = " TEXT";
@@ -92,6 +91,19 @@ public class RepositoryScript {
                     RepositoryAttendant.Attendants.COLUMN_NAME_LOGIN + TEXT_TYPE + COMMA_SEP +
                     RepositoryAttendant.Attendants.COLUMN_NAME_PASSWORD + TEXT_TYPE + COMMA_SEP +
                     RepositoryAttendant.Attendants.COLUMN_NAME_EMAIL + TEXT_TYPE +
+            " )",
+            "CREATE TABLE " + RepositoryPaymentForm.PaymentForms.TABLE_NAME + " (" +
+                    RepositoryPaymentForm.PaymentForms.COLUMN_NAME_PAYMENT_ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    RepositoryPaymentForm.PaymentForms.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    RepositoryPaymentForm.PaymentForms.COLUMN_NAME_DESCRIPTION + TEXT_TYPE +
+            " )",
+            "CREATE TABLE " + RepositoryAccompaniment.Accompaniments.TABLE_NAME + " (" +
+                    RepositoryAccompaniment.Accompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    RepositoryAccompaniment.Accompaniments.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    RepositoryAccompaniment.Accompaniments.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
+                    RepositoryAccompaniment.Accompaniments.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
+                    RepositoryAccompaniment.Accompaniments.COLUMN_NAME_IS_ACTIVE + INTEGER_TYPE + COMMA_SEP +
+                    RepositoryAccompaniment.Accompaniments.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE +
             " )"
     };
 
@@ -104,11 +116,12 @@ public class RepositoryScript {
             "DROP TABLE IF EXISTS " + RepositoryCategory.Categories.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryAdvertisement.Advertisements.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryOrder.Orders.TABLE_NAME,
-            "DROP TABLE IF EXISTS " + RepositoryOrderItem.OrderItems.TABLE_NAME
+            "DROP TABLE IF EXISTS " + RepositoryOrderItem.OrderItems.TABLE_NAME,
+            "DROP TABLE IF EXISTS " + RepositoryPaymentForm.PaymentForms.TABLE_NAME,
+            "DROP TABLE IF EXISTS " + RepositoryAccompaniment.Accompaniments.TABLE_NAME
     };
-
-    private SQLiteHelper dbHelper;
     protected SQLiteDatabase db;
+    private SQLiteHelper dbHelper;
 
     public RepositoryScript(Context ctx){
         dbHelper = new SQLiteHelper(ctx, DATABASE_NAME, DATABASE_VERSION, SCRIPT_CREATE_TABLES, SCRIPT_DELETE_TABLES);
