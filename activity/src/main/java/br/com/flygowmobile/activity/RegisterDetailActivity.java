@@ -417,6 +417,16 @@ public class RegisterDetailActivity extends Activity {
                 repositoryAccompaniment.save(accompaniment);
             }
 
+            //foodAccompaniments
+            JSONArray foodAccompaniments  = initialData.getJSONArray("foodAccompaniments");
+            for (int i = 0; i < foodAccompaniments.length(); i++) {
+                obj = foodAccompaniments.getJSONObject(i);
+
+
+                //Log.i(REGISTER_DETAIL_ACTIVITY, "Save Accompaniment(s): " + accompaniment);
+                //repositoryAccompaniment.save(accompaniment);
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
