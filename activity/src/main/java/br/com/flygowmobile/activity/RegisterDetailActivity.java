@@ -37,6 +37,7 @@ import br.com.flygowmobile.database.RepositoryAttendant;
 import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
+import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 import br.com.flygowmobile.database.RepositoryPaymentForm;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Accompaniment;
@@ -45,6 +46,7 @@ import br.com.flygowmobile.entity.Attendant;
 import br.com.flygowmobile.entity.Category;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
+import br.com.flygowmobile.entity.FoodAccompaniment;
 import br.com.flygowmobile.entity.PaymentForm;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
@@ -64,6 +66,7 @@ public class RegisterDetailActivity extends Activity {
     public static RepositoryFood repositoryFood;
     public static RepositoryPaymentForm repositoryPaymentForm;
     public static RepositoryAccompaniment repositoryAccompaniment;
+    public static RepositoryFoodAccompaniment repositoryFoodAccompaniment;
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
     private Spinner spinnerCoin, spinnerAttendant;
     private MultiSelectionSpinner spinnerAdvertisements;
@@ -93,6 +96,12 @@ public class RegisterDetailActivity extends Activity {
         Bundle bundle = getIntent().getExtras();
         String json = bundle.getString("jsonDetailDomain");
 
+        spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
+        spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
+        spinnerAdvertisements = (MultiSelectionSpinner) findViewById(R.id.spinnerAdvertisements);
+        mRegisterFormDetailView = findViewById(R.id.register_detail_form);
+        mProgressDetailView = findViewById(R.id.register_detail_progress);
+
         // Repositories
         repositoryCoin = new RepositoryCoin(this);
         repositoryAttendant = new RepositoryAttendant(this);
@@ -102,14 +111,11 @@ public class RegisterDetailActivity extends Activity {
         repositoryFood = new RepositoryFood(this);
         repositoryPaymentForm = new RepositoryPaymentForm(this);
         repositoryAccompaniment = new RepositoryAccompaniment(this);
+        repositoryFoodAccompaniment = new RepositoryFoodAccompaniment(this);
 
-        spinnerCoin = (Spinner) findViewById(R.id.spinnerCoin);
-        spinnerAttendant = (Spinner) findViewById(R.id.spinnerAttendant);
-        spinnerAdvertisements = (MultiSelectionSpinner) findViewById(R.id.spinnerAdvertisements);
-        mRegisterFormDetailView = findViewById(R.id.register_detail_form);
-        mProgressDetailView = findViewById(R.id.register_detail_progress);
         try {
             if (json != null) {
+
                 JSONObject jsonObject = new JSONObject(json);
 
                 JSONArray jsonCoins = jsonObject.getJSONArray("coins");
@@ -121,7 +127,7 @@ public class RegisterDetailActivity extends Activity {
                 JSONArray jsonAdvertisements = jsonObject.getJSONArray("advertisements");
                 this.populateSpinnerAdvertisements(jsonAdvertisements, spinnerAdvertisements, spinnerAdvertisementValues);
             }
-            if(!hasCoin || !hasAttendant || !hasAdvertisement){
+            if (!hasCoin || !hasAttendant || !hasAdvertisement) {
                 String details = "";
                 if(!hasCoin){
                     details += " - " + StaticMessages.COIN_CONFIGURATION.getName() + "\n";
@@ -421,10 +427,27 @@ public class RegisterDetailActivity extends Activity {
             JSONArray foodAccompaniments  = initialData.getJSONArray("foodAccompaniments");
             for (int i = 0; i < foodAccompaniments.length(); i++) {
                 obj = foodAccompaniments.getJSONObject(i);
+                Accompaniment accompaniment = new Accompaniment();
+                accompaniment.setAccompanimentId(obj.getInt("id"));
+                accompaniment.setName(obj.getString("name"));
+                accompaniment.setValue(obj.getDouble("value"));
+                accompaniment.setDescription(obj.getString("description"));
+                accompaniment.setActive(obj.getBoolean("active"));
+                accompaniment.setCategoryId(obj.getInt("categoryId"));
 
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Accompaniment(s): " + accompaniment);
+                repositoryAccompaniment.save(accompaniment);
 
-                //Log.i(REGISTER_DETAIL_ACTIVITY, "Save Accompaniment(s): " + accompaniment);
-                //repositoryAccompaniment.save(accompaniment);
+                JSONArray foodIds = obj.getJSONArray("foodIds");
+                for (int j = 0; j < foodIds.length(); j++) {
+                    int id = foodIds.getInt(j);
+                    FoodAccompaniment foodAccompaniment = new FoodAccompaniment();
+                    foodAccompaniment.setFoodId(id);
+                    foodAccompaniment.setAccompanimentId(obj.getInt("id"));
+
+                    Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food Accompaniment: " + id);
+                    repositoryFoodAccompaniment.save(foodAccompaniment);
+                }
             }
 
         } catch (JSONException e) {

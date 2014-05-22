@@ -12,6 +12,7 @@ public class RepositoryScript {
     private static final String INTEGER_TYPE = " INTEGER";
     private static final String REAL_TYPE = " REAL";
     private static final String BLOB_TYPE = " BLOB";
+    private static final String NOT_NULL = " NOT NULL";
     private static final String COMMA_SEP = ",";
 
     private static final String[] SCRIPT_CREATE_TABLES = new String[] {
@@ -104,6 +105,11 @@ public class RepositoryScript {
                     RepositoryAccompaniment.Accompaniments.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     RepositoryAccompaniment.Accompaniments.COLUMN_NAME_IS_ACTIVE + INTEGER_TYPE + COMMA_SEP +
                     RepositoryAccompaniment.Accompaniments.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE +
+            " )",
+            "CREATE TABLE " + RepositoryFoodAccompaniment.FoodAccompaniments.TABLE_NAME + " (" +
+                    RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_FOOD_ID + INTEGER_TYPE +  NOT_NULL + COMMA_SEP +
+                    RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + INTEGER_TYPE +  NOT_NULL+ COMMA_SEP +
+                    " PRIMARY KEY (" + RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_FOOD_ID + ", " + RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + ")" +
             " )"
     };
 
@@ -118,7 +124,8 @@ public class RepositoryScript {
             "DROP TABLE IF EXISTS " + RepositoryOrder.Orders.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryOrderItem.OrderItems.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryPaymentForm.PaymentForms.TABLE_NAME,
-            "DROP TABLE IF EXISTS " + RepositoryAccompaniment.Accompaniments.TABLE_NAME
+            "DROP TABLE IF EXISTS " + RepositoryAccompaniment.Accompaniments.TABLE_NAME,
+            "DROP TABLE IF EXISTS " + RepositoryFoodAccompaniment.FoodAccompaniments.TABLE_NAME
     };
     protected SQLiteDatabase db;
     private SQLiteHelper dbHelper;
