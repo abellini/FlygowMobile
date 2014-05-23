@@ -5,6 +5,9 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -159,6 +162,24 @@ public class RegisterDetailActivity extends Activity {
                 tabletRegisterDetails();
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.layout.menu_sec_to_register_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.menu_connect_configurations:
+                //TODO: Implementar a volta para a tela de registro de tablet
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private void tabletRegisterDetails() {
@@ -360,6 +381,15 @@ public class RegisterDetailActivity extends Activity {
     }
 
     private void saveMenuInformations(JSONObject initialData) {
+        try{
+            repositoryCategory.removeAll();
+            repositoryFoodAccompaniment.removeAll();
+            repositoryFood.removeAll();
+            repositoryPaymentForm.removeAll();
+            repositoryAccompaniment.removeAll();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
         JSONObject obj = null;
         try {

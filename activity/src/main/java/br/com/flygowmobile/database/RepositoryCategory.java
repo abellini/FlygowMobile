@@ -120,6 +120,12 @@ public class RepositoryCategory extends Repository<Category> {
         return db.query(Categories.TABLE_NAME, Category.columns, null, null, null, null, null, null);
     }
 
+    public int removeAll() {
+        int count = db.delete(Categories.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_CATEGORY, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     public static abstract class Categories implements BaseColumns {
 
         public static final String TABLE_NAME = "Category";

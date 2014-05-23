@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import java.util.List;
 
@@ -21,31 +22,51 @@ public class RepositoryFoodAccompaniment extends Repository<FoodAccompaniment> {
 
     @Override
     public long save(FoodAccompaniment foodAccompaniment) {
-        long id = foodAccompaniment.getFoodId();
+        return this.insert(foodAccompaniment);
+    }
 
-        FoodAccompaniment foodAcc = findById(id);
-        if (foodAcc != null) {
-            if (foodAcc.getFoodId() != 0) {
-                this.update(foodAccompaniment);
-            }
-        } else {
-            id = this.insert(foodAccompaniment);
-        }
-        return id;
+    public int removeAll() {
+        int count = db.delete(FoodAccompaniments.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_FOOD_ACCOMPANIMENT, "Delete [" + count + "] record(s)");
+        return count;
     }
 
     @Override
     protected ContentValues populateContentValues(FoodAccompaniment foodAccompaniment) {
-        return null;
+        ContentValues values = new ContentValues();
+        values.put(FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID, foodAccompaniment.getAccompanimentId());
+        values.put(FoodAccompaniments.COLUMN_NAME_FOOD_ID, foodAccompaniment.getFoodId());
+        return values;
     }
 
     @Override
     protected long insert(FoodAccompaniment foodAccompaniment) {
-        return 0;
+        ContentValues values = populateContentValues(foodAccompaniment);
+        long id = db.insert(FoodAccompaniments.TABLE_NAME, "", values);
+        Log.i(REPOSITORY_FOOD_ACCOMPANIMENT, "Insert [" + id + "] FoodAccompaniments record");
+        return id;
+    }
+
+    public int deleteByFoodId(long id) {
+        String where = FoodAccompaniments.COLUMN_NAME_FOOD_ID + "=?";
+        String _id = String.valueOf(id);
+        String[] whereArgs = new String[] { _id };
+        int count = db.delete(FoodAccompaniments.TABLE_NAME, where, whereArgs);
+        Log.i(REPOSITORY_FOOD_ACCOMPANIMENT, "Delete [" + count + "] FoodAccompaniments record(s)");
+        return count;
+    }
+
+    public int deleteByAccompanimentId(long id) {
+        String where = FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + "=?";
+        String _id = String.valueOf(id);
+        String[] whereArgs = new String[] { _id };
+        int count = db.delete(FoodAccompaniments.TABLE_NAME, where, whereArgs);
+        Log.i(REPOSITORY_FOOD_ACCOMPANIMENT, "Delete [" + count + "] FoodAccompaniments record(s)");
+        return count;
     }
 
     @Override
-    protected int update(FoodAccompaniment foodAccompaniment) {
+    protected int update(FoodAccompaniment obj) {
         return 0;
     }
 
@@ -53,6 +74,7 @@ public class RepositoryFoodAccompaniment extends Repository<FoodAccompaniment> {
     public int delete(long id) {
         return 0;
     }
+
 
     @Override
     public FoodAccompaniment findById(long id) {

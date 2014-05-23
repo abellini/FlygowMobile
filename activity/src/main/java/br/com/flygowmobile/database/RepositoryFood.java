@@ -35,6 +35,12 @@ public class RepositoryFood extends Repository<Food> {
         return id;
     }
 
+    public int removeAll() {
+        int count = db.delete(Foods.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_FOOD, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     protected ContentValues populateContentValues(Food food) {
 

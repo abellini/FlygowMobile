@@ -56,9 +56,14 @@ public class RepositoryAccompaniment extends Repository<Accompaniment> {
         return id;
     }
 
+    public int removeAll() {
+        int count = db.delete(Accompaniments.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_ACCOMPANIMENT, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     protected int update(Accompaniment accompaniment) {
-
         ContentValues values = populateContentValues(accompaniment);
         String _id = String.valueOf(accompaniment.getAccompanimentId());
         String where = Accompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + "=?";
@@ -70,7 +75,6 @@ public class RepositoryAccompaniment extends Repository<Accompaniment> {
 
     @Override
     public int delete(long id) {
-
         String where = Accompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + "=?";
         String _id = String.valueOf(id);
         String[] whereArgs = new String[] { _id };

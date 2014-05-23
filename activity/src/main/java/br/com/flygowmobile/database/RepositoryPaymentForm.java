@@ -103,6 +103,12 @@ public class RepositoryPaymentForm extends Repository<PaymentForm> {
         return null;
     }
 
+    public int removeAll() {
+        int count = db.delete(PaymentForms.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_PAYMENT, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     public List<PaymentForm> listAll() {
         Cursor c = getCursor();
@@ -113,12 +119,12 @@ public class RepositoryPaymentForm extends Repository<PaymentForm> {
             int idxDescription =  c.getColumnIndex(PaymentForms.COLUMN_NAME_DESCRIPTION);
 
             do {
-                PaymentForm coin = new PaymentForm();
-                paymentForms.add(coin);
+                PaymentForm paymentForm = new PaymentForm();
+                paymentForms.add(paymentForm);
                 // recupera os atributos de Payment Form
-                coin.setPaymentFormId(c.getInt(idxId));
-                coin.setName(c.getString(idxName));
-                coin.setDescription(c.getString(idxDescription));
+                paymentForm.setPaymentFormId(c.getInt(idxId));
+                paymentForm.setName(c.getString(idxName));
+                paymentForm.setDescription(c.getString(idxDescription));
             } while (c.moveToNext());
         }
         return paymentForms;
