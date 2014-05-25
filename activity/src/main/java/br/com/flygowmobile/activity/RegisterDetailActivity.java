@@ -2,6 +2,7 @@ package br.com.flygowmobile.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -175,7 +176,11 @@ public class RegisterDetailActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menu_connect_configurations:
-                //TODO: Implementar a volta para a tela de registro de tablet
+                Intent it = new Intent(RegisterDetailActivity.this, RegisterActivity.class);
+                it.putExtra("isReconnect", true);
+                it.putExtra("isChangeConfiguration", true);
+                startActivity(it);
+                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

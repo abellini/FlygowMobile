@@ -1,21 +1,11 @@
 package br.com.flygowmobile.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -65,6 +55,11 @@ public class RegisterActivity extends Activity {
 
     private Bundle bundle;
 
+    private boolean isReconnect;
+    private boolean isChangeConfiguration;
+    private Tablet tabletToTask;
+    private long previousTabletNumber;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +90,13 @@ public class RegisterActivity extends Activity {
         if(hasConfigs){
             populateFields(bundle.getString("configData"));
         }else{
-            populateFields(null);
+            isReconnect = bundle.getBoolean("isReconnect");
+            isChangeConfiguration = bundle.getBoolean("isChangeConfiguration");
+            if(isReconnect){
+                populateFieldsFromDataBase();
+            }else{
+                populateFields(null);
+            }
         }
     }
 
@@ -117,6 +118,19 @@ public class RegisterActivity extends Activity {
             }
         }else{
             mip.setText(getCurrentTabletIP());
+        }
+    }
+
+    private void populateFieldsFromDataBase() {
+        try {
+            tabletToTask = repositoryTablet.findLast();
+            mNumero.setText(""+tabletToTask.getNumber());
+            mip.setText(tabletToTask.getIp());
+            mport.setText(""+tabletToTask.getPort());
+            mserverIP.setText(tabletToTask.getServerIP());
+            mserverPort.setText(""+tabletToTask.getServerPort());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -204,13 +218,25 @@ public class RegisterActivity extends Activity {
             FlygowServerUrl url = (FlygowServerUrl)getApplication();
             url.setServerIp(serverIP);
             url.setServerPort(Integer.parseInt(serverPort));
-            Tablet tablet = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
+            Tablet tabletToTask = null;
+            if(!isReconnect){
+                tabletToTask = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
+            }else{
+                tabletToTask = repositoryTablet.findLast();
+                previousTabletNumber = tabletToTask.getNumber();
+                tabletToTask.setNumber(nNumber);
+                tabletToTask.setIp(ip);
+                tabletToTask.setPort(nport);
+                tabletToTask.setServerIP(serverIP);
+                tabletToTask.setServerPort(nserverPort);
+            }
 
             //LOADING
             progressRegisterDialog = ProgressDialog.show(RegisterActivity.this, StaticTitles.LOAD.getName(),
                     StaticMessages.REGISTER_FROM_SERVER.getName(), true);
 
-            mRegisterTask = new RegisterTabletTask(tablet);
+            mRegisterTask = new RegisterTabletTask(tabletToTask, isReconnect, isChangeConfiguration);
+            mRegisterTask.setPreviousTabletNumber(previousTabletNumber);
             mRegisterTask.execute((Void) null);
         }
 
@@ -222,22 +248,45 @@ public class RegisterActivity extends Activity {
     public class RegisterTabletTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet tablet;
+        private long previousTabletNumber;
+        private boolean isReconnect, isChangeConfiguration;
         FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.CONNECT);
 
-        RegisterTabletTask(Tablet tablet) {
+        RegisterTabletTask(Tablet tablet, boolean isReconnect, boolean isChangeConfiguration) {
             this.tablet = tablet;
+            this.isChangeConfiguration = isChangeConfiguration;
+            this.isReconnect = isReconnect;
+        }
+
+        public boolean isChangeConfiguration() {
+            return isChangeConfiguration;
+        }
+
+        public boolean isReconnect() {
+            return isReconnect;
+        }
+
+        public void setPreviousTabletNumber(long previousTabletNumber) {
+            this.previousTabletNumber = previousTabletNumber;
+        }
+
+        public long getPreviousTabletNumber() {
+            return previousTabletNumber;
         }
 
         @Override
         protected String doInBackground(Void... params) {
             try {
                 String tabletJson = tablet.toJSONInitialConfig();
-                String isReconnect = bundle.getString("isReconnect") != null ? bundle.getString("isReconnect") : "false";
+                String isReconnect = isReconnect() ? "true" : "false";
+                String isChangeConfiguration = isChangeConfiguration() ? "true" : "false";
                 NameValuePair tabletJsonPair = new BasicNameValuePair("tabletJson", tabletJson);
                 NameValuePair isReconnectPair = new BasicNameValuePair("isReconnect", isReconnect);
+                NameValuePair isChangeConfigurationPair = new BasicNameValuePair("isChangeConfiguration", isChangeConfiguration);
+                NameValuePair previousTabletNumberPair = new BasicNameValuePair("previousTabletNumber", ""+previousTabletNumber);
                 Log.i(REGISTER_ACTIVITY, "URL -->>>>>>>> " + url);
-                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(tabletJsonPair, isReconnectPair));
+                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(tabletJsonPair, isReconnectPair, isChangeConfigurationPair, previousTabletNumberPair));
             } catch (HttpHostConnectException ex) {
                 Log.i(REGISTER_ACTIVITY, StaticMessages.TIMEOUT.getName());
                 Toast.makeText(RegisterActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();

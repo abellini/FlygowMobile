@@ -129,6 +129,7 @@ public class Tablet implements Serializable {
                 "\"ip\": " + "\"" + getIp() + "\", " +
                 "\"port\": " + getPort() + ", " +
                 "\"serverIP\": " + "\"" + getServerIP() + "\", " +
+                "\"id\": " + getTabletId() + ", " +
                 "\"serverPort\": " + getServerPort() +
                 "}";
     }
