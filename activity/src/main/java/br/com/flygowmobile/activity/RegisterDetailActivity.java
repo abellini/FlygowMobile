@@ -133,22 +133,22 @@ public class RegisterDetailActivity extends Activity {
             }
             if (!hasCoin || !hasAttendant || !hasAdvertisement) {
                 String details = "";
-                if(!hasCoin){
+                if (!hasCoin) {
                     details += " - " + StaticMessages.COIN_CONFIGURATION.getName() + "\n";
                 }
-                if(!hasAttendant){
+                if (!hasAttendant) {
                     details += " - " + StaticMessages.ATTENDANT_CONFIGURATION.getName() + "\n";
                 }
-                if(!hasAdvertisement){
+                if (!hasAdvertisement) {
                     details += " - " + StaticMessages.ADVERTISEMENT_CONFIGURATION.getName() + "\n";
                 }
                 details += "\n" + StaticMessages.MANDATORY_CONFIGURATIONS.getName();
                 details += "\n" + StaticMessages.DEFINE_CHOICES.getName();
-                        StaticMessages generic = StaticMessages.getCustomMessage(StaticMessages.MISSING_CONFIGURATIONS.getName() + details);
+                StaticMessages generic = StaticMessages.getCustomMessage(StaticMessages.MISSING_CONFIGURATIONS.getName() + details);
                 FlygowAlertDialog.createWarningPopupWithIntent(this,
-                    StaticTitles.WARNING,
-                    generic,
-                    null
+                        StaticTitles.WARNING,
+                        generic,
+                        null
                 );
             }
 
@@ -166,15 +166,15 @@ public class RegisterDetailActivity extends Activity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
         menuInflater.inflate(R.layout.menu_sec_to_register_activity, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.menu_connect_configurations:
                 Intent it = new Intent(RegisterDetailActivity.this, RegisterActivity.class);
                 it.putExtra("isReconnect", true);
@@ -248,12 +248,12 @@ public class RegisterDetailActivity extends Activity {
         }
         //Verificando se já existe configurações salvas para esse campo
         Coin savedCoin = repositoryCoin.findLast();
-        if(savedCoin != null){
+        if (savedCoin != null) {
             ArrayAdapter myAdap = (ArrayAdapter) spinnerCoin.getAdapter();
             int spinnerPosition = myAdap.getPosition(savedCoin.getName());
             spinnerCoin.setSelection(spinnerPosition, true);
             hasCoin = true;
-        }else{
+        } else {
             spinnerCoin.setSelection(0);
         }
     }
@@ -316,17 +316,17 @@ public class RegisterDetailActivity extends Activity {
         }
         //Verificando se já existe configurações salvas para esse campo
         Attendant savedAttendant = repositoryAttendant.findById(repositoryTablet.findLast().getAttendantId());
-        if(savedAttendant != null){
+        if (savedAttendant != null) {
             ArrayAdapter myAdap = (ArrayAdapter) spinnerAttendant.getAdapter();
             int spinnerPosition = myAdap.getPosition(savedAttendant.getName());
             spinnerAttendant.setSelection(spinnerPosition, true);
             hasAttendant = true;
-        }else{
+        } else {
             spinnerAttendant.setSelection(0);
         }
     }
 
-    private void populateSpinnerAdvertisements(JSONArray jsonArray, MultiSelectionSpinner spinner, final Map<Integer, String> store){
+    private void populateSpinnerAdvertisements(JSONArray jsonArray, MultiSelectionSpinner spinner, final Map<Integer, String> store) {
         DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
         List<String> list = new ArrayList<String>();
         try {
@@ -355,28 +355,28 @@ public class RegisterDetailActivity extends Activity {
         }
         //Verificando se já existe configurações salvas para esse campo
         List<Advertisement> savedAdvertisements = repositoryAdvertisement.listAll();
-        if(savedAdvertisements != null && !savedAdvertisements.isEmpty()){
+        if (savedAdvertisements != null && !savedAdvertisements.isEmpty()) {
             List<String> options = new ArrayList<String>();
-            for(Advertisement adv : savedAdvertisements){
+            for (Advertisement adv : savedAdvertisements) {
                 options.add(adv.getName());
             }
             spinnerAdvertisements.setSelection(options);
             hasAdvertisement = true;
-        }else{
-            if(!listAdvertisements.isEmpty()){
+        } else {
+            if (!listAdvertisements.isEmpty()) {
                 spinnerAdvertisements.setSelection(Arrays.asList(listAdvertisements.values().iterator().next().getName()));
             }
         }
     }
 
-    private String getAdvertisementIds(String choosedAdvertisements){
+    private String getAdvertisementIds(String choosedAdvertisements) {
         String advIds = "";
-        if(choosedAdvertisements != null && !"".equals(choosedAdvertisements)){
+        if (choosedAdvertisements != null && !"".equals(choosedAdvertisements)) {
             List<String> listNameAdv = Arrays.asList(choosedAdvertisements.split(","));
-            for(String name : listNameAdv){
-                for(int id : spinnerAdvertisementValues.keySet()){
+            for (String name : listNameAdv) {
+                for (int id : spinnerAdvertisementValues.keySet()) {
                     String advName = spinnerAdvertisementValues.get(id).trim();
-                    if(advName.equals(name.trim())){
+                    if (advName.equals(name.trim())) {
                         advIds += id + ",";
                     }
                 }
@@ -386,13 +386,13 @@ public class RegisterDetailActivity extends Activity {
     }
 
     private void saveMenuInformations(JSONObject initialData) {
-        try{
+        try {
             repositoryCategory.removeAll();
             repositoryFoodAccompaniment.removeAll();
             repositoryFood.removeAll();
             repositoryPaymentForm.removeAll();
             repositoryAccompaniment.removeAll();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -400,7 +400,7 @@ public class RegisterDetailActivity extends Activity {
         try {
 
             // Categories
-            JSONArray categories  = initialData.getJSONArray("category");
+            JSONArray categories = initialData.getJSONArray("category");
             for (int i = 0; i < categories.length(); i++) {
                 obj = categories.getJSONObject(i);
                 Category category = new Category();
@@ -413,7 +413,7 @@ public class RegisterDetailActivity extends Activity {
             }
 
             // Foods
-            JSONArray foods  = initialData.getJSONArray("foods");
+            JSONArray foods = initialData.getJSONArray("foods");
             for (int i = 0; i < foods.length(); i++) {
                 obj = foods.getJSONObject(i);
                 Food food = new Food();
@@ -430,7 +430,7 @@ public class RegisterDetailActivity extends Activity {
             }
 
             //paymentForms
-            JSONArray paymentForms  = initialData.getJSONArray("paymentForms");
+            JSONArray paymentForms = initialData.getJSONArray("paymentForms");
             for (int i = 0; i < paymentForms.length(); i++) {
                 obj = paymentForms.getJSONObject(i);
                 PaymentForm paymentForm = new PaymentForm();
@@ -443,7 +443,7 @@ public class RegisterDetailActivity extends Activity {
             }
 
             //categoryAccompaniments
-            JSONArray categoryAccompaniments  = initialData.getJSONArray("categoryAccompaniments");
+            JSONArray categoryAccompaniments = initialData.getJSONArray("categoryAccompaniments");
             for (int i = 0; i < categoryAccompaniments.length(); i++) {
                 obj = categoryAccompaniments.getJSONObject(i);
                 Accompaniment accompaniment = new Accompaniment();
@@ -459,7 +459,7 @@ public class RegisterDetailActivity extends Activity {
             }
 
             //foodAccompaniments
-            JSONArray foodAccompaniments  = initialData.getJSONArray("foodAccompaniments");
+            JSONArray foodAccompaniments = initialData.getJSONArray("foodAccompaniments");
             for (int i = 0; i < foodAccompaniments.length(); i++) {
                 obj = foodAccompaniments.getJSONObject(i);
                 Accompaniment accompaniment = new Accompaniment();
@@ -505,9 +505,9 @@ public class RegisterDetailActivity extends Activity {
         repositoryAttendant.save(attendant);
 
         List<String> selectedAdvertisementsString = spinnerAdvertisements.getSelectedStrings();
-        for(String selected : selectedAdvertisementsString){
-            for(Advertisement advertisement : listAdvertisements.values()){
-                if(selected.equals(advertisement.getName())){
+        for (String selected : selectedAdvertisementsString) {
+            for (Advertisement advertisement : listAdvertisements.values()) {
+                if (selected.equals(advertisement.getName())) {
                     advertisement.setTabletId(tablet.getTabletId());
                     repositoryAdvertisement.save(advertisement);
                 }
@@ -525,7 +525,7 @@ public class RegisterDetailActivity extends Activity {
      */
     public class RegisterDetailsTabletTask extends AsyncTask<Void, Void, String> {
 
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.REGISTER_DETAILS);
         private String coin;
         private String attendant;
@@ -544,7 +544,7 @@ public class RegisterDetailActivity extends Activity {
                 String choosedAdvertisements = spinnerAdvertisements.getSelectedItemsAsString();
                 String arrayAdvertisements = getAdvertisementIds(choosedAdvertisements);
                 Log.i(REGISTER_DETAIL_ACTIVITY, "ADVERTISEMENTS -->>>>>>>> " + arrayAdvertisements);
-                String tabletDetailsJson = "{tabletNumber: "+ tablet.getNumber() + ", coinId: " + coinId + ", attendantId: " + attendantId + ", advertisements: " + (arrayAdvertisements.equals("") ? "\"\"" : "\"" + arrayAdvertisements + "\"")  + "}";
+                String tabletDetailsJson = "{tabletNumber: " + tablet.getNumber() + ", coinId: " + coinId + ", attendantId: " + attendantId + ", advertisements: " + (arrayAdvertisements.equals("") ? "\"\"" : "\"" + arrayAdvertisements + "\"") + "}";
                 NameValuePair valuePair = new BasicNameValuePair("tabletDetailsJson", tabletDetailsJson);
                 Log.i(REGISTER_DETAIL_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
@@ -580,16 +580,17 @@ public class RegisterDetailActivity extends Activity {
                     progressLocalRegisterDialog.dismiss();
                     Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
 
-                    //Intent it = new Intent(RegisterDetailActivity.this, PrincipalMenu.class);
-                    //it.putExtra("jsonObject", jsonObject.toString());
-                    //startActivity(it);// TODO: Próxima tela
+                    Intent it = new Intent(RegisterDetailActivity.this, MainActivity.class);
+                    startActivity(it);
 
-                    //finish();
+                    finish();
                 } else {
+                    //FINISH LOADING...
                     progressRegisterDialog.dismiss();
                     Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
                 }
             } catch (Exception e) {
+                //FINISH LOADING...
                 progressRegisterDialog.dismiss();
                 progressLocalRegisterDialog.dismiss();
                 Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.EXCEPTION.getName());

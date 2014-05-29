@@ -29,9 +29,9 @@ import br.com.flygowmobile.service.ServiceHandler;
 
 public class SplashScreen extends Activity implements Runnable {
 
-    private final int DELAY = 1000;
-    public static RepositoryTablet repositoryTablet;
     private static final String SPLASH_SCREEN_ACTIVITY = "SplashScreen";
+    public static RepositoryTablet repositoryTablet;
+    private final int DELAY = 1000;
     private ProgressDialog progressDialog;
     private ProgressDialog loadServerDialog;
 
@@ -41,7 +41,7 @@ public class SplashScreen extends Activity implements Runnable {
         setContentView(R.layout.splash);
         repositoryTablet = new RepositoryTablet(this);
         progressDialog = ProgressDialog.show(SplashScreen.this, StaticTitles.LOAD.getName(),
-              StaticMessages.WAIT.getName(), true);
+                StaticMessages.WAIT.getName(), true);
         Handler h = new Handler();
         h.postDelayed(this, DELAY);
 
@@ -53,19 +53,20 @@ public class SplashScreen extends Activity implements Runnable {
         initialize();
     }
 
-    private void initialize(){
+    private void initialize() {
         Tablet configs = getConfigurations();
         proceed(configs);
     }
 
-    private Tablet getConfigurations(){
+    private Tablet getConfigurations() {
         Tablet config = repositoryTablet.findLast();
         return config;
     }
 
-    private void proceed(Tablet configs){
-        Intent it = new Intent(this, RegisterActivity.class);;
-        if(configs == null){
+    private void proceed(Tablet configs) {
+        Intent it = new Intent(this, RegisterActivity.class);
+        ;
+        if (configs == null) {
             it.putExtra("configs", false);
             progressDialog.dismiss();
             startActivity(it);
@@ -86,9 +87,9 @@ public class SplashScreen extends Activity implements Runnable {
     public class PingTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet configs;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
 
-        public PingTask(Tablet configs){
+        public PingTask(Tablet configs) {
             serverAddressObj.setServerIp(configs.getServerIP());
             serverAddressObj.setServerPort(configs.getServerPort());
             this.configs = configs;
@@ -116,9 +117,9 @@ public class SplashScreen extends Activity implements Runnable {
         @Override
         protected void onPostExecute(String response) {
             try {
-                if(StaticMessages.TIMEOUT.getName().equals(response)){
+                if (StaticMessages.TIMEOUT.getName().equals(response)) {
                     response = "{success: false}";
-                }else if (StaticMessages.NOT_SERVICE.getName().equals(response)){
+                } else if (StaticMessages.NOT_SERVICE.getName().equals(response)) {
                     response = "{success: false}";
                 }
                 JSONObject jsonObject = new JSONObject(response);

@@ -6,7 +6,7 @@ import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 
 public class FoodAccompaniment implements Serializable {
 
-    public static String[] columns = new String[] {
+    public static String[] columns = new String[]{
             RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_FOOD_ID,
             RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID
     };

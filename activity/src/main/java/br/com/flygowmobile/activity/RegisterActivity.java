@@ -25,23 +25,20 @@ import java.net.NetworkInterface;
 import java.util.Arrays;
 import java.util.Enumeration;
 
+import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.ServiceHandler;
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 
 public class RegisterActivity extends Activity {
 
-    private RegisterTabletTask mRegisterTask = null;
     private static final String REGISTER_ACTIVITY = "RegisterActivity";
-
     public static RepositoryTablet repositoryTablet;
-
     public Context context;
-
+    private RegisterTabletTask mRegisterTask = null;
     // UI references.
     private EditText mip;
     private EditText mNumero;
@@ -87,27 +84,27 @@ public class RegisterActivity extends Activity {
 
         bundle = getIntent().getExtras();
         boolean hasConfigs = bundle.getBoolean("configs");
-        if(hasConfigs){
+        if (hasConfigs) {
             populateFields(bundle.getString("configData"));
-        }else{
+        } else {
             isReconnect = bundle.getBoolean("isReconnect");
             isChangeConfiguration = bundle.getBoolean("isChangeConfiguration");
-            if(isReconnect){
+            if (isReconnect) {
                 populateFieldsFromDataBase();
-            }else{
+            } else {
                 populateFields(null);
             }
         }
     }
 
     private void populateFields(String configData) {
-        if(configData != null){
+        if (configData != null) {
             try {
                 JSONObject jsonConfigData = new JSONObject(configData);
                 mNumero.setText(jsonConfigData.getString("number"));
-                if(getCurrentTabletIP().equals(jsonConfigData.getString("ip"))){
+                if (getCurrentTabletIP().equals(jsonConfigData.getString("ip"))) {
                     mip.setText(jsonConfigData.getString("ip"));
-                }else{
+                } else {
                     mip.setText(getCurrentTabletIP());
                 }
                 mport.setText(jsonConfigData.getString("port"));
@@ -116,7 +113,7 @@ public class RegisterActivity extends Activity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             mip.setText(getCurrentTabletIP());
         }
     }
@@ -124,23 +121,23 @@ public class RegisterActivity extends Activity {
     private void populateFieldsFromDataBase() {
         try {
             tabletToTask = repositoryTablet.findLast();
-            mNumero.setText(""+tabletToTask.getNumber());
+            mNumero.setText("" + tabletToTask.getNumber());
             mip.setText(tabletToTask.getIp());
-            mport.setText(""+tabletToTask.getPort());
+            mport.setText("" + tabletToTask.getPort());
             mserverIP.setText(tabletToTask.getServerIP());
-            mserverPort.setText(""+tabletToTask.getServerPort());
+            mserverPort.setText("" + tabletToTask.getServerPort());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private String getCurrentTabletIP(){
+    private String getCurrentTabletIP() {
         String ipHost = "";
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces();
-                 en.hasMoreElements();) {
+                 en.hasMoreElements(); ) {
                 NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
+                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
                     InetAddress inetAddress = enumIpAddr.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
                         ipHost = inetAddress.getHostAddress().toString();
@@ -152,7 +149,6 @@ public class RegisterActivity extends Activity {
         }
         return ipHost;
     }
-
 
 
     public void tabletRegister() {
@@ -215,13 +211,13 @@ public class RegisterActivity extends Activity {
             int nport = Integer.parseInt(port);
             int nserverPort = Integer.parseInt(serverPort);
 
-            FlygowServerUrl url = (FlygowServerUrl)getApplication();
+            FlygowServerUrl url = (FlygowServerUrl) getApplication();
             url.setServerIp(serverIP);
             url.setServerPort(Integer.parseInt(serverPort));
             Tablet tabletToTask = null;
-            if(!isReconnect){
+            if (!isReconnect) {
                 tabletToTask = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
-            }else{
+            } else {
                 tabletToTask = repositoryTablet.findLast();
                 previousTabletNumber = tabletToTask.getNumber();
                 tabletToTask.setNumber(nNumber);
@@ -242,16 +238,21 @@ public class RegisterActivity extends Activity {
 
     }
 
+    public void saveTablet(Tablet tablet) {
+        repositoryTablet.removeAll();
+        repositoryTablet.save(tablet);
+    }
+
     /**
      * Represents an asynchronous registration task used to salve Tablet
      */
     public class RegisterTabletTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet tablet;
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        String url = serverAddressObj.getServerUrl(ServerController.CONNECT);
         private long previousTabletNumber;
         private boolean isReconnect, isChangeConfiguration;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl)getApplication();
-        String url = serverAddressObj.getServerUrl(ServerController.CONNECT);
 
         RegisterTabletTask(Tablet tablet, boolean isReconnect, boolean isChangeConfiguration) {
             this.tablet = tablet;
@@ -267,12 +268,12 @@ public class RegisterActivity extends Activity {
             return isReconnect;
         }
 
-        public void setPreviousTabletNumber(long previousTabletNumber) {
-            this.previousTabletNumber = previousTabletNumber;
-        }
-
         public long getPreviousTabletNumber() {
             return previousTabletNumber;
+        }
+
+        public void setPreviousTabletNumber(long previousTabletNumber) {
+            this.previousTabletNumber = previousTabletNumber;
         }
 
         @Override
@@ -284,7 +285,7 @@ public class RegisterActivity extends Activity {
                 NameValuePair tabletJsonPair = new BasicNameValuePair("tabletJson", tabletJson);
                 NameValuePair isReconnectPair = new BasicNameValuePair("isReconnect", isReconnect);
                 NameValuePair isChangeConfigurationPair = new BasicNameValuePair("isChangeConfiguration", isChangeConfiguration);
-                NameValuePair previousTabletNumberPair = new BasicNameValuePair("previousTabletNumber", ""+previousTabletNumber);
+                NameValuePair previousTabletNumberPair = new BasicNameValuePair("previousTabletNumber", "" + previousTabletNumber);
                 Log.i(REGISTER_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(tabletJsonPair, isReconnectPair, isChangeConfigurationPair, previousTabletNumberPair));
             } catch (HttpHostConnectException ex) {
@@ -343,10 +344,5 @@ public class RegisterActivity extends Activity {
             mRegisterTask = null;
             //FINISH LOADING...
         }
-    }
-
-    public void saveTablet(Tablet tablet) {
-        repositoryTablet.removeAll();
-        repositoryTablet.save(tablet);
     }
 }

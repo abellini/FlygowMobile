@@ -1,11 +1,12 @@
 package br.com.flygowmobile.entity;
 
 import java.io.Serializable;
+
 import br.com.flygowmobile.database.RepositoryTablet;
 
 public class Tablet implements Serializable {
 
-    public static String[] columns = new String[] {
+    public static String[] columns = new String[]{
             RepositoryTablet.Tablets.COLUMN_NAME_TABLET_ID,
             RepositoryTablet.Tablets.COLUMN_NAME_STATUS_ID,
             RepositoryTablet.Tablets.COLUMN_NAME_COIN_ID,
@@ -49,7 +50,8 @@ public class Tablet implements Serializable {
     }
 
 
-    public Tablet() {}
+    public Tablet() {
+    }
 
     public long getTabletId() {
         return tabletId;
@@ -125,7 +127,7 @@ public class Tablet implements Serializable {
 
     public String toJSONInitialConfig() {
         return "{" +
-                "\"number\": "+ getNumber() + ", " +
+                "\"number\": " + getNumber() + ", " +
                 "\"ip\": " + "\"" + getIp() + "\", " +
                 "\"port\": " + getPort() + ", " +
                 "\"serverIP\": " + "\"" + getServerIP() + "\", " +
@@ -135,7 +137,7 @@ public class Tablet implements Serializable {
 
     public String toJSONDetailsConfig() {
         return "{" +
-                "\"number\": "+ getNumber() + ", " +
+                "\"number\": " + getNumber() + ", " +
                 "\"statusId\": " + getStatusId() + ", " +
                 "\"coinId\": " + getCoinId() + ", " +
                 "\"attendantId\": " + getAttendantId() +
