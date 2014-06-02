@@ -84,11 +84,11 @@ public class RegisterActivity extends Activity {
 
         bundle = getIntent().getExtras();
         boolean hasConfigs = bundle.getBoolean("configs");
+        isReconnect = bundle.getBoolean("isReconnect");
+        isChangeConfiguration = bundle.getBoolean("isChangeConfiguration");
         if (hasConfigs) {
             populateFields(bundle.getString("configData"));
         } else {
-            isReconnect = bundle.getBoolean("isReconnect");
-            isChangeConfiguration = bundle.getBoolean("isChangeConfiguration");
             if (isReconnect) {
                 populateFieldsFromDataBase();
             } else {

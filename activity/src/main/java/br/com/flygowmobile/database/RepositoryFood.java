@@ -100,6 +100,34 @@ public class RepositoryFood extends Repository<Food> {
         return null;
     }
 
+    public List<Food> listByCategoryId(long categoryId) {
+        Cursor c = db.query(true, Foods.TABLE_NAME, Food.columns, Foods.COLUMN_NAME_CATEGORY_ID+ "=" + categoryId, null, null, null, null, null);
+        List<Food> foods = new ArrayList<Food>();
+        if (c.moveToFirst()) {
+            int idxId = c.getColumnIndex(Foods.COLUMN_NAME_FOOD_ID);
+            int idxName = c.getColumnIndex(Foods.COLUMN_NAME_NAME);
+            int idxValue =  c.getColumnIndex(Foods.COLUMN_NAME_VALUE);
+            int idxDescription =  c.getColumnIndex(Foods.COLUMN_NAME_DESCRIPTION);
+            int idxNutrionalInfo =  c.getColumnIndex(Foods.COLUMN_NAME_NUTRITIONAL_INFO);
+            int idxIsActive =  c.getColumnIndex(Foods.COLUMN_NAME_IS_ACTIVE);
+            int idxCategory =  c.getColumnIndex(Foods.COLUMN_NAME_CATEGORY_ID);
+
+            do {
+                Food food = new Food();
+                foods.add(food);
+                // recupera os atributos de food
+                food.setFoodId(c.getInt(idxId));
+                food.setName(c.getString(idxName));
+                food.setValue(c.getDouble(idxValue));
+                food.setDescription(c.getString(idxDescription));
+                food.setNutritionalInfo(c.getString(idxNutrionalInfo));
+                food.setActive(Boolean.parseBoolean(c.getString(idxIsActive)));
+                food.setCategoryId(c.getInt(idxCategory));
+            } while (c.moveToNext());
+        }
+        return foods;
+    }
+
     @Override
     public List<Food> listAll() {
 

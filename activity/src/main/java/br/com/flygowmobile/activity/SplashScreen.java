@@ -135,7 +135,7 @@ public class SplashScreen extends Activity implements Runnable {
                     loadServerDialog.dismiss();
                     it = new Intent(SplashScreen.this, RegisterActivity.class);
                     it.putExtra("configs", true);
-                    it.putExtra("isReconnect", "true");
+                    it.putExtra("isReconnect", true);
                     it.putExtra("configData", configs.toJSONInitialConfig());
                     FlygowAlertDialog.createWarningPopupWithIntent(SplashScreen.this, StaticTitles.WARNING, StaticMessages.TIMEOUT, it);
                 }

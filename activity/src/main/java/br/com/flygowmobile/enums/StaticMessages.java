@@ -18,6 +18,7 @@ public enum StaticMessages {
     ADVERTISEMENT_CONFIGURATION("Advertisement Configuration"),
     MANDATORY_CONFIGURATIONS("(*) Mandatory Configurations."),
     DEFINE_CHOICES("Default values ​​are displayed. Please set your choices to proceed!"),
+    MORE_DETAILS("+ details"),
     GENERIC("")
     ;
 
