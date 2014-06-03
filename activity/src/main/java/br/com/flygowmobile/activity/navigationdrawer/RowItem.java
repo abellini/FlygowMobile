@@ -8,6 +8,7 @@ public class RowItem {
     private String subtitle;
     private String price;
     private int icon;
+    private byte[] image;
     private boolean isGroupHeader = false;
 
     public RowItem(String title, int icon, boolean isGroupHeader) {
@@ -50,5 +51,13 @@ public class RowItem {
 
     public void setPrice(String price) {
         this.price = price;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 }

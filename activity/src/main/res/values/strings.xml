@@ -13,9 +13,8 @@
     </string-array>
 
     <array name="icons">
-        <item>@drawable/plus</item>
         <item>@drawable/lanche_header</item>
-        <item>@drawable/sweet_header</item>
+        <item>@drawable/plus</item>
     </array>
 
 </resources>

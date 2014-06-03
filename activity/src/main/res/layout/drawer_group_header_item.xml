@@ -20,13 +20,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textSize="20dp"
+        android:textSize="25dp"
+        android:textStyle="italic"
         android:layout_toRightOf="@id/headericon"
-        android:textColor="#434343"
+        android:textColor="#1b5869"
         android:fontFamily="Arial"
         android:clickable="false"
         android:layout_marginLeft="3px"
-        android:layout_marginTop="25px"
+        android:layout_marginTop="28px"
     />
 
     <!--  divider -->

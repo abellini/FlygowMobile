@@ -42,6 +42,11 @@ public class RepositoryCategory extends Repository<Category> {
         values.put(Categories.COLUMN_NAME_CATEGORY_ID, category.getCategoryId());
         values.put(Categories.COLUMN_NAME_NAME, category.getName());
         values.put(Categories.COLUMN_NAME_DESCRIPTION, category.getDescription());
+        try{
+            values.put(Categories.COLUMN_NAME_PHOTO, category.getPhoto());
+        }catch(Exception e){
+            Log.e(REPOSITORY_CATEGORY, "ERROR ::: No category photo");
+        }
 
         return values;
     }
@@ -101,6 +106,7 @@ public class RepositoryCategory extends Repository<Category> {
             int idxId = c.getColumnIndex(Categories.COLUMN_NAME_CATEGORY_ID);
             int idxName = c.getColumnIndex(Categories.COLUMN_NAME_NAME);
             int idxDescription =  c.getColumnIndex(Categories.COLUMN_NAME_DESCRIPTION);
+            int idxPhoto =  c.getColumnIndex(Categories.COLUMN_NAME_PHOTO);
 
             do {
                 Category category = new Category();
@@ -109,6 +115,11 @@ public class RepositoryCategory extends Repository<Category> {
                 category.setCategoryId(c.getLong(idxId));
                 category.setName(c.getString(idxName));
                 category.setDescription(c.getString(idxDescription));
+                try{
+                    category.setPhoto(c.getBlob(idxPhoto));
+                }catch (Exception e){
+                    category.setPhoto(null);
+                }
             } while (c.moveToNext());
         }
         return categories;

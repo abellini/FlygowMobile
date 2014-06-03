@@ -1,9 +1,12 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,7 +51,14 @@ public class CustomAdapter extends BaseAdapter {
             ImageView imgIcon = (ImageView) convertView.findViewById(R.id.headericon);
             TextView txtTitle = (TextView) convertView.findViewById(R.id.header);
 
-            imgIcon.setImageResource(row_pos.getIcon());
+            byte[] outImage = row_pos.getImage();
+            if(outImage != null && outImage.length > 0){
+                ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+                Bitmap theImage = BitmapFactory.decodeStream(imageStream);
+                imgIcon.setImageBitmap(theImage);
+            }else{
+                imgIcon.setImageResource(row_pos.getIcon());
+            }
             txtTitle.setText(row_pos.getTitle());
         }
         return convertView;

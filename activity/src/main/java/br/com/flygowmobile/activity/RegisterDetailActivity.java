@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -409,7 +411,13 @@ public class RegisterDetailActivity extends Activity {
                 category.setCategoryId(obj.getInt("id"));
                 category.setName(obj.getString("name"));
                 category.setDescription(obj.getString("description"));
-
+                byte[] photo = null;
+                try{
+                    photo = Base64.decode(obj.getString("photo"), Base64.DEFAULT);
+                }catch (JSONException je){
+                    photo = null;
+                }
+                category.setPhoto(photo);
                 Log.i(REGISTER_DETAIL_ACTIVITY, "Save Category(ies): " + category);
                 repositoryCategory.save(category);
             }

@@ -29,6 +29,8 @@ public class BuildMenuItemsService {
     private TypedArray menuIcons;
 
     private final static String CHARACTER_SPACE = " ";
+    private final static Integer ICON_CATEGORY_DEFAULT = 0;
+    private final static Integer ICON_FOOD_ITEM = 1;
 
     public BuildMenuItemsService(Context ctx, TypedArray menuIcons){
         repositoryTablet = new RepositoryTablet(ctx);
@@ -42,12 +44,21 @@ public class BuildMenuItemsService {
         List<Category> headerTitles = getCategoryHeaders();
         List<RowItem> rowItems = new ArrayList<RowItem>();
         for(Category header : headerTitles){
-            RowItem headerItem = new RowItem(header.getName(), menuIcons.getResourceId(1, -1), true);
+
+            RowItem headerItem = new RowItem(
+                    header.getName(),
+                    menuIcons.getResourceId(ICON_CATEGORY_DEFAULT, -1),
+                    true
+            );
+            headerItem.setImage(header.getPhoto());
             rowItems.add(headerItem);
             List<Food> foods = getFoodsByCategory(header);
             for(Food food : foods){
-                RowItem items = new RowItem(food.getName(), menuIcons.getResourceId(
-                        0, -1), false);
+                RowItem items = new RowItem(
+                        food.getName(),
+                        menuIcons.getResourceId(ICON_FOOD_ITEM, -1),
+                        false
+                );
                 items.setSubtitle(StaticMessages.MORE_DETAILS.getName());
                 items.setPrice(formatFoodValue(food.getValue()));
                 rowItems.add(items);

@@ -10,12 +10,14 @@ public class Category implements Serializable {
     public static String[] columns = new String[] {
             RepositoryCategory.Categories.COLUMN_NAME_CATEGORY_ID,
             RepositoryCategory.Categories.COLUMN_NAME_NAME,
-            RepositoryCategory.Categories.COLUMN_NAME_DESCRIPTION
+            RepositoryCategory.Categories.COLUMN_NAME_DESCRIPTION,
+            RepositoryCategory.Categories.COLUMN_NAME_PHOTO
     };
 
     private long categoryId;
     private String name;
     private String description;
+    private byte[] photo;
 
     public Category() {}
 
@@ -47,6 +49,14 @@ public class Category implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     public String toJSONInitialConfig() {
