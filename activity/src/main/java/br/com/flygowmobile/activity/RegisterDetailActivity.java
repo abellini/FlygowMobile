@@ -46,6 +46,7 @@ import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 import br.com.flygowmobile.database.RepositoryPaymentForm;
+import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Advertisement;
@@ -55,6 +56,7 @@ import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.FoodAccompaniment;
 import br.com.flygowmobile.entity.PaymentForm;
+import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -71,6 +73,7 @@ public class RegisterDetailActivity extends Activity {
     public static RepositoryTablet repositoryTablet;
     public static RepositoryCategory repositoryCategory;
     public static RepositoryFood repositoryFood;
+    public static RepositoryPromotion repositoryPromotion;
     public static RepositoryPaymentForm repositoryPaymentForm;
     public static RepositoryAccompaniment repositoryAccompaniment;
     public static RepositoryFoodAccompaniment repositoryFoodAccompaniment;
@@ -116,6 +119,7 @@ public class RegisterDetailActivity extends Activity {
         repositoryAdvertisement = new RepositoryAdvertisement(this);
         repositoryCategory = new RepositoryCategory(this);
         repositoryFood = new RepositoryFood(this);
+        repositoryPromotion = new RepositoryPromotion(this);
         repositoryPaymentForm = new RepositoryPaymentForm(this);
         repositoryAccompaniment = new RepositoryAccompaniment(this);
         repositoryFoodAccompaniment = new RepositoryFoodAccompaniment(this);
@@ -393,6 +397,7 @@ public class RegisterDetailActivity extends Activity {
             repositoryCategory.removeAll();
             repositoryFoodAccompaniment.removeAll();
             repositoryFood.removeAll();
+            repositoryPromotion.removeAll();
             repositoryPaymentForm.removeAll();
             repositoryAccompaniment.removeAll();
         } catch (Exception e) {
@@ -437,6 +442,32 @@ public class RegisterDetailActivity extends Activity {
 
                 Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
                 repositoryFood.save(food);
+            }
+
+            //promotions
+            JSONArray promotions = initialData.getJSONArray("promotions");
+            for (int i = 0; i < promotions.length(); i++) {
+                obj = promotions.getJSONObject(i);
+                Promotion promotion = new Promotion();
+                promotion.setPromotionId(obj.getInt("id"));
+                promotion.setName(obj.getString("name"));
+                promotion.setDescription(obj.getString("description"));
+                promotion.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                byte[] photo, video = null;
+                try{
+                    photo = Base64.decode(obj.getString("photo"), Base64.DEFAULT);
+                }catch (JSONException je){
+                    photo = null;
+                }
+                try{
+                    video = Base64.decode(obj.getString("video"), Base64.DEFAULT);
+                }catch (JSONException je){
+                    video = null;
+                }
+                promotion.setPhoto(photo);
+                promotion.setVideo(video);
+                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Promotion(s): " + promotion);
+                repositoryPromotion.save(promotion);
             }
 
             //paymentForms

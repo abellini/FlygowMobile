@@ -7,7 +7,8 @@ public enum StaticTitles {
     ERROR("Error!"),
     WARNING("Warning!"),
     LOAD("Loading..."),
-    SUCCESS("Successful!")
+    SUCCESS("Successful!"),
+    PROMOTIONS("Promotions")
     ;
 
     private String name;

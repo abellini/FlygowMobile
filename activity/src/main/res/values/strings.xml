@@ -15,6 +15,7 @@
     <array name="icons">
         <item>@drawable/lanche_header</item>
         <item>@drawable/plus</item>
+        <item>@drawable/promotion</item>
     </array>
 
 </resources>

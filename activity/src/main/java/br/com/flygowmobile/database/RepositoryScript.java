@@ -110,6 +110,14 @@ public class RepositoryScript {
                     RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_FOOD_ID + INTEGER_TYPE +  NOT_NULL + COMMA_SEP +
                     RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + INTEGER_TYPE +  NOT_NULL+ COMMA_SEP +
                     " PRIMARY KEY (" + RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_FOOD_ID + ", " + RepositoryFoodAccompaniment.FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + ")" +
+            " )",
+            "CREATE TABLE " + RepositoryPromotion.Promotions.TABLE_NAME + " (" +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_PROMOTION_ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_NAME + TEXT_TYPE + COMMA_SEP +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO + BLOB_TYPE + COMMA_SEP +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_VIDEO + BLOB_TYPE +
             " )"
     };
 
@@ -125,7 +133,8 @@ public class RepositoryScript {
             "DROP TABLE IF EXISTS " + RepositoryOrderItem.OrderItems.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryPaymentForm.PaymentForms.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryAccompaniment.Accompaniments.TABLE_NAME,
-            "DROP TABLE IF EXISTS " + RepositoryFoodAccompaniment.FoodAccompaniments.TABLE_NAME
+            "DROP TABLE IF EXISTS " + RepositoryFoodAccompaniment.FoodAccompaniments.TABLE_NAME,
+            "DROP TABLE IF EXISTS " + RepositoryPromotion.Promotions.TABLE_NAME
     };
     protected SQLiteDatabase db;
     private SQLiteHelper dbHelper;
