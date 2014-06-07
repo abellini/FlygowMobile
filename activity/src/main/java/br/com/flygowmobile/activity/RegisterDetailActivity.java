@@ -45,6 +45,7 @@ import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
+import br.com.flygowmobile.database.RepositoryFoodPromotion;
 import br.com.flygowmobile.database.RepositoryPaymentForm;
 import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
@@ -55,6 +56,7 @@ import br.com.flygowmobile.entity.Category;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.FoodAccompaniment;
+import br.com.flygowmobile.entity.FoodPromotion;
 import br.com.flygowmobile.entity.PaymentForm;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.entity.Tablet;
@@ -77,6 +79,7 @@ public class RegisterDetailActivity extends Activity {
     public static RepositoryPaymentForm repositoryPaymentForm;
     public static RepositoryAccompaniment repositoryAccompaniment;
     public static RepositoryFoodAccompaniment repositoryFoodAccompaniment;
+    public static RepositoryFoodPromotion repositoryFoodPromotion;
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
     private Spinner spinnerCoin, spinnerAttendant;
     private MultiSelectionSpinner spinnerAdvertisements;
@@ -123,6 +126,7 @@ public class RegisterDetailActivity extends Activity {
         repositoryPaymentForm = new RepositoryPaymentForm(this);
         repositoryAccompaniment = new RepositoryAccompaniment(this);
         repositoryFoodAccompaniment = new RepositoryFoodAccompaniment(this);
+        repositoryFoodPromotion = new RepositoryFoodPromotion(this);
 
         try {
             if (json != null) {
@@ -392,14 +396,19 @@ public class RegisterDetailActivity extends Activity {
         return advIds.toString();
     }
 
+    private void removeAllDetails() throws Exception{
+        repositoryCategory.removeAll();
+        repositoryFoodAccompaniment.removeAll();
+        repositoryFood.removeAll();
+        repositoryPromotion.removeAll();
+        repositoryFoodPromotion.removeAll();
+        repositoryPaymentForm.removeAll();
+        repositoryAccompaniment.removeAll();
+    }
+
     private void saveMenuInformations(JSONObject initialData) {
         try {
-            repositoryCategory.removeAll();
-            repositoryFoodAccompaniment.removeAll();
-            repositoryFood.removeAll();
-            repositoryPromotion.removeAll();
-            repositoryPaymentForm.removeAll();
-            repositoryAccompaniment.removeAll();
+            removeAllDetails();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -470,6 +479,37 @@ public class RegisterDetailActivity extends Activity {
                 repositoryPromotion.save(promotion);
             }
 
+            //foodPromotions
+            JSONArray foodPromotions = initialData.getJSONArray("foodPromotions");
+            for (int i = 0; i < foodPromotions.length(); i++) {
+                obj = foodPromotions.getJSONObject(i);
+                Food saved = repositoryFood.findById(obj.getInt("id"));
+                if(saved == null) {
+                    Food food = new Food();
+                    food.setFoodId(obj.getInt("id"));
+                    food.setName(obj.getString("name"));
+                    food.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                    food.setDescription(obj.getString("description"));
+                    food.setNutritionalInfo(obj.getString("nutritionalInfo"));
+                    food.setActive(Boolean.parseBoolean(obj.getString("active")));
+                    food.setCategoryId(obj.getInt("categoryId"));
+
+                    Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
+                    repositoryFood.save(food);
+                    saved = food;
+                }
+                JSONArray promotionIds = obj.getJSONArray("promotionIds");
+                for (int j = 0; j < promotionIds.length(); j++) {
+                    int promoId = promotionIds.getInt(j);
+                    FoodPromotion foodPromotion = new FoodPromotion();
+                    foodPromotion.setFoodId(saved.getFoodId());
+                    foodPromotion.setPromotionId(promoId);
+
+                    Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food Promotion: " + promoId);
+                    repositoryFoodPromotion.save(foodPromotion);
+                }
+            }
+
             //paymentForms
             JSONArray paymentForms = initialData.getJSONArray("paymentForms");
             for (int i = 0; i < paymentForms.length(); i++) {
@@ -503,25 +543,28 @@ public class RegisterDetailActivity extends Activity {
             JSONArray foodAccompaniments = initialData.getJSONArray("foodAccompaniments");
             for (int i = 0; i < foodAccompaniments.length(); i++) {
                 obj = foodAccompaniments.getJSONObject(i);
-                Accompaniment accompaniment = new Accompaniment();
-                accompaniment.setAccompanimentId(obj.getInt("id"));
-                accompaniment.setName(obj.getString("name"));
-                accompaniment.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
-                accompaniment.setDescription(obj.getString("description"));
-                accompaniment.setActive(obj.getBoolean("active"));
-                accompaniment.setCategoryId(obj.getInt("categoryId"));
+                Accompaniment saved = repositoryAccompaniment.findById(obj.getInt("id"));
+                if(saved == null){
+                    Accompaniment accompaniment = new Accompaniment();
+                    accompaniment.setAccompanimentId(obj.getInt("id"));
+                    accompaniment.setName(obj.getString("name"));
+                    accompaniment.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                    accompaniment.setDescription(obj.getString("description"));
+                    accompaniment.setActive(obj.getBoolean("active"));
+                    accompaniment.setCategoryId(obj.getInt("categoryId"));
 
-                Log.i(REGISTER_DETAIL_ACTIVITY, "Save Accompaniment(s): " + accompaniment);
-                repositoryAccompaniment.save(accompaniment);
-
+                    Log.i(REGISTER_DETAIL_ACTIVITY, "Save Accompaniment(s): " + accompaniment);
+                    repositoryAccompaniment.save(accompaniment);
+                    saved = accompaniment;
+                }
                 JSONArray foodIds = obj.getJSONArray("foodIds");
                 for (int j = 0; j < foodIds.length(); j++) {
-                    int id = foodIds.getInt(j);
+                    int foodId = foodIds.getInt(j);
                     FoodAccompaniment foodAccompaniment = new FoodAccompaniment();
-                    foodAccompaniment.setFoodId(id);
-                    foodAccompaniment.setAccompanimentId(obj.getInt("id"));
+                    foodAccompaniment.setFoodId(foodId);
+                    foodAccompaniment.setAccompanimentId(saved.getAccompanimentId());
 
-                    Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food Accompaniment: " + id);
+                    Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food Accompaniment: " + foodId);
                     repositoryFoodAccompaniment.save(foodAccompaniment);
                 }
             }

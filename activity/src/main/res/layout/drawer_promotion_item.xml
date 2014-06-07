@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+>
+    <ImageView
+        android:id="@+id/promoitemicon"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5px"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
+    />
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="2px"
+        android:paddingBottom="2px"
+    >
+
+        <TextView
+            android:id="@+id/promotitle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="left|fill_horizontal"
+            android:textColor="#4d4d4d"
+            android:textSize="18dp" />
+
+        <TextView
+            android:id="@+id/promoitems"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/promotitle"
+            android:textColor="#d77515"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/promosubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/promoitems"
+            android:textColor="#1b5869"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/promoprice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/promosubtitle"
+            android:layout_below="@id/promoitems"
+            android:layout_marginLeft="58px"
+            android:layout_marginTop="-2px"
+            android:textColor="#1b5869"
+            android:textSize="17dp" />
+    </RelativeLayout>
+</LinearLayout>

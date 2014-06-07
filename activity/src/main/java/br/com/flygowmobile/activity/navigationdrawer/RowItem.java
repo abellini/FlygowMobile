@@ -5,11 +5,13 @@ package br.com.flygowmobile.activity.navigationdrawer;
  */
 public class RowItem {
     private String title;
+    private String promoItems;
     private String subtitle;
     private String price;
     private int icon;
     private byte[] image;
     private boolean isGroupHeader = false;
+    private boolean isPromoItem = false;
 
     public RowItem(String title, int icon, boolean isGroupHeader) {
         this.title = title;
@@ -23,6 +25,14 @@ public class RowItem {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getPromoItems() {
+        return promoItems;
+    }
+
+    public void setPromoItems(String promoItems) {
+        this.promoItems = promoItems;
     }
 
     public int getIcon() {
@@ -59,5 +69,13 @@ public class RowItem {
 
     public void setImage(byte[] image) {
         this.image = image;
+    }
+
+    public boolean isPromoItem() {
+        return isPromoItem;
+    }
+
+    public void setPromoItem(boolean isPromoItem) {
+        this.isPromoItem = isPromoItem;
     }
 }

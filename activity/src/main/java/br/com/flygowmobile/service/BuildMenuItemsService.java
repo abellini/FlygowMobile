@@ -10,6 +10,7 @@ import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
+import br.com.flygowmobile.database.RepositoryFoodPromotion;
 import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Category;
@@ -29,6 +30,7 @@ public class BuildMenuItemsService {
     private RepositoryCoin repositoryCoin;
     private RepositoryFood repositoryFood;
     private RepositoryPromotion repositoryPromotion;
+    private RepositoryFoodPromotion repositoryFoodPromotion;
     private TypedArray menuIcons;
 
     private final static String CHARACTER_SPACE = " ";
@@ -41,6 +43,7 @@ public class BuildMenuItemsService {
         repositoryCategory = new RepositoryCategory(ctx);
         repositoryFood = new RepositoryFood(ctx);
         repositoryPromotion = new RepositoryPromotion(ctx);
+        repositoryFoodPromotion = new RepositoryFoodPromotion(ctx);
         repositoryCoin = new RepositoryCoin(ctx);
         this.menuIcons = menuIcons;
     }
@@ -88,6 +91,19 @@ public class BuildMenuItemsService {
                         menuIcons.getResourceId(ICON_MENU_ITEM, -1),
                         false
                 );
+                items.setPromoItem(true);
+                List<Food> promotionItems = repositoryFoodPromotion.listByPromotion(promo.getPromotionId());
+                String promoItemStr = "";
+                int i = 0;
+                for(Food item : promotionItems){
+                    if(i != promotionItems.size() - 1){
+                        promoItemStr += item.getName() + "<br>";
+                    }else{
+                        promoItemStr += item.getName();
+                    }
+                    i++;
+                }
+                items.setPromoItems(promoItemStr);
                 items.setSubtitle(StaticMessages.MORE_DETAILS.getName());
                 items.setPrice(formatItemValue(promo.getValue()));
                 rowItems.add(items);
