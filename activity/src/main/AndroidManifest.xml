@@ -19,7 +19,7 @@
         <activity
             android:name="br.com.flygowmobile.activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="br.com.flygowmobile.activity.RegisterActivity"

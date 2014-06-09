@@ -4,15 +4,20 @@ package br.com.flygowmobile.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -44,8 +49,6 @@ public class MainActivity extends Activity {
     private List<RowItem> rowItems;
     private CustomAdapter adapter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,6 +63,8 @@ public class MainActivity extends Activity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.slider_list);
+
+        mDrawerLayout.setScrimColor(Color.TRANSPARENT);
 
         rowItems = menuItemsService.getMenuItems();
 
@@ -87,12 +92,13 @@ public class MainActivity extends Activity {
             }
         };
 
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
-
         if (savedInstanceState == null) {
             // on first time display view for first nav item
             updateDisplay(0);
         }
+
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerLayout.openDrawer(Gravity.LEFT);
     }
 
     class SlideitemListener implements ListView.OnItemClickListener {
