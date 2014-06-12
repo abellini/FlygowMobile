@@ -4,6 +4,7 @@ package br.com.flygowmobile.activity.navigationdrawer;
  * Created by Tiago Rocha Gomes on 29/05/14.
  */
 public class RowItem {
+    private long id;
     private String title;
     private String promoItems;
     private String subtitle;
@@ -17,6 +18,21 @@ public class RowItem {
         this.title = title;
         this.icon = icon;
         this.isGroupHeader = isGroupHeader;
+    }
+
+    public RowItem(long id, String title, int icon, boolean isGroupHeader) {
+        this.id = id;
+        this.title = title;
+        this.icon = icon;
+        this.isGroupHeader = isGroupHeader;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -78,4 +94,6 @@ public class RowItem {
     public void setPromoItem(boolean isPromoItem) {
         this.isPromoItem = isPromoItem;
     }
+
+
 }

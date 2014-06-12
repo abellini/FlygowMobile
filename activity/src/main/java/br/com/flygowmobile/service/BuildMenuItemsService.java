@@ -25,6 +25,10 @@ import br.com.flygowmobile.enums.StaticTitles;
  */
 public class BuildMenuItemsService {
 
+    private final static String CHARACTER_SPACE = " ";
+    private final static Integer ICON_CATEGORY_DEFAULT = 0;
+    private final static Integer ICON_MENU_ITEM = 1;
+    private final static Integer ICON_PROMOTION_HEADER = 2;
     private RepositoryTablet repositoryTablet;
     private RepositoryCategory repositoryCategory;
     private RepositoryCoin repositoryCoin;
@@ -32,11 +36,6 @@ public class BuildMenuItemsService {
     private RepositoryPromotion repositoryPromotion;
     private RepositoryFoodPromotion repositoryFoodPromotion;
     private TypedArray menuIcons;
-
-    private final static String CHARACTER_SPACE = " ";
-    private final static Integer ICON_CATEGORY_DEFAULT = 0;
-    private final static Integer ICON_MENU_ITEM = 1;
-    private final static Integer ICON_PROMOTION_HEADER = 2;
 
     public BuildMenuItemsService(Context ctx, TypedArray menuIcons){
         repositoryTablet = new RepositoryTablet(ctx);
@@ -64,6 +63,7 @@ public class BuildMenuItemsService {
             List<Food> foods = getFoodsByCategory(header);
             for(Food food : foods){
                 RowItem items = new RowItem(
+                        food.getFoodId(),
                         food.getName(),
                         menuIcons.getResourceId(ICON_MENU_ITEM, -1),
                         false

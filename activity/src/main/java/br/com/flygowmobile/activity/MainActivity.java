@@ -4,7 +4,6 @@ package br.com.flygowmobile.activity;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
@@ -16,12 +15,10 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.activity.navigationdrawer.CustomAdapter;
@@ -48,6 +45,7 @@ public class MainActivity extends Activity {
 
     private List<RowItem> rowItems;
     private CustomAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +90,8 @@ public class MainActivity extends Activity {
             }
         };
 
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
         if (savedInstanceState == null) {
             // on first time display view for first nav item
             updateDisplay(0);
@@ -99,21 +99,14 @@ public class MainActivity extends Activity {
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.openDrawer(Gravity.LEFT);
-    }
 
-    class SlideitemListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-        {
-            updateDisplay(position);
-        }
 
     }
 
     private void updateDisplay(int position) {
         Fragment fragment = null;
         switch (position) {
-            case 0:
+            case 1:
                 fragment = new FB_Fragment();
                 break;
             default:
@@ -154,13 +147,13 @@ public class MainActivity extends Activity {
         // Handle action bar actions click
         switch (item.getItemId()) {
             case action_settings:
-            return true;
-            default :
+                return true;
+            default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    /***
+    /**
      * Called when invalidateOptionsMenu() is triggered
      */
     @Override
@@ -188,6 +181,16 @@ public class MainActivity extends Activity {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    class SlideitemListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            RowItem item = (RowItem) parent.getItemAtPosition(position);
+            Toast.makeText(MainActivity.this, item.getId() + " - " + item.getTitle().toString(), Toast.LENGTH_LONG).show();
+            updateDisplay(position);
+        }
+
     }
 
 } 

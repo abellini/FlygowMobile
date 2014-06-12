@@ -7,7 +7,7 @@ import br.com.flygowmobile.enums.ServerController;
 /**
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
-public class FlygowServerUrl extends Application{
+public class FlygowServerUrl extends Application {
     private static String HTTP_HEADER = "http://";
     private static String APPLICATION_NAME = "flygow";
     private static String WEBSERVICE_PREFIX = "webservice";
@@ -17,12 +17,12 @@ public class FlygowServerUrl extends Application{
     private String serverIp;
     private int serverPort;
 
-    public FlygowServerUrl(){
+    public FlygowServerUrl() {
         this.serverIp = "127.0.0.1";
         this.serverPort = 8080;
     }
 
-    public FlygowServerUrl(String serverIp, int serverPort){
+    public FlygowServerUrl(String serverIp, int serverPort) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
     }
@@ -43,11 +43,11 @@ public class FlygowServerUrl extends Application{
         this.serverPort = serverPort;
     }
 
-    public String getServerUrl(ServerController controller){
+    public String getServerUrl(ServerController controller) {
         return this.buildUrl(controller);
     }
 
-    private String buildUrl(ServerController controller){
+    private String buildUrl(ServerController controller) {
         String url = HTTP_HEADER + serverIp + PORT_SEPARATOR + serverPort + PATH_SEPARATOR +
                 APPLICATION_NAME + PATH_SEPARATOR + WEBSERVICE_PREFIX + PATH_SEPARATOR + controller.getName();
         return url;
