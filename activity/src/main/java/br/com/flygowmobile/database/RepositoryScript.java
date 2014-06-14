@@ -40,8 +40,9 @@ public class RepositoryScript {
                     RepositoryAdvertisement.Advertisements.COLUMN_NAME_INITIAL_DATE + TEXT_TYPE + COMMA_SEP +
                     RepositoryAdvertisement.Advertisements.COLUMN_NAME_FINAL_DATE + TEXT_TYPE + COMMA_SEP +
                     RepositoryAdvertisement.Advertisements.COLUMN_NAME_IS_ACTIVE + INTEGER_TYPE + COMMA_SEP +
-                    RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO + TEXT_TYPE + COMMA_SEP +
-                    RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO + TEXT_TYPE +
+                    RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO_NAME + TEXT_TYPE + COMMA_SEP +
+                    RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO + BLOB_TYPE + COMMA_SEP +
+                    RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO_NAME + TEXT_TYPE +
             " )",
             "CREATE TABLE " + RepositoryOrder.Orders.TABLE_NAME + " (" +
                     RepositoryOrder.Orders.COLUMN_NAME_ORDER_ID + INTEGER_TYPE + " PRIMARY KEY,"+

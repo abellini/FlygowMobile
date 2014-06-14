@@ -6,7 +6,8 @@ package br.com.flygowmobile.enums;
 public enum ServerController {
     PING("ping"),
     CONNECT("connect"),
-    REGISTER_DETAILS("registerDetails")
+    REGISTER_DETAILS("registerDetails"),
+    INITIALIZE_MEDIA_ADVERTISEMENTS("initializeMediaAdvertisements")
     ;
 
     private String name;

@@ -14,6 +14,7 @@ public class Advertisement implements Serializable{
     private Date finalDate;
     private boolean active;
     private String photoName;
+    private byte[] photo;
     private String videoName;
 
     public static String[] columns = new String[] {
@@ -23,8 +24,9 @@ public class Advertisement implements Serializable{
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_INITIAL_DATE,
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_FINAL_DATE,
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_IS_ACTIVE,
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO_NAME,
             RepositoryAdvertisement.Advertisements.COLUMN_NAME_PHOTO,
-            RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO
+            RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO_NAME
     };
 
     public Advertisement() { }
@@ -98,6 +100,14 @@ public class Advertisement implements Serializable{
 
     public void setPhotoName(String photoName) {
         this.photoName = photoName;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     public String getVideoName() {

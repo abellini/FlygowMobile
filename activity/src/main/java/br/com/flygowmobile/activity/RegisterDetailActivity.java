@@ -353,9 +353,17 @@ public class RegisterDetailActivity extends Activity {
                 advertisement.setInicialDate(fm.parse(obj.getString("inicialDate")));
                 advertisement.setFinalDate(fm.parse(obj.getString("finalDate")));
                 advertisement.setActive(obj.getBoolean("active"));
-
+                try{
+                    advertisement.setPhotoName(obj.getString("photoName"));
+                }catch (JSONException je){
+                    advertisement.setPhotoName(null);
+                }
+                try{
+                    advertisement.setVideoName(obj.getString("videoName"));
+                }catch (JSONException je){
+                    advertisement.setVideoName(null);
+                }
                 listAdvertisements.put(advertisement.getAdvertisementId(), advertisement);
-
                 list.add(name);
                 store.put(id, name);
             }

@@ -87,6 +87,7 @@ public class BuildMenuItemsService {
             rowItems.add(promoHeaderItem);
             for(Promotion promo : promotions){
                 RowItem items = new RowItem(
+                        promo.getPromotionId(),
                         promo.getName(),
                         menuIcons.getResourceId(ICON_MENU_ITEM, -1),
                         false

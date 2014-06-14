@@ -46,8 +46,9 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         values.put(Advertisements.COLUMN_NAME_IS_ACTIVE, advertisement.isActive());
         values.put(Advertisements.COLUMN_NAME_INITIAL_DATE, fm.format(advertisement.getInicialDate()));
         values.put(Advertisements.COLUMN_NAME_FINAL_DATE, fm.format(advertisement.getFinalDate()));
-        values.put(Advertisements.COLUMN_NAME_PHOTO, advertisement.getPhotoName());
-        values.put(Advertisements.COLUMN_NAME_VIDEO, advertisement.getVideoName());
+        values.put(Advertisements.COLUMN_NAME_PHOTO, advertisement.getPhoto());
+        values.put(Advertisements.COLUMN_NAME_PHOTO_NAME, advertisement.getPhotoName());
+        values.put(Advertisements.COLUMN_NAME_VIDEO_NAME, advertisement.getVideoName());
 
         return values;
     }
@@ -103,8 +104,9 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
                 int idxIniDate =  c.getColumnIndex(Advertisements.COLUMN_NAME_INITIAL_DATE);
                 int idxFinalDate =  c.getColumnIndex(Advertisements.COLUMN_NAME_FINAL_DATE);
                 int idxIsActive =  c.getColumnIndex(Advertisements.COLUMN_NAME_IS_ACTIVE);
-                int idxPhotoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_PHOTO);
-                int idxVideoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_VIDEO);
+                int idxPhotoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_PHOTO_NAME);
+                int idxPhoto =  c.getColumnIndex(Advertisements.COLUMN_NAME_PHOTO);
+                int idxVideoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_VIDEO_NAME);
 
 
                 Advertisement advertisement = new Advertisement();
@@ -115,6 +117,7 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
                 advertisement.setInicialDate(fm.parse(c.getString(idxIniDate)));
                 advertisement.setFinalDate(fm.parse(c.getString(idxFinalDate)));
                 advertisement.setPhotoName(c.getString(idxPhotoName));
+                advertisement.setPhoto(c.getBlob(idxPhoto));
                 advertisement.setVideoName(c.getString(idxVideoName));
 
                 return advertisement;
@@ -138,8 +141,9 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
                 int idxIniDate =  c.getColumnIndex(Advertisements.COLUMN_NAME_INITIAL_DATE);
                 int idxFinalDate =  c.getColumnIndex(Advertisements.COLUMN_NAME_FINAL_DATE);
                 int idxIsActive =  c.getColumnIndex(Advertisements.COLUMN_NAME_IS_ACTIVE);
-                int idxPhotoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_PHOTO);
-                int idxVideoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_VIDEO);
+                int idxPhotoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_PHOTO_NAME);
+                int idxPhoto =  c.getColumnIndex(Advertisements.COLUMN_NAME_PHOTO);
+                int idxVideoName =  c.getColumnIndex(Advertisements.COLUMN_NAME_VIDEO_NAME);
 
                 do {
                     Advertisement advertisement = new Advertisement();
@@ -150,6 +154,7 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
                     advertisement.setInicialDate(fm.parse(c.getString(idxIniDate)));
                     advertisement.setFinalDate(fm.parse(c.getString(idxFinalDate)));
                     advertisement.setPhotoName(c.getString(idxPhotoName));
+                    advertisement.setPhoto(c.getBlob(idxPhoto));
                     advertisement.setVideoName(c.getString(idxVideoName));
 
                     advertisements.add(advertisement);
@@ -177,8 +182,9 @@ public class RepositoryAdvertisement extends Repository<Advertisement> {
         public static final String COLUMN_NAME_INITIAL_DATE = "initialDate";
         public static final String COLUMN_NAME_FINAL_DATE = "finalDate";
         public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
+        public static final String COLUMN_NAME_PHOTO_NAME = "photoName";
         public static final String COLUMN_NAME_PHOTO = "photo";
-        public static final String COLUMN_NAME_VIDEO = "video";
+        public static final String COLUMN_NAME_VIDEO_NAME = "videoName";
 
     }
 
