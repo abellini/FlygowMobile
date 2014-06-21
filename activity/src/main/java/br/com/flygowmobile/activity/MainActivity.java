@@ -29,10 +29,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.VideoUtils;
 import br.com.flygowmobile.activity.navigationdrawer.AdvertisementFragment;
 import br.com.flygowmobile.activity.navigationdrawer.CustomAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.FB_Fragment;
@@ -240,6 +243,12 @@ public class MainActivity extends Activity {
 
         @Override
         protected String doInBackground(Void... params) {
+            try {
+                VideoUtils.removeAllPhisicalVideos(MainActivity.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.w(MAIN_ACTIVITY, "Not videos to remove!");
+            }
             String url = serverAddressObj.getServerUrl(ServerController.INITIALIZE_MEDIA_ADVERTISEMENTS);
             String chooseAdvertisementsIds = "";
             try {
@@ -294,7 +303,14 @@ public class MainActivity extends Activity {
                                 fromServer.setPhoto(media);
                                 repositoryAdvertisement.save(fromServer);
                             }else if (MediaTypeEnum.VIDEO.getId().equals(mediaTypeId.byteValue())){
-                                //TODO:: Implements video
+                                String videoName = new Date().getTime() + "";
+                                try{
+                                    VideoUtils.saveVideo(MainActivity.this, videoName, media);
+                                    fromServer.setVideoName(videoName);
+                                    repositoryAdvertisement.save(fromServer);
+                                }catch(Exception e){
+                                    fromServer.setVideoName(null);
+                                }
                             }
                         }
                     }
