@@ -1,9 +1,11 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
+import java.io.Serializable;
+
 /**
  * Created by Tiago Rocha Gomes on 29/05/14.
  */
-public class RowItem {
+public class RowItem implements Serializable {
     private long id;
     private String title;
     private String promoItems;

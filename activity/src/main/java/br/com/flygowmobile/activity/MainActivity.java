@@ -54,29 +54,21 @@ import static br.com.flygowmobile.activity.R.id.action_settings;
 
 public class MainActivity extends Activity {
 
+    private static final String MAIN_ACTIVITY = "MainActivity";
     String[] menutitles;
     TypedArray menuIcons;
-
     // nav drawer title
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
     private BuildMenuItemsService menuItemsService;
-
     private List<RowItem> rowItems;
     private CustomAdapter adapter;
-
     private RepositoryAdvertisement repositoryAdvertisement;
-
     private AdvertisementMediaTask advertisementMediaTask;
-
     private ProgressDialog progressAdvertisementDialog;
-
-    private static final String MAIN_ACTIVITY = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +119,7 @@ public class MainActivity extends Activity {
 
         if (savedInstanceState == null) {
             // on first time display view for first nav item
-            updateDisplay(0);
+            //updateDisplay(0);
         }
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -141,15 +133,12 @@ public class MainActivity extends Activity {
         advertisementMediaTask.execute((Void) null);
     }
 
-    private void updateDisplay(int position) {
-        Fragment fragment = null;
-        switch (position) {
-            case 1:
-                fragment = new FB_Fragment();
-                break;
-            default:
-                break;
-        }
+    private void updateDisplay(RowItem item) {
+        Fragment fragment = new FB_Fragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable("item", item);
+        fragment.setArguments(args);
 
         if (fragment != null) {
             FragmentManager fragmentManager = getFragmentManager();
@@ -227,7 +216,7 @@ public class MainActivity extends Activity {
             RowItem item = (RowItem) parent.getItemAtPosition(position);
             if(!item.isGroupHeader()){
                 Toast.makeText(MainActivity.this, item.getId() + " - " + item.getTitle().toString(), Toast.LENGTH_LONG).show();
-                updateDisplay(position);
+                updateDisplay(item);
             }
         }
     }
