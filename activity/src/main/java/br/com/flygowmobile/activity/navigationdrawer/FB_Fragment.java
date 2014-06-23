@@ -22,5 +22,17 @@ public class FB_Fragment extends Fragment {
         return rootView;
     }
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle args = getArguments();
+        if (args == null) {
+            Toast.makeText(getActivity(), "arguments is null ", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(getActivity(), "text " + args, Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
 }
