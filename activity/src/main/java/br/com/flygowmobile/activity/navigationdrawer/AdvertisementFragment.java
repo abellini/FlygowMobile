@@ -6,12 +6,13 @@ import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 import android.widget.VideoView;
 import android.widget.ViewFlipper;
 
@@ -42,7 +43,6 @@ public class AdvertisementFragment extends Fragment {
         repositoryAdvertisement = new RepositoryAdvertisement(getActivity());
         List<Advertisement> allAdvertisements = repositoryAdvertisement.listAll();
         defineAdvertisementViews(viewFlipper, allAdvertisements);
-
         viewFlipper.getInAnimation().setAnimationListener(new Animation.AnimationListener() {
             public void onAnimationStart(Animation animation) {
                 if (viewFlipper.getCurrentView() instanceof VideoView) {
@@ -62,15 +62,7 @@ public class AdvertisementFragment extends Fragment {
             }
 
             public void onAnimationRepeat(Animation animation) {}
-            public void onAnimationEnd(Animation animation) {/*
-                if (viewFlipper.getCurrentView() instanceof ImageView) {
-                    Log.i(ADVERTISEMENT_FRAGMENT_ACTIVITY, "START IMAGE");
-                    if(!viewFlipper.isFlipping()){
-                        Log.i(ADVERTISEMENT_FRAGMENT_ACTIVITY, "NOT FLIPPING");
-                        viewFlipper.startFlipping();
-                    }
-                }*/
-            }
+            public void onAnimationEnd(Animation animation) {}
         });
 
         if(allAdvertisements.size() > 1){
@@ -102,7 +94,16 @@ public class AdvertisementFragment extends Fragment {
         if(viewFlipper != null && allAdvertisements != null && !allAdvertisements.isEmpty()){
             for(Advertisement advertisement : allAdvertisements){
                 ImageView imgview = new ImageView(getActivity());
+                ViewFlipper.LayoutParams imgLayout = new ViewFlipper.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                imgLayout.gravity = Gravity.RIGHT;
+                imgview.setLayoutParams(imgLayout);
+
                 VideoView videoView = new VideoView(getActivity());
+                ViewFlipper.LayoutParams videoLayout = new ViewFlipper.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                videoLayout.gravity = Gravity.RIGHT;
+                videoView.setLayoutParams(videoLayout);
                 if(advertisement.getVideoName() != null && !advertisement.getVideoName().equals("")){
                     try {
                         String videoPath = VideoUtils.getVideo(getActivity().getApplicationContext(), advertisement.getVideoName());

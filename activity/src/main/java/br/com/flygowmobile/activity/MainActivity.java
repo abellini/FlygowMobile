@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,21 +55,29 @@ import static br.com.flygowmobile.activity.R.id.action_settings;
 
 public class MainActivity extends Activity {
 
-    private static final String MAIN_ACTIVITY = "MainActivity";
     String[] menutitles;
     TypedArray menuIcons;
+
     // nav drawer title
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
+
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
     private BuildMenuItemsService menuItemsService;
+
     private List<RowItem> rowItems;
     private CustomAdapter adapter;
+
     private RepositoryAdvertisement repositoryAdvertisement;
+
     private AdvertisementMediaTask advertisementMediaTask;
+
     private ProgressDialog progressAdvertisementDialog;
+
+    private static final String MAIN_ACTIVITY = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,12 +113,14 @@ public class MainActivity extends Activity {
                 R.drawable.ic_drawer, R.string.app_name,R.string.app_name) {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
+                alignFragmentToCenter();
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
 
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
+                alignFragmentToRight();
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 invalidateOptionsMenu();
             }
@@ -131,6 +142,17 @@ public class MainActivity extends Activity {
         List<Advertisement> allAdvs = repositoryAdvertisement.listAll();
         advertisementMediaTask = new AdvertisementMediaTask(allAdvs);
         advertisementMediaTask.execute((Void) null);
+    }
+
+    private void alignFragmentToCenter(){
+        LinearLayout content = (LinearLayout)
+                findViewById(R.id.content);
+        View spacer = findViewById(R.id.spacer);
+        content.removeView(spacer);
+    }
+
+    private void alignFragmentToRight(){
+        View spacer = new View(this);
     }
 
     private void updateDisplay(RowItem item) {

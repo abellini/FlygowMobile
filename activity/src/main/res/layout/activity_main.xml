@@ -5,12 +5,26 @@
     android:layout_height="match_parent" >
 
     <!-- The main content view -->
-    <FrameLayout
-        android:id="@+id/frame_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="180dp"
-    />
+    <LinearLayout
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/spacer"
+            android:layout_width="275dp"
+            android:visibility="invisible"
+            android:clickable="false"
+            android:layout_height="fill_parent">
+        </View>
+
+        <LinearLayout
+            android:id="@+id/frame_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"/>
+    </LinearLayout>
 
     <!-- The navigation drawer list -->
     <ListView
