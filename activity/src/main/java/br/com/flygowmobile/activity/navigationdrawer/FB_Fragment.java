@@ -26,7 +26,7 @@ public class FB_Fragment extends Fragment {
         repositoryFood = new RepositoryFood(getActivity());
 
 
-        TextView lblDescription = (TextView) rootView.findViewById(R.id.lblDescription);
+        /*TextView lblDescription = (TextView) rootView.findViewById(R.id.lblDescription);
         TextView lblName = (TextView) rootView.findViewById(R.id.lblName);
         TextView lblNutritional = (TextView) rootView.findViewById(R.id.lblNutritional);
         ImageView imgFood = (ImageView) rootView.findViewById(R.id.imgFood);
@@ -42,7 +42,7 @@ public class FB_Fragment extends Fragment {
             lblDescription.setText(food.getDescription());
             lblNutritional.setText(food.getNutritionalInfo());
             //imgFood.setimage
-        }
+        }*/
 
         return rootView;
     }

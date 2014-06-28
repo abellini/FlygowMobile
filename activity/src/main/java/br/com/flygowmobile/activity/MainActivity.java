@@ -22,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.widget.ViewFlipper;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.conn.HttpHostConnectException;
@@ -145,14 +146,30 @@ public class MainActivity extends Activity {
     }
 
     private void alignFragmentToCenter(){
-        LinearLayout content = (LinearLayout)
-                findViewById(R.id.content);
-        View spacer = findViewById(R.id.spacer);
-        content.removeView(spacer);
+        try{
+            ViewFlipper view = (ViewFlipper)findViewById(R.id.switcher);
+            ViewFlipper.LayoutParams layout = new ViewFlipper.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layout.gravity = Gravity.CENTER;
+            layout.setMargins(-137, 0, 0, 0);
+            view.setLayoutParams(layout);
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Advertisement to CENTER");
+        }
+
     }
 
     private void alignFragmentToRight(){
-        View spacer = new View(this);
+        try{
+            ViewFlipper view = (ViewFlipper)findViewById(R.id.switcher);
+            ViewFlipper.LayoutParams layout = new ViewFlipper.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layout.gravity = Gravity.CENTER;
+            layout.setMargins(0, 0, 0, 0);
+            view.setLayoutParams(layout);
+        }catch (Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Advertisement to RIGHT");
+        }
     }
 
     private void updateDisplay(RowItem item) {

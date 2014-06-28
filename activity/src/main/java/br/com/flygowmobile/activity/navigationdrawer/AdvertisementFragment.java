@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.VideoView;
 import android.widget.ViewFlipper;
 
@@ -93,17 +94,21 @@ public class AdvertisementFragment extends Fragment {
     private void defineAdvertisementViews(ViewFlipper viewFlipper, List<Advertisement> allAdvertisements){
         if(viewFlipper != null && allAdvertisements != null && !allAdvertisements.isEmpty()){
             for(Advertisement advertisement : allAdvertisements){
+
                 ImageView imgview = new ImageView(getActivity());
                 ViewFlipper.LayoutParams imgLayout = new ViewFlipper.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                imgLayout.gravity = Gravity.RIGHT;
+                imgLayout.gravity = Gravity.CENTER;
+                imgLayout.setMargins(137, 0, 0, 0);
                 imgview.setLayoutParams(imgLayout);
 
                 VideoView videoView = new VideoView(getActivity());
                 ViewFlipper.LayoutParams videoLayout = new ViewFlipper.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                videoLayout.gravity = Gravity.RIGHT;
+                videoLayout.gravity = Gravity.CENTER;
+                videoLayout.setMargins(137, 0, 0, 0);
                 videoView.setLayoutParams(videoLayout);
+
                 if(advertisement.getVideoName() != null && !advertisement.getVideoName().equals("")){
                     try {
                         String videoPath = VideoUtils.getVideo(getActivity().getApplicationContext(), advertisement.getVideoName());
