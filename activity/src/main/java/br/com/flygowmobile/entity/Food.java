@@ -13,9 +13,9 @@ public class Food implements Serializable {
             RepositoryFood.Foods.COLUMN_NAME_DESCRIPTION,
             RepositoryFood.Foods.COLUMN_NAME_NUTRITIONAL_INFO,
             RepositoryFood.Foods.COLUMN_NAME_IS_ACTIVE,
-            RepositoryFood.Foods.COLUMN_NAME_CATEGORY_ID
+            RepositoryFood.Foods.COLUMN_NAME_CATEGORY_ID,
+            RepositoryFood.Foods.COLUMN_NAME_PHOTO
     };
-
     private long foodId;
     private String name;
     private Double value;
@@ -23,12 +23,13 @@ public class Food implements Serializable {
     private String nutritionalInfo;
     private boolean isActive;
     private int categoryId;
+    private byte[] photo;
 
     public Food(){
 
     }
 
-    public Food(long foodId, String name, Double value, String description, String nutritionalInfo,boolean isActive, int categoryId){
+    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo) {
         this.foodId = foodId;
         this.name = name;
         this.value = value;
@@ -36,6 +37,7 @@ public class Food implements Serializable {
         this.nutritionalInfo = nutritionalInfo;
         this.isActive = isActive;
         this.categoryId = categoryId;
+        this.setPhoto(photo);
     }
 
 
@@ -95,6 +97,14 @@ public class Food implements Serializable {
         this.categoryId = categoryId;
     }
 
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
+    }
+
     public String toJSON() {
         return "{" +
                 "\"foodId\": "+ getFoodId() + ", " +
@@ -104,6 +114,9 @@ public class Food implements Serializable {
                 "\"nutritionalInfo\": " + "\"" + getNutritionalInfo() + " " +
                 "\"isActive\": " + "\"" + isActive() + " " +
                 "\"categoryId\": " + "\"" + getCategoryId() + " " +
+                "\"photo\": " + "\"" + getPhoto() + " " +
                 "}";
     }
+
+
 }

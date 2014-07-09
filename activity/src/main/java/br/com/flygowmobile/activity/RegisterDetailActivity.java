@@ -24,7 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -456,6 +455,13 @@ public class RegisterDetailActivity extends Activity {
                 food.setNutritionalInfo(obj.getString("nutritionalInfo"));
                 food.setActive(Boolean.parseBoolean(obj.getString("active")));
                 food.setCategoryId(obj.getInt("categoryId"));
+                byte[] photo = null;
+                try {
+                    photo = Base64.decode(obj.getString("photo"), Base64.DEFAULT);
+                } catch (JSONException je) {
+                    photo = null;
+                }
+                food.setPhoto(photo);
 
                 Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
                 repositoryFood.save(food);
