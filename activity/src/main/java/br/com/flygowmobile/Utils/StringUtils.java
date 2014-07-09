@@ -23,4 +23,11 @@ public class StringUtils {
         return df.format(date);
     }
 
+    public static boolean isNotEmpty(String str){
+        if(str == null || str.isEmpty()){
+            return false;
+        }else{
+            return true;
+        }
+    }
 }

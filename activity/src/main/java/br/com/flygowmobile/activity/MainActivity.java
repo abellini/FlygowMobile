@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
@@ -31,12 +33,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.Utils.VideoUtils;
 import br.com.flygowmobile.activity.navigationdrawer.AdvertisementFragment;
 import br.com.flygowmobile.activity.navigationdrawer.CustomAdapter;
@@ -277,25 +287,47 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
                 Log.w(MAIN_ACTIVITY, "Not videos to remove!");
             }
-            String url = serverAddressObj.getServerUrl(ServerController.INITIALIZE_MEDIA_ADVERTISEMENTS);
-            String chooseAdvertisementsIds = "";
+            String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_MEDIA_ADVERTISEMENTS);
+            JSONObject jsonSuccess = new JSONObject();
+            JSONArray dataMedia = new JSONArray();
             try {
-                int i = 0;
+                jsonSuccess.put("data", dataMedia);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
                 for(Advertisement adv : advertisements){
-                    if(i != advertisements.size()-1){
-                        chooseAdvertisementsIds += adv.getAdvertisementId() + ",";
-                    }else{
-                        chooseAdvertisementsIds += adv.getAdvertisementId();
+                    JSONObject dataObj = new JSONObject();
+                    dataMedia.put(dataObj);
+                    dataObj.put("advertisementId", adv.getAdvertisementId());
+                    try {
+                        if(StringUtils.isNotEmpty(adv.getVideoName())){
+                            dataObj.put("mediaType", MediaTypeEnum.VIDEO.getId());
+                            VideoUtils.downloadVideoByEntityId(MainActivity.this, serverUrl, adv.getAdvertisementId(), adv.getVideoName());
+                        } else {
+                            if (StringUtils.isNotEmpty(adv.getPhotoName())) {
+                                dataObj.put("mediaType", MediaTypeEnum.PHOTO.getId());
+                                NameValuePair advIdPair = new BasicNameValuePair("entityId", adv.getAdvertisementId() + "");
+                                NameValuePair mediaTypePair = new BasicNameValuePair("mediaType", MediaTypeEnum.PHOTO.getId() + "");
+                                String response = ServiceHandler.makeServiceCall(serverUrl, ServiceHandler.POST, Arrays.asList(advIdPair, mediaTypePair));
+                                JSONObject jsonObject = new JSONObject(response);
+                                try {
+                                    dataObj.put("media", jsonObject.getString("media"));
+                                } catch (JSONException je) {
+                                    dataObj.put("media", null);
+                                }
+                            }
+                        }
+                        jsonSuccess.put("success", true);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        jsonSuccess.put("success", false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        jsonSuccess.put("success", false);
                     }
-                    i++;
                 }
-                NameValuePair advertisementPairJson = new BasicNameValuePair("chooseAdvertisementsIds", ""+chooseAdvertisementsIds);
-                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(advertisementPairJson));
-
-            } catch (HttpHostConnectException ex) {
-                Log.i(MAIN_ACTIVITY, StaticMessages.TIMEOUT.getName());
-                progressAdvertisementDialog.dismiss();
-                return StaticMessages.TIMEOUT.getName();
+                return jsonSuccess.toString();
             } catch (Exception e) {
                 Log.i(MAIN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
                 progressAdvertisementDialog.dismiss();
@@ -307,44 +339,38 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String response) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                JSONArray advArrObj = jsonObject.getJSONArray("data");
-                for(int i = 0; i < advArrObj.length(); i++){
-                    JSONObject advObj = advArrObj.getJSONObject(i);
-                    Long advertisementId = advObj.getLong("advertisementId");
-                    Integer mediaTypeId = advObj.getInt("mediaType");
-                    String mediaString;
-                    try{
-                        mediaString = advObj.getString("media");
-                    }catch(JSONException je){
-                        mediaString = null;
-                    }
-                    if (mediaString != null && !mediaString.equals("")) {
-                        Advertisement fromServer = repositoryAdvertisement.findById(advertisementId);
-                        if(fromServer != null){
-                            byte[] media = null;
+                if(jsonObject.getBoolean("success")){
+                    JSONArray advArrObj = jsonObject.getJSONArray("data");
+                    for(int i = 0; i < advArrObj.length(); i++){
+                        JSONObject advObj = advArrObj.getJSONObject(i);
+                        Long advertisementId = advObj.getLong("advertisementId");
+                        Integer mediaTypeId = advObj.getInt("mediaType");
+                        if(MediaTypeEnum.PHOTO.getId().equals(mediaTypeId.byteValue())){
+                            String photoString;
                             try{
-                                media = Base64.decode(mediaString, Base64.DEFAULT);
-                            }catch (Exception ex){
-                                media = null;
+                                photoString = advObj.getString("media");
+                            }catch(JSONException je){
+                                photoString = null;
                             }
-                            if(MediaTypeEnum.PHOTO.getId().equals(mediaTypeId.byteValue())){
-                                fromServer.setPhoto(media);
-                                repositoryAdvertisement.save(fromServer);
-                            }else if (MediaTypeEnum.VIDEO.getId().equals(mediaTypeId.byteValue())){
-                                String videoName = new Date().getTime() + "";
-                                try{
-                                    VideoUtils.saveVideo(MainActivity.this, videoName, media);
-                                    fromServer.setVideoName(videoName);
+                            if (photoString != null && !photoString.equals("")) {
+                                Advertisement fromServer = repositoryAdvertisement.findById(advertisementId);
+                                if(fromServer != null){
+                                    byte[] media = null;
+                                    try{
+                                        media = Base64.decode(photoString, Base64.DEFAULT);
+                                    }catch (Exception ex){
+                                        media = null;
+                                    }
+                                    fromServer.setPhoto(media);
                                     repositoryAdvertisement.save(fromServer);
-                                }catch(Exception e){
-                                    fromServer.setVideoName(null);
                                 }
                             }
                         }
                     }
                 }
+
                 Fragment fragment;
-                if(advArrObj != null && advArrObj.length() > 0){
+                if(advertisements != null && advertisements.size() > 0){
                     fragment = new AdvertisementFragment();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
