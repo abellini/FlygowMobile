@@ -18,6 +18,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,7 +55,11 @@ import br.com.flygowmobile.activity.navigationdrawer.FB_Fragment;
 import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 import br.com.flygowmobile.activity.navigationdrawer.WelcomeFragment;
 import br.com.flygowmobile.database.RepositoryAdvertisement;
+import br.com.flygowmobile.database.RepositoryCoin;
+import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Advertisement;
+import br.com.flygowmobile.entity.Coin;
+import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.MediaTypeEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -62,11 +67,8 @@ import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildMenuItemsService;
 import br.com.flygowmobile.service.ServiceHandler;
 
-import static br.com.flygowmobile.activity.R.id.action_settings;
-
 public class MainActivity extends Activity {
 
-    String[] menutitles;
     TypedArray menuIcons;
 
     // nav drawer title
@@ -83,6 +85,8 @@ public class MainActivity extends Activity {
     private CustomAdapter adapter;
 
     private RepositoryAdvertisement repositoryAdvertisement;
+    private RepositoryTablet repositoryTablet;
+    private RepositoryCoin repositoryCoin;
 
     private AdvertisementMediaTask advertisementMediaTask;
 
@@ -97,7 +101,6 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         mTitle = mDrawerTitle = getTitle();
-        //menutitles = getResources().getStringArray(R.array.titles);
 
         menuIcons = getResources().obtainTypedArray(R.array.icons);
         menuItemsService = new BuildMenuItemsService(this, menuIcons);
@@ -115,6 +118,8 @@ public class MainActivity extends Activity {
         mDrawerList.setOnItemClickListener(new SlideitemListener());
 
         repositoryAdvertisement = new RepositoryAdvertisement(this);
+        repositoryTablet = new RepositoryTablet(this);
+        repositoryCoin = new RepositoryCoin(this);
 
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -210,8 +215,25 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.global, menu);
-        return true;
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+
+        initializeOrderValue(menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void initializeOrderValue(Menu menu){
+        final String initialValue = "0,00";
+        MenuItem menuItem = menu.findItem(R.id.allPrice);
+        Tablet tablet = repositoryTablet.findLast();
+        if(tablet != null){
+            Coin coin = repositoryCoin.findById(tablet.getCoinId());
+            if(coin != null && menuItem != null){
+                menuItem.setTitle(coin.getSymbol() + " " + initialValue);
+            }
+        }
     }
 
     @Override
@@ -222,7 +244,7 @@ public class MainActivity extends Activity {
         }
         // Handle action bar actions click
         switch (item.getItemId()) {
-            case action_settings:
+            case R.id.basket:
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -236,7 +258,6 @@ public class MainActivity extends Activity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         // if nav drawer is opened, hide the action items
         boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-        menu.findItem(action_settings).setVisible(!drawerOpen);
         return super.onPrepareOptionsMenu(menu);
     }
 

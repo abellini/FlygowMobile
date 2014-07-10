@@ -8,12 +8,10 @@
     <string name="title_activity_register_detail">Register Detail</string>
     <string name="description">Description:</string>
     <string name="nutritional">Nutritional Information:</string>
-
-
-    <string-array name="titles">
-        <item>Facebook</item>
-        <item>Google</item>
-    </string-array>
+    <string name="action_btn_basket">Meus Pedidos</string>
+    <string name="action_btn_call_attendant">Chamar Atendente</string>
+    <string name="finalizeService">Pedir a Conta</string>
+    <string name="defaultAllPrice">0,00</string>
 
     <array name="icons">
         <item>@drawable/lanche_header</item>

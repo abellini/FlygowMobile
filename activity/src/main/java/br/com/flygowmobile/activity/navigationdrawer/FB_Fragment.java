@@ -29,30 +29,6 @@ public class FB_Fragment extends Fragment {
 
         repositoryFood = new RepositoryFood(getActivity());
 
-
-        TextView lblDescription = (TextView) rootView.findViewById(R.id.lblDescription);
-        TextView lblName = (TextView) rootView.findViewById(R.id.lblName);
-        TextView lblNutritional = (TextView) rootView.findViewById(R.id.lblNutritional);
-        ImageView imgFood = (ImageView) rootView.findViewById(R.id.imgFood);
-
-
-        Bundle args = getArguments();
-        if (args != null) {
-
-            RowItem item = (RowItem) args.getSerializable("item");
-
-            Food food = repositoryFood.findById(item.getId());
-            lblName.setText(food.getName());
-            lblDescription.setText(food.getDescription());
-            lblNutritional.setText(food.getNutritionalInfo());
-            byte[] photo = food.getPhoto();
-            if (photo != null && photo.length > 0) {
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
-                Bitmap theImage = BitmapFactory.decodeStream(imageStream);
-                imgFood.setImageBitmap(theImage);
-            }
-        }
-
         return rootView;
     }
 
