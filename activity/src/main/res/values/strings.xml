@@ -9,6 +9,8 @@
     <string name="description">Description:</string>
     <string name="nutritional">Nutritional Information:</string>
     <string name="action_btn_basket">Meus Pedidos</string>
+
+    <string name="value">Value:</string>
     <string name="action_btn_call_attendant">Chamar Atendente</string>
     <string name="finalizeService">Pedir a Conta</string>
     <string name="defaultAllPrice">0,00</string>

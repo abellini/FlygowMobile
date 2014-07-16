@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Search, should appear as action button -->
-    <item android:id="@+id/callAtendant"
+    <item
+        android:id="@+id/callAtendant"
         android:icon="@drawable/attendant"
-        android:title="@string/action_btn_call_attendant"
         android:showAsAction="ifRoom|withText"
-    />
-    <item android:id="@+id/basket"
+        android:title="@string/action_btn_call_attendant" />
+    <item
+        android:id="@+id/basket"
         android:icon="@drawable/basket"
-        android:title="@string/action_btn_basket"
         android:showAsAction="ifRoom|withText"
-    />
+        android:title="@string/action_btn_basket" />
 
-    <item android:id="@+id/allPrice"
+    <item
+        android:id="@+id/allPrice"
         android:icon="@drawable/all_price"
-        android:title="@string/defaultAllPrice"
         android:showAsAction="ifRoom|withText"
-    />
+        android:title="@string/defaultAllPrice" />
 
-    <item android:id="@+id/finalizeService"
+    <item
+        android:id="@+id/finalizeService"
         android:icon="@drawable/end_order"
-        android:title="@string/finalizeService"
         android:showAsAction="ifRoom|withText"
-    />
+        android:title="@string/finalizeService" />
 </menu>

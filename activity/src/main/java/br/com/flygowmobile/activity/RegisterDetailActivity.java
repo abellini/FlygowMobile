@@ -444,6 +444,7 @@ public class RegisterDetailActivity extends Activity {
             }
 
             // Foods
+            Log.w(REGISTER_DETAIL_ACTIVITY, "Foods");
             JSONArray foods = initialData.getJSONArray("foods");
             for (int i = 0; i < foods.length(); i++) {
                 obj = foods.getJSONObject(i);
@@ -455,6 +456,7 @@ public class RegisterDetailActivity extends Activity {
                 food.setNutritionalInfo(obj.getString("nutritionalInfo"));
                 food.setActive(Boolean.parseBoolean(obj.getString("active")));
                 food.setCategoryId(obj.getInt("categoryId"));
+                food.setPhotoName(obj.getString("photoName"));
                 byte[] photo = null;
                 try {
                     photo = Base64.decode(obj.getString("photo"), Base64.DEFAULT);
@@ -507,6 +509,7 @@ public class RegisterDetailActivity extends Activity {
                     food.setNutritionalInfo(obj.getString("nutritionalInfo"));
                     food.setActive(Boolean.parseBoolean(obj.getString("active")));
                     food.setCategoryId(obj.getInt("categoryId"));
+                    food.setPhotoName(obj.getString("photoName"));
 
                     Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
                     repositoryFood.save(food);

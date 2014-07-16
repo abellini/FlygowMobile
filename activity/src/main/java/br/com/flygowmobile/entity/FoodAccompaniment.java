@@ -14,6 +14,14 @@ public class FoodAccompaniment implements Serializable {
     private long accompanimentId;
     private long foodId;
 
+    public FoodAccompaniment() {
+    }
+
+    public FoodAccompaniment(long accompanimentId, long foodId) {
+        this.accompanimentId = accompanimentId;
+        this.foodId = foodId;
+    }
+
     public long getAccompanimentId() {
         return accompanimentId;
     }

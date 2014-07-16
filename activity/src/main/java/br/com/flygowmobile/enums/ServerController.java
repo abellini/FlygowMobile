@@ -7,8 +7,8 @@ public enum ServerController {
     PING("ping"),
     CONNECT("connect"),
     REGISTER_DETAILS("registerDetails"),
-    INITIALIZE_MEDIA_ADVERTISEMENTS("initializeMediaAdvertisements")
-    ;
+    INITIALIZE_MEDIA_ADVERTISEMENTS("initializeMediaAdvertisements"),
+    INITIALIZE_PHOTO_FOODS("initializeFoodImages");
 
     private String name;
 
@@ -16,7 +16,7 @@ public enum ServerController {
         this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 }

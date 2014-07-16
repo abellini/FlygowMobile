@@ -14,7 +14,8 @@ public class Food implements Serializable {
             RepositoryFood.Foods.COLUMN_NAME_NUTRITIONAL_INFO,
             RepositoryFood.Foods.COLUMN_NAME_IS_ACTIVE,
             RepositoryFood.Foods.COLUMN_NAME_CATEGORY_ID,
-            RepositoryFood.Foods.COLUMN_NAME_PHOTO
+            RepositoryFood.Foods.COLUMN_NAME_PHOTO,
+            RepositoryFood.Foods.COLUMN_NAME_PHOTO_NAME
     };
     private long foodId;
     private String name;
@@ -24,12 +25,13 @@ public class Food implements Serializable {
     private boolean isActive;
     private int categoryId;
     private byte[] photo;
+    private String photoName;
 
     public Food(){
 
     }
 
-    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo) {
+    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo, String photoName) {
         this.foodId = foodId;
         this.name = name;
         this.value = value;
@@ -38,6 +40,7 @@ public class Food implements Serializable {
         this.isActive = isActive;
         this.categoryId = categoryId;
         this.setPhoto(photo);
+        this.photoName = photoName;
     }
 
 
@@ -105,16 +108,25 @@ public class Food implements Serializable {
         this.photo = photo;
     }
 
+    public String getPhotoName() {
+        return photoName;
+    }
+
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
     public String toJSON() {
         return "{" +
                 "\"foodId\": "+ getFoodId() + ", " +
                 "\"name\": " + "\"" + getName() + "\", " +
                 "\"value\": " + getValue() + ", " +
-                "\"description\": " + "\"" + getDescription() + " " +
-                "\"nutritionalInfo\": " + "\"" + getNutritionalInfo() + " " +
-                "\"isActive\": " + "\"" + isActive() + " " +
-                "\"categoryId\": " + "\"" + getCategoryId() + " " +
-                "\"photo\": " + "\"" + getPhoto() + " " +
+                "\"description\": " + "\"" + getDescription() + ", " +
+                "\"nutritionalInfo\": " + "\"" + getNutritionalInfo() + ", " +
+                "\"isActive\": " + "\"" + isActive() + ", " +
+                "\"categoryId\": " + "\"" + getCategoryId() + ", " +
+                "\"photo\": " + "\"" + getPhoto() + ", " +
+                "\"photoName\": " + "\"" + getPhotoName() + " " +
                 "}";
     }
 

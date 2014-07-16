@@ -20,8 +20,8 @@ public enum StaticMessages {
     DEFINE_CHOICES("Default values ​​are displayed. Please set your choices to proceed!"),
     MORE_DETAILS("+ details"),
     LOADING_ADVERTISEMENTS("Loading advertisements from server..."),
-    GENERIC("")
-    ;
+    LOADING_PHOTO_FOOD("Loading photos food from server..."),
+    GENERIC("");
 
     private String name;
 
@@ -29,16 +29,16 @@ public enum StaticMessages {
         this.name = name;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public static StaticMessages getCustomMessage(String message) {
+        GENERIC.setName(message);
+        return StaticMessages.GENERIC;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public static StaticMessages getCustomMessage(String message){
-        GENERIC.setName(message);
-        return StaticMessages.GENERIC;
+    public void setName(String name) {
+        this.name = name;
     }
 }
