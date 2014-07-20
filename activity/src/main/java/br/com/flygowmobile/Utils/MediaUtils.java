@@ -30,10 +30,11 @@ import br.com.flygowmobile.enums.MediaTypeEnum;
 /**
  * Created by Tiago Rocha Gomes on 19/06/14.
  */
-public class VideoUtils {
+public class MediaUtils {
 
     private static final String EXTENSION = ".mp4";
     private static final Integer MAX_VIDEO_SIZE = 10024; //10 MB
+    private static final Integer MAX_PHOTO_SIZE = 10024; //10 MB
 
     public static void downloadVideoByEntityId(Context ctx, String serverUrl, Integer entityId, String videoName) throws IOException {
         URL u = new URL(serverUrl);
@@ -64,6 +65,38 @@ public class VideoUtils {
             f.write(buffer, 0, len1);
         }
         f.close();
+    }
+
+    public static byte[] downloadPhotoByEntityId(Context ctx, String serverUrl, String entityType, Long entityId) throws IOException {
+        URL u = new URL(serverUrl);
+        HttpURLConnection c = (HttpURLConnection) u.openConnection();
+        c.setRequestMethod("POST");
+        c.setDoOutput(true);
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("entityId", entityId + ""));
+        params.add(new BasicNameValuePair("entityType", entityType + ""));
+
+        OutputStream os = c.getOutputStream();
+        BufferedWriter writer = new BufferedWriter(
+                new OutputStreamWriter(os, "UTF-8"));
+        writer.write(getQuery(params));
+        writer.flush();
+        writer.close();
+        os.close();
+
+        c.connect();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        InputStream in = c.getInputStream();
+
+        byte[] buffer = new byte[MAX_PHOTO_SIZE];
+        int len1 = 0;
+        while ( (len1 = in.read(buffer)) > 0 ) {
+            baos.write(buffer, 0, len1);
+        }
+        baos.close();
+        return baos.toByteArray();
     }
 
     private static String getQuery(List<NameValuePair> params) throws UnsupportedEncodingException {

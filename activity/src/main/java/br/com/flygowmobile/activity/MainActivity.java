@@ -36,9 +36,10 @@ import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.List;
 
+import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
-import br.com.flygowmobile.Utils.VideoUtils;
 import br.com.flygowmobile.activity.navigationdrawer.AdvertisementFragment;
 import br.com.flygowmobile.activity.navigationdrawer.CustomAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.FB_Fragment;
@@ -140,21 +141,13 @@ public class MainActivity extends Activity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.openDrawer(Gravity.LEFT);
 
-        //Set the inicial fragment... photo foods
+        //Set the inicial fragment... photo foods...
+        //After this, load the advertisements and change to the next activity
         progressFoodDialog = ProgressDialog.show(MainActivity.this, StaticTitles.LOAD.getName(),
-                StaticMessages.LOADING_PHOTO_FOOD.getName(), true);
+                StaticMessages.LOADING_PHOTO_PRODUCTS.getName(), true);
         List<Food> allFoods = repositoryFood.listAll();
         foodPhotoTask = new FoodPhotoTask(allFoods);
         foodPhotoTask.execute((Void) null);
-
-        //Set the inicial advertisements
-        progressAdvertisementDialog = ProgressDialog.show(MainActivity.this, StaticTitles.LOAD.getName(),
-                StaticMessages.LOADING_ADVERTISEMENTS.getName(), true);
-        List<Advertisement> allAdvs = repositoryAdvertisement.listAll();
-        advertisementMediaTask = new AdvertisementMediaTask(allAdvs);
-        advertisementMediaTask.execute((Void) null);
-
-
     }
 
     private void alignFragmentToCenter(){
@@ -300,7 +293,7 @@ public class MainActivity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                VideoUtils.removeAllPhisicalVideos(MainActivity.this);
+                MediaUtils.removeAllPhisicalVideos(MainActivity.this);
             } catch (IOException e) {
                 e.printStackTrace();
                 Log.w(MAIN_ACTIVITY, "There aren't videos to remove!");
@@ -321,7 +314,7 @@ public class MainActivity extends Activity {
                     try {
                         if(StringUtils.isNotEmpty(adv.getVideoName())){
                             dataObj.put("mediaType", MediaTypeEnum.VIDEO.getId());
-                            VideoUtils.downloadVideoByEntityId(MainActivity.this, serverUrl, adv.getAdvertisementId(), adv.getVideoName());
+                            MediaUtils.downloadVideoByEntityId(MainActivity.this, serverUrl, adv.getAdvertisementId(), adv.getVideoName());
                         } else {
                             if (StringUtils.isNotEmpty(adv.getPhotoName())) {
                                 dataObj.put("mediaType", MediaTypeEnum.PHOTO.getId());
@@ -417,44 +410,21 @@ public class MainActivity extends Activity {
 
         @Override
         protected String doInBackground(Void... params) {
-            //try {
-            // VideoUtils.removeAllPhisicalVideos(MainActivity.this);
-            //} catch (IOException e) {
-            //  e.printStackTrace();
-            //Log.w(MAIN_ACTIVITY, "There aren't videos to remove!");
-            //}
-            String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_FOODS);
+            String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_PRODUCTS);
             JSONObject jsonSuccess = new JSONObject();
-            JSONArray dataMedia = new JSONArray();
-            try {
-                jsonSuccess.put("data", dataMedia);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             try {
                 for (Food food : foods) {
                     JSONObject dataObj = new JSONObject();
-                    dataMedia.put(dataObj);
                     dataObj.put("foodId", food.getFoodId());
                     try {
                         if (StringUtils.isNotEmpty(food.getPhotoName())) {
-                            //dataObj.put("mediaType", MediaTypeEnum.PHOTO.getId());
-                            //VideoUtils.downloadVideoByEntityId(MainActivity.this, serverUrl, food.getFoodId(), food.getPhotoName());
-                            //} else {
-                            //if (StringUtils.isNotEmpty(adv.getPhotoName())) {
-                            Log.w(MAIN_ACTIVITY, serverUrl);
-                            dataObj.put("mediaType", MediaTypeEnum.PHOTO.getId());
-                            NameValuePair advIdPair = new BasicNameValuePair("entityId", food.getFoodId() + "");
-                            NameValuePair mediaTypePair = new BasicNameValuePair("mediaType", MediaTypeEnum.PHOTO.getId() + "");
-                            String response = ServiceHandler.makeServiceCall(serverUrl, ServiceHandler.POST, Arrays.asList(advIdPair, mediaTypePair));
-                            JSONObject jsonObject = new JSONObject(response);
-                            try {
-                                dataObj.put("media", jsonObject.getString("media"));
-                            } catch (JSONException je) {
-                                dataObj.put("media", null);
+                            byte[] photo = MediaUtils.downloadPhotoByEntityId(
+                                    MainActivity.this, serverUrl, Food.class.getSimpleName(), food.getFoodId());
+                            if(photo != null && photo.length > 0){
+                                food.setPhoto(photo);
+                                repositoryFood.save(food);
                             }
                         }
-                        //}
                         jsonSuccess.put("success", true);
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
@@ -476,35 +446,9 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String response) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                if (jsonObject.getBoolean("success")) {
-                    JSONArray advArrObj = jsonObject.getJSONArray("data");
-                    for (int i = 0; i < advArrObj.length(); i++) {
-                        JSONObject advObj = advArrObj.getJSONObject(i);
-                        Long foodId = advObj.getLong("foodId");
-                        Integer mediaTypeId = advObj.getInt("mediaType");
-                        if (MediaTypeEnum.PHOTO.getId().equals(mediaTypeId.byteValue())) {
-                            String photoString;
-                            try {
-                                photoString = advObj.getString("media");
-                            } catch (JSONException je) {
-                                photoString = null;
-                            }
-                            if (photoString != null && !photoString.equals("")) {
-                                Log.w(MAIN_ACTIVITY, photoString);
-                                Food fromServer = repositoryFood.findById(foodId);
-                                if (fromServer != null) {
-                                    byte[] media = null;
-                                    try {
-                                        media = Base64.decode(photoString, Base64.DEFAULT);
-                                    } catch (Exception ex) {
-                                        media = null;
-                                    }
-                                    fromServer.setPhoto(media);
-                                    repositoryFood.save(fromServer);
-                                }
-                            }
-                        }
-                    }
+                if (!jsonObject.getBoolean("success")) {
+                    FlygowAlertDialog.createWarningPopup(
+                            MainActivity.this, StaticTitles.WARNING, StaticMessages.WARNING_LOAD_PHOTO);
                 }
 
                 progressFoodDialog.dismiss();
@@ -512,6 +456,13 @@ public class MainActivity extends Activity {
                 Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName());
                 progressFoodDialog.dismiss();
             }
+
+            //Set the inicial advertisements
+            progressAdvertisementDialog = ProgressDialog.show(MainActivity.this, StaticTitles.LOAD.getName(),
+                    StaticMessages.LOADING_ADVERTISEMENTS.getName(), true);
+            List<Advertisement> allAdvs = repositoryAdvertisement.listAll();
+            advertisementMediaTask = new AdvertisementMediaTask(allAdvs);
+            advertisementMediaTask.execute((Void) null);
         }
     }
 }

@@ -36,4 +36,14 @@ public class FlygowAlertDialog {
         alertDialog.setIcon(R.drawable.ic_dialog_warning);
         alertDialog.show();
     }
+
+    public static void createWarningPopup(final Activity activity, StaticTitles title, StaticMessages message){
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setTitle(title.getName());
+        alertDialog.setMessage(message.getName());
+
+        // Set the Icon for the Dialog
+        alertDialog.setIcon(R.drawable.ic_dialog_warning);
+        alertDialog.show();
+    }
 }

@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.VideoView;
 import android.widget.ViewFlipper;
 
@@ -23,7 +22,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-import br.com.flygowmobile.Utils.VideoUtils;
+import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.activity.R;
 
 import br.com.flygowmobile.database.RepositoryAdvertisement;
@@ -111,7 +110,7 @@ public class AdvertisementFragment extends Fragment {
 
                 if(advertisement.getVideoName() != null && !advertisement.getVideoName().equals("")){
                     try {
-                        String videoPath = VideoUtils.getVideo(getActivity().getApplicationContext(), advertisement.getVideoName());
+                        String videoPath = MediaUtils.getVideo(getActivity().getApplicationContext(), advertisement.getVideoName());
                         videoView.setVideoPath(videoPath);
                         viewFlipper.addView(videoView);
                     } catch (IOException e) {
