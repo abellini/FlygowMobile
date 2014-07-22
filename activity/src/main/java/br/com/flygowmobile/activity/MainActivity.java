@@ -22,7 +22,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import org.apache.http.NameValuePair;
@@ -41,8 +40,10 @@ import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.navigationdrawer.AdvertisementFragment;
+import br.com.flygowmobile.activity.navigationdrawer.BasketFragment;
+import br.com.flygowmobile.activity.navigationdrawer.CallAtendantFragment;
 import br.com.flygowmobile.activity.navigationdrawer.CustomAdapter;
-import br.com.flygowmobile.activity.navigationdrawer.FB_Fragment;
+import br.com.flygowmobile.activity.navigationdrawer.FinalizeServiceFragment;
 import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 import br.com.flygowmobile.activity.navigationdrawer.WelcomeFragment;
 import br.com.flygowmobile.database.RepositoryAdvertisement;
@@ -217,13 +218,27 @@ public class MainActivity extends Activity {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        Fragment fragment;
+        FragmentManager fragmentManager = getFragmentManager();
         // Handle action bar actions click
         switch (item.getItemId()) {
+            case R.id.callAtendant:
+                fragment = new CallAtendantFragment();
+                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+                return true;
             case R.id.basket:
+                fragment = new BasketFragment();
+                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+                return true;
+            case R.id.finalizeService:
+                fragment = new FinalizeServiceFragment();
+                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+
     }
 
     /**
