@@ -58,6 +58,7 @@ import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildMenuItemsService;
+import br.com.flygowmobile.service.ClickProductContentService;
 import br.com.flygowmobile.service.ServiceHandler;
 
 public class MainActivity extends Activity {
@@ -71,6 +72,7 @@ public class MainActivity extends Activity {
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
     private BuildMenuItemsService menuItemsService;
+    private ClickProductContentService clickProductContentService;
     private List<RowItem> rowItems;
     private CustomAdapter adapter;
     private RepositoryAdvertisement repositoryAdvertisement;
@@ -92,6 +94,7 @@ public class MainActivity extends Activity {
 
         menuIcons = getResources().obtainTypedArray(R.array.icons);
         menuItemsService = new BuildMenuItemsService(this, menuIcons);
+        clickProductContentService = new ClickProductContentService(MainActivity.this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.slider_list);
@@ -177,25 +180,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void updateDisplay(RowItem item) {
-        Fragment fragment = new FB_Fragment();
 
-        Bundle args = new Bundle();
-        args.putSerializable("item", item);
-        fragment.setArguments(args);
-
-        if (fragment != null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-            // update selected item and title, then close the drawer
-            //setTitle(menutitles[position]);
-            mDrawerLayout.closeDrawer(mDrawerList);
-        } else {
-            // error in creating fragment
-            Log.e("MainActivity", "Error in creating fragment");
-        }
-
-    }
 
     @Override
     public void setTitle(CharSequence title) {
@@ -274,10 +259,7 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             RowItem item = (RowItem) parent.getItemAtPosition(position);
-            if(!item.isGroupHeader()){
-                Toast.makeText(MainActivity.this, item.getId() + " - " + item.getTitle().toString(), Toast.LENGTH_LONG).show();
-                updateDisplay(item);
-            }
+            clickProductContentService.onClickProductItem(item);
         }
     }
 

@@ -6,6 +6,7 @@ import android.content.res.TypedArray;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 import br.com.flygowmobile.database.RepositoryCategory;
 import br.com.flygowmobile.database.RepositoryCoin;
@@ -46,6 +47,8 @@ public class BuildMenuItemsService {
         repositoryCoin = new RepositoryCoin(ctx);
         this.menuIcons = menuIcons;
     }
+
+
 
     public List<RowItem> getMenuItems(){
         List<Category> headerTitles = getCategoryHeaders();

@@ -21,6 +21,7 @@ public enum StaticMessages {
     MORE_DETAILS("+ details"),
     LOADING_ADVERTISEMENTS("Loading advertisements from server..."),
     LOADING_PHOTO_PRODUCTS("Loading product photos from server..."),
+    LOAD_PRODUCT("Load product information..."),
     WARNING_LOAD_PHOTO("Some photos of products are not loaded from the server. Please, verify!"),
     GENERIC("");
 
