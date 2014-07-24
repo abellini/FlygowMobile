@@ -4,7 +4,7 @@ package br.com.flygowmobile.enums;
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
 public enum StaticMessages {
-    TIMEOUT("Timeout Call! Please, verify the server!"),
+    TIMEOUT("Timeout Call! Please, ver ify the server!"),
     NOT_SERVICE("Without Service!"),
     WAIT("Please, wait. Application loading data..."),
     LOCAL_LOAD("Getting data from server to the tablet database..."),
@@ -23,6 +23,7 @@ public enum StaticMessages {
     LOADING_PHOTO_PRODUCTS("Loading product photos from server..."),
     LOAD_PRODUCT("Load product information..."),
     WARNING_LOAD_PHOTO("Some photos of products are not loaded from the server. Please, verify!"),
+    WARNING_LOAD_ADVERTISEMENTS("Some advertisements are not loaded from the server. Please, verify!"),
     GENERIC("");
 
     private String name;

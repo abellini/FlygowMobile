@@ -297,32 +297,24 @@ public class MainActivity extends Activity {
             }
             String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_MEDIA_ADVERTISEMENTS);
             JSONObject jsonSuccess = new JSONObject();
-            JSONArray dataMedia = new JSONArray();
-            try {
-                jsonSuccess.put("data", dataMedia);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
             try {
                 for(Advertisement adv : advertisements){
-                    JSONObject dataObj = new JSONObject();
-                    dataMedia.put(dataObj);
-                    dataObj.put("advertisementId", adv.getAdvertisementId());
                     try {
                         if(StringUtils.isNotEmpty(adv.getVideoName())){
-                            dataObj.put("mediaType", MediaTypeEnum.VIDEO.getId());
                             MediaUtils.downloadVideoByEntityId(MainActivity.this, serverUrl, adv.getAdvertisementId(), adv.getVideoName());
                         } else {
                             if (StringUtils.isNotEmpty(adv.getPhotoName())) {
-                                dataObj.put("mediaType", MediaTypeEnum.PHOTO.getId());
-                                NameValuePair advIdPair = new BasicNameValuePair("entityId", adv.getAdvertisementId() + "");
-                                NameValuePair mediaTypePair = new BasicNameValuePair("mediaType", MediaTypeEnum.PHOTO.getId() + "");
-                                String response = ServiceHandler.makeServiceCall(serverUrl, ServiceHandler.POST, Arrays.asList(advIdPair, mediaTypePair));
-                                JSONObject jsonObject = new JSONObject(response);
-                                try {
-                                    dataObj.put("media", jsonObject.getString("media"));
-                                } catch (JSONException je) {
-                                    dataObj.put("media", null);
+                                serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_PRODUCTS);
+                                byte[] photo = MediaUtils.downloadPhotoByEntityId(
+                                        MainActivity.this,
+                                        serverUrl,
+                                        Advertisement.class.getSimpleName(),
+                                        Long.parseLong(adv.getAdvertisementId()+"")
+                                );
+                                adv.setPhoto(photo);
+                                if(photo != null && photo.length > 0){
+                                    repositoryAdvertisement.save(adv);
                                 }
                             }
                         }
@@ -347,34 +339,9 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String response) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                if(jsonObject.getBoolean("success")){
-                    JSONArray advArrObj = jsonObject.getJSONArray("data");
-                    for(int i = 0; i < advArrObj.length(); i++){
-                        JSONObject advObj = advArrObj.getJSONObject(i);
-                        Long advertisementId = advObj.getLong("advertisementId");
-                        Integer mediaTypeId = advObj.getInt("mediaType");
-                        if(MediaTypeEnum.PHOTO.getId().equals(mediaTypeId.byteValue())){
-                            String photoString;
-                            try{
-                                photoString = advObj.getString("media");
-                            }catch(JSONException je){
-                                photoString = null;
-                            }
-                            if (photoString != null && !photoString.equals("")) {
-                                Advertisement fromServer = repositoryAdvertisement.findById(advertisementId);
-                                if(fromServer != null){
-                                    byte[] media = null;
-                                    try{
-                                        media = Base64.decode(photoString, Base64.DEFAULT);
-                                    }catch (Exception ex){
-                                        media = null;
-                                    }
-                                    fromServer.setPhoto(media);
-                                    repositoryAdvertisement.save(fromServer);
-                                }
-                            }
-                        }
-                    }
+                if(!jsonObject.getBoolean("success")){
+                    FlygowAlertDialog.createWarningPopup(
+                            MainActivity.this, StaticTitles.WARNING, StaticMessages.WARNING_LOAD_ADVERTISEMENTS);
                 }
 
                 Fragment fragment;

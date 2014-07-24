@@ -42,6 +42,11 @@ public class FlygowAlertDialog {
         alertDialog.setTitle(title.getName());
         alertDialog.setMessage(message.getName());
 
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, TEXT_OK_BTN, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
         // Set the Icon for the Dialog
         alertDialog.setIcon(R.drawable.ic_dialog_warning);
         alertDialog.show();
