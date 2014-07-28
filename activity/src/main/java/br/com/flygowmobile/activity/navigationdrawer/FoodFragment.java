@@ -10,16 +10,26 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
+import android.widget.ViewFlipper;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
+import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.MediaUtils;
+import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.entity.Food;
+import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 
@@ -30,6 +40,7 @@ public class FoodFragment extends Fragment {
 
     private RepositoryFood repositoryFood;
     private RowItem item;
+    private Food foodItem;
     private Activity activity;
     private ProgressDialog progressProductInfoDialog;
 
@@ -43,9 +54,10 @@ public class FoodFragment extends Fragment {
         defineFonts(rootView);
 
         //define image food in backgroud layout
-        setBackgroundFoodImage(rootView);
+        setFoodMedia(rootView);
         setProductPrice(rootView);
         setProductTitle(rootView);
+        setProductDescription(rootView);
 
         return rootView;
     }
@@ -53,34 +65,57 @@ public class FoodFragment extends Fragment {
     private void defineFonts(View rootView){
         // Font path
         String fontGabriolaPath = "fonts/GABRIOLA.TTF";
-        String fontChillerPath = "fonts/CHILLER.TTF";
+        String fontErasBoldPath = "fonts/ERASBD.TTF";
+        String fontErasMediumPath = "fonts/ERASMD.TTF";
 
         // text view label
         TextView priceView = (TextView)rootView.findViewById(R.id.productPrice);
-        TextView porView = (TextView)rootView.findViewById(R.id.productPor);
+        TextView clickHereView = (TextView)rootView.findViewById(R.id.productClickHere);
         TextView pecaView = (TextView)rootView.findViewById(R.id.productPeca);
 
         TextView titleView = (TextView)rootView.findViewById(R.id.productTitle);
+        TextView descriptionView = (TextView)rootView.findViewById(R.id.productDescription);
 
         // Loading Font Face
         Typeface gabriola = Typeface.createFromAsset(activity.getAssets(), fontGabriolaPath );
-        Typeface chiller = Typeface.createFromAsset(activity.getAssets(), fontChillerPath );
+        Typeface erasBold = Typeface.createFromAsset(activity.getAssets(), fontErasBoldPath);
+        Typeface erasMedium = Typeface.createFromAsset(activity.getAssets(), fontErasMediumPath);
 
         // Applying font
         priceView.setTypeface(gabriola);
-        porView.setTypeface(gabriola);
+        clickHereView.setTypeface(gabriola);
         pecaView.setTypeface(gabriola);
 
-        titleView.setTypeface(chiller);
+        titleView.setTypeface(erasBold);
+        descriptionView.setTypeface(erasMedium);
     }
 
-    private void setBackgroundFoodImage(View rootView){
-        Food foodItem = repositoryFood.findById(item.getId());
+    private void setFoodMedia(View rootView){
+        foodItem = repositoryFood.findById(item.getId());
         progressProductInfoDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
                 StaticMessages.LOAD_PRODUCT.getName(), true);
-        BitmapWorkerTask task = new BitmapWorkerTask(rootView, foodItem.getPhoto());
+        if(StringUtils.isNotEmpty(foodItem.getVideoName())){
+            try {
+                String foodVideoPath = MediaUtils.getVideo(activity, foodItem.getVideoName());
+                //VERIFICAR FORMA DE CRIAR UM VIDEOVIEW... DENTRO DO ASYNC TASK NÃO FUNFA!
+                VideoView videoView = new VideoView(getActivity());
+                RelativeLayout.LayoutParams videoLayout = new RelativeLayout.LayoutParams(
+                        480, 360);
+                videoView.setLayoutParams(videoLayout);
+                videoView.setX(280);
+                videoView.setY(5);
+                videoView.setVideoPath(foodVideoPath);
+                RelativeLayout mainLayout = (RelativeLayout) rootView.findViewById(R.id.foodImageBackground);
+                mainLayout.addView(videoView);
+                videoView.start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        PhotoWorkerTask task = new PhotoWorkerTask(rootView, foodItem);
         task.execute();
     }
+
 
     private void setProductPrice(View rootView){
         TextView priceView = (TextView)rootView.findViewById(R.id.productPrice);
@@ -89,18 +124,33 @@ public class FoodFragment extends Fragment {
     }
 
     private void setProductTitle(View rootView){
-        TextView priceView = (TextView)rootView.findViewById(R.id.productTitle);
+        TextView titleView = (TextView)rootView.findViewById(R.id.productTitle);
         String title = item.getTitle();
-        priceView.setText(title);
+        titleView.setText(title);
     }
 
-    class BitmapWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
-        private View rootView;
-        private byte[] photo;
+    private void setProductDescription(View rootView){
+        TextView descriptionView = (TextView)rootView.findViewById(R.id.productDescription);
+        Food food = repositoryFood.findById(item.getId());
+        if(food != null && food.getDescription() != null && !food.getDescription().isEmpty()){
+            descriptionView.setText(food.getDescription());
+        }
+    }
 
-        public BitmapWorkerTask(View rootView, byte[] photo) {
+    class PhotoWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
+        private View rootView;
+        private Food foodItem;
+        private byte[] photo;
+        private byte[] video;
+
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl) activity.getApplication();
+
+        public PhotoWorkerTask(View rootView, Food foodItem) {
             this.rootView = rootView;
-            this.photo = photo;
+            this.foodItem = foodItem;
+            if(this.foodItem != null){
+                this.photo = foodItem.getPhoto();
+            }
         }
 
         // Decode image in background.
@@ -110,7 +160,6 @@ public class FoodFragment extends Fragment {
             if(photo != null && photo.length > 0){
                 ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);
                 bitmap = BitmapFactory.decodeStream(imageStream);
-                return bitmap;
             }
             return bitmap;
         }
@@ -128,4 +177,3 @@ public class FoodFragment extends Fragment {
         }
     }
 }
-

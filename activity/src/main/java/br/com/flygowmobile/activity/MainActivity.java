@@ -12,7 +12,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -20,19 +19,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.util.Arrays;
 import java.util.List;
 
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
@@ -54,13 +50,11 @@ import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Tablet;
-import br.com.flygowmobile.enums.MediaTypeEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildMenuItemsService;
 import br.com.flygowmobile.service.ClickProductContentService;
-import br.com.flygowmobile.service.ServiceHandler;
 
 public class MainActivity extends Activity {
 
@@ -155,20 +149,17 @@ public class MainActivity extends Activity {
     }
 
     private void alignFragmentToCenter(){
-        try{
-            ViewFlipper view = (ViewFlipper)findViewById(R.id.switcher);
-            ViewFlipper.LayoutParams layout = new ViewFlipper.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            layout.gravity = Gravity.CENTER;
-            layout.setMargins(-137, 0, 0, 0);
-            view.setLayoutParams(layout);
-        }catch(Exception e){
-            Log.w(MAIN_ACTIVITY, "Dont Align Advertisement to CENTER");
-        }
-
+        alignAdvertisementFragmentToCenter();
+        alignFoodDetailsToCenter();
     }
 
     private void alignFragmentToRight(){
+        alignAdvertisementFragmentToRight();
+        alignFoodDetailsToRight();
+    }
+
+
+    private void alignAdvertisementFragmentToRight(){
         try{
             ViewFlipper view = (ViewFlipper)findViewById(R.id.switcher);
             ViewFlipper.LayoutParams layout = new ViewFlipper.LayoutParams(
@@ -181,6 +172,66 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void alignAdvertisementFragmentToCenter(){
+        try{
+            ViewFlipper view = (ViewFlipper)findViewById(R.id.switcher);
+            ViewFlipper.LayoutParams layout = new ViewFlipper.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            layout.gravity = Gravity.CENTER;
+            layout.setMargins(-137, 0, 0, 0);
+            view.setLayoutParams(layout);
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Advertisement to CENTER");
+        }
+    }
+
+
+    private void alignFoodDetailsToCenter(){
+        final int MARGIN = 120;
+        try{
+            TextView priceView = (TextView)findViewById(R.id.productPrice);
+            TextView clickHereView = (TextView)findViewById(R.id.productClickHere);
+            TextView pecaView = (TextView)findViewById(R.id.productPeca);
+            TextView titleView = (TextView)findViewById(R.id.productTitle);
+            TextView descriptionView = (TextView)findViewById(R.id.productDescription);
+            Button btnOrder = (Button) findViewById(R.id.btnOrder);
+            Button btnIdentifier = (Button) findViewById(R.id.btnIdentifier);
+
+            priceView.setX(priceView.getLeft()-MARGIN);
+            clickHereView.setX(clickHereView.getLeft()-MARGIN);
+            pecaView.setX(pecaView.getLeft()-MARGIN);
+            titleView.setX(titleView.getLeft()-MARGIN);
+            descriptionView.setX(descriptionView.getLeft()-MARGIN);
+            btnOrder.setX(btnOrder.getLeft()-MARGIN);
+            btnIdentifier.setX(btnIdentifier.getLeft()-MARGIN);
+
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Food Details to CENTER");
+        }
+    }
+
+    private void alignFoodDetailsToRight(){
+        try{
+            TextView priceView = (TextView)findViewById(R.id.productPrice);
+            TextView clickHereView = (TextView)findViewById(R.id.productClickHere);
+            TextView pecaView = (TextView)findViewById(R.id.productPeca);
+            TextView titleView = (TextView)findViewById(R.id.productTitle);
+            TextView descriptionView = (TextView)findViewById(R.id.productDescription);
+            Button btnOrder = (Button) findViewById(R.id.btnOrder);
+            Button btnIdentifier = (Button) findViewById(R.id.btnIdentifier);
+
+            priceView.setX(priceView.getLeft());
+            clickHereView.setX(clickHereView.getLeft());
+            pecaView.setX(pecaView.getLeft());
+            titleView.setX(titleView.getLeft());
+            descriptionView.setX(descriptionView.getLeft());
+            btnOrder.setX(btnOrder.getLeft());
+            btnIdentifier.setX(btnIdentifier.getLeft());
+
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Food Details to RIGHT");
+        }
+    }
 
 
     @Override
@@ -289,20 +340,20 @@ public class MainActivity extends Activity {
 
         @Override
         protected String doInBackground(Void... params) {
-            try {
-                MediaUtils.removeAllPhisicalVideos(MainActivity.this);
-            } catch (IOException e) {
-                e.printStackTrace();
-                Log.w(MAIN_ACTIVITY, "There aren't videos to remove!");
-            }
-            String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_MEDIA_ADVERTISEMENTS);
+            String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_VIDEO_PRODUCTS);
             JSONObject jsonSuccess = new JSONObject();
 
             try {
                 for(Advertisement adv : advertisements){
                     try {
                         if(StringUtils.isNotEmpty(adv.getVideoName())){
-                            MediaUtils.downloadVideoByEntityId(MainActivity.this, serverUrl, adv.getAdvertisementId(), adv.getVideoName());
+                            MediaUtils.downloadVideoByEntityId(
+                                    MainActivity.this,
+                                    serverUrl,
+                                    Advertisement.class.getSimpleName(),
+                                    adv.getAdvertisementId(),
+                                    adv.getVideoName()
+                            );
                         } else {
                             if (StringUtils.isNotEmpty(adv.getPhotoName())) {
                                 serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_PRODUCTS);
@@ -374,6 +425,12 @@ public class MainActivity extends Activity {
 
         @Override
         protected String doInBackground(Void... params) {
+            try {
+                MediaUtils.removeAllPhisicalVideos(MainActivity.this);
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.w(MAIN_ACTIVITY, "There aren't videos to remove!");
+            }
             String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_PRODUCTS);
             JSONObject jsonSuccess = new JSONObject();
             try {
@@ -383,10 +440,28 @@ public class MainActivity extends Activity {
                     try {
                         if (StringUtils.isNotEmpty(food.getPhotoName())) {
                             byte[] photo = MediaUtils.downloadPhotoByEntityId(
-                                    MainActivity.this, serverUrl, Food.class.getSimpleName(), food.getFoodId());
+                                    MainActivity.this,
+                                    serverUrl,
+                                    Food.class.getSimpleName(),
+                                    food.getFoodId()
+                            );
                             if(photo != null && photo.length > 0){
                                 food.setPhoto(photo);
                                 repositoryFood.save(food);
+                            }
+                        }
+                        if(StringUtils.isNotEmpty(food.getVideoName())){
+                            serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_VIDEO_PRODUCTS);
+                            try {
+                                MediaUtils.downloadVideoByEntityId(
+                                        MainActivity.this,
+                                        serverUrl,
+                                        Food.class.getSimpleName(),
+                                        Integer.parseInt(food.getFoodId() + ""),
+                                        food.getVideoName()
+                                );
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
                         }
                         jsonSuccess.put("success", true);

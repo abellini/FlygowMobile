@@ -53,7 +53,7 @@ public class RepositoryFood extends Repository<Food> {
         values.put(Foods.COLUMN_NAME_PHOTO, food.getPhoto());
         values.put(Foods.COLUMN_NAME_PHOTO, food.getPhoto());
         values.put(Foods.COLUMN_NAME_PHOTO_NAME, food.getPhotoName());
-
+        values.put(Foods.COLUMN_NAME_VIDEO_NAME, food.getVideoName());
         return values;
     }
 
@@ -94,7 +94,18 @@ public class RepositoryFood extends Repository<Food> {
         Cursor c = db.query(true, Foods.TABLE_NAME, Food.columns, Foods.COLUMN_NAME_FOOD_ID+ "=" + id, null, null, null, null, null);
         if (c.getCount() > 0) {
             c.moveToFirst();
-            Food food = new Food(c.getLong(0), c.getString(1), c.getDouble(2), c.getString(3), c.getString(4), Boolean.parseBoolean(c.getString(5)), c.getInt(6), c.getBlob(7), c.getString(8));
+            Food food = new Food(
+                    c.getLong(0),
+                    c.getString(1),
+                    c.getDouble(2),
+                    c.getString(3),
+                    c.getString(4),
+                    Boolean.parseBoolean(c.getString(5)),
+                    c.getInt(6),
+                    c.getBlob(7),
+                    c.getString(8),
+                    c.getString(9)
+            );
             return food;
         }
         return null;
@@ -113,6 +124,7 @@ public class RepositoryFood extends Repository<Food> {
             int idxCategory =  c.getColumnIndex(Foods.COLUMN_NAME_CATEGORY_ID);
             int idxPhoto = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO);
             int idxPhotoName = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO_NAME);
+            int idxVideoName = c.getColumnIndex(Foods.COLUMN_NAME_VIDEO_NAME);
 
             do {
                 Food food = new Food();
@@ -127,6 +139,7 @@ public class RepositoryFood extends Repository<Food> {
                 food.setCategoryId(c.getInt(idxCategory));
                 food.setPhoto(c.getBlob(idxPhoto));
                 food.setPhotoName(c.getString(idxPhotoName));
+                food.setVideoName(c.getString(idxVideoName));
             } while (c.moveToNext());
         }
         return foods;
@@ -147,6 +160,7 @@ public class RepositoryFood extends Repository<Food> {
             int idxCategory =  c.getColumnIndex(Foods.COLUMN_NAME_CATEGORY_ID);
             int idxPhoto = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO);
             int idxPhotoName = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO_NAME);
+            int idxVideoName = c.getColumnIndex(Foods.COLUMN_NAME_VIDEO_NAME);
 
             do {
                 Food food = new Food();
@@ -161,6 +175,7 @@ public class RepositoryFood extends Repository<Food> {
                 food.setCategoryId(c.getInt(idxCategory));
                 food.setPhoto(c.getBlob(idxPhoto));
                 food.setPhotoName(c.getString(idxPhotoName));
+                food.setVideoName(c.getString(idxVideoName));
             } while (c.moveToNext());
         }
         return foods;
@@ -187,6 +202,6 @@ public class RepositoryFood extends Repository<Food> {
         public static final String COLUMN_NAME_NUTRITIONAL_INFO = "nutritionalInfo";
         public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
         public static final String COLUMN_NAME_PHOTO_NAME = "photoName";
-
+        public static final String COLUMN_NAME_VIDEO_NAME = "videoName";
     }
 }

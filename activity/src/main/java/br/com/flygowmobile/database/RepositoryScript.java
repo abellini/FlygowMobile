@@ -77,7 +77,8 @@ public class RepositoryScript {
                     RepositoryFood.Foods.COLUMN_NAME_OPERATION_AREA_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryFood.Foods.COLUMN_NAME_NUTRITIONAL_INFO + TEXT_TYPE + COMMA_SEP +
                     RepositoryFood.Foods.COLUMN_NAME_IS_ACTIVE + INTEGER_TYPE + COMMA_SEP +
-                    RepositoryFood.Foods.COLUMN_NAME_PHOTO_NAME + TEXT_TYPE +
+                    RepositoryFood.Foods.COLUMN_NAME_PHOTO_NAME + TEXT_TYPE + COMMA_SEP +
+                    RepositoryFood.Foods.COLUMN_NAME_VIDEO_NAME + TEXT_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryOperationArea.OperationAreas.TABLE_NAME + " (" +
                     RepositoryOperationArea.OperationAreas.COLUMN_NAME_OPERATION_AREA_ID + INTEGER_TYPE + " PRIMARY KEY," +

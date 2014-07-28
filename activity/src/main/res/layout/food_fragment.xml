@@ -15,7 +15,7 @@
         android:textStyle="bold"
         android:textColor="#6f2020"
         android:background="@drawable/price_round_shape"
-        android:layout_marginTop="400px"
+        android:layout_marginTop="415px"
         android:layout_marginLeft="793px"
     />
 
@@ -28,20 +28,20 @@
         android:textStyle="bold"
         android:textColor="#40403e"
         android:text="faça seu pedido..."
-        android:layout_marginTop="390px"
+        android:layout_marginTop="405px"
         android:layout_marginLeft="793px"
     />
 
     <TextView
-        android:id="@+id/productPor"
+        android:id="@+id/productClickHere"
         android:layout_height="50px"
         android:layout_width="200px"
         android:textSize="20px"
         android:gravity="center|center_vertical"
         android:textStyle="bold"
         android:textColor="#40403e"
-        android:text="+ detalhes nos ícones"
-        android:layout_marginTop="460px"
+        android:text="basta clicar aqui!"
+        android:layout_marginTop="475px"
         android:layout_marginLeft="793px"
         />
 
@@ -49,7 +49,7 @@
         android:id="@+id/productTitle"
         android:layout_height="50px"
         android:layout_width="wrap_content"
-        android:textSize="35px"
+        android:textSize="25px"
         android:gravity="center|center_vertical"
         android:textStyle="bold"
         android:textColor="#6f2020"
@@ -57,7 +57,22 @@
         android:paddingRight="10px"
         android:background="@drawable/title_round_shape"
         android:layout_marginTop="370px"
-        android:layout_marginLeft="290px"
+        android:layout_marginLeft="280px"
+    />
+
+    <TextView
+        android:id="@+id/productDescription"
+        android:layout_height="90px"
+        android:layout_width="480px"
+        android:textSize="17px"
+        android:gravity="center|center_vertical"
+        android:textStyle="bold"
+        android:textColor="#40403e"
+        android:paddingLeft="10px"
+        android:paddingRight="10px"
+        android:background="@drawable/description_round_shape"
+        android:layout_marginTop="425px"
+        android:layout_marginLeft="280px"
     />
 
     <Button
@@ -65,7 +80,7 @@
         android:layout_height="61px"
         android:id="@+id/btnOrder"
         android:background="@drawable/btn_pedir"
-        android:layout_marginTop="460px"
+        android:layout_marginTop="475px"
         android:layout_marginLeft="960px"
     />
 
@@ -74,7 +89,7 @@
         android:layout_height="61px"
         android:id="@+id/btnIdentifier"
         android:background="@drawable/food_identifier"
-        android:layout_marginTop="370px"
+        android:layout_marginTop="385px"
         android:layout_marginLeft="760px"
     />
 

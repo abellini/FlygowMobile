@@ -36,7 +36,7 @@ public class MediaUtils {
     private static final Integer MAX_VIDEO_SIZE = 10024; //10 MB
     private static final Integer MAX_PHOTO_SIZE = 10024; //10 MB
 
-    public static void downloadVideoByEntityId(Context ctx, String serverUrl, Integer entityId, String videoName) throws IOException {
+    public static void downloadVideoByEntityId(Context ctx, String serverUrl, String entityType, Integer entityId, String videoName) throws IOException {
         URL u = new URL(serverUrl);
         HttpURLConnection c = (HttpURLConnection) u.openConnection();
         c.setRequestMethod("POST");
@@ -44,7 +44,7 @@ public class MediaUtils {
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("entityId", entityId + ""));
-        params.add(new BasicNameValuePair("mediaType", MediaTypeEnum.VIDEO.getId() + ""));
+        params.add(new BasicNameValuePair("entityType", entityType + ""));
 
         OutputStream os = c.getOutputStream();
         BufferedWriter writer = new BufferedWriter(

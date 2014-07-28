@@ -15,7 +15,8 @@ public class Food implements Serializable {
             RepositoryFood.Foods.COLUMN_NAME_IS_ACTIVE,
             RepositoryFood.Foods.COLUMN_NAME_CATEGORY_ID,
             RepositoryFood.Foods.COLUMN_NAME_PHOTO,
-            RepositoryFood.Foods.COLUMN_NAME_PHOTO_NAME
+            RepositoryFood.Foods.COLUMN_NAME_PHOTO_NAME,
+            RepositoryFood.Foods.COLUMN_NAME_VIDEO_NAME
     };
     private long foodId;
     private String name;
@@ -26,12 +27,13 @@ public class Food implements Serializable {
     private int categoryId;
     private byte[] photo;
     private String photoName;
+    private String videoName;
 
     public Food(){
 
     }
 
-    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo, String photoName) {
+    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo, String photoName, String videoName) {
         this.foodId = foodId;
         this.name = name;
         this.value = value;
@@ -41,6 +43,7 @@ public class Food implements Serializable {
         this.categoryId = categoryId;
         this.setPhoto(photo);
         this.photoName = photoName;
+        this.videoName = videoName;
     }
 
 
@@ -116,6 +119,14 @@ public class Food implements Serializable {
         this.photoName = photoName;
     }
 
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
+    }
+
     public String toJSON() {
         return "{" +
                 "\"foodId\": "+ getFoodId() + ", " +
@@ -126,7 +137,8 @@ public class Food implements Serializable {
                 "\"isActive\": " + "\"" + isActive() + ", " +
                 "\"categoryId\": " + "\"" + getCategoryId() + ", " +
                 "\"photo\": " + "\"" + getPhoto() + ", " +
-                "\"photoName\": " + "\"" + getPhotoName() + " " +
+                "\"photoName\": " + "\"" + getPhotoName() + ", " +
+                "\"videoName\": " + "\"" + getVideoName() + " " +
                 "}";
     }
 

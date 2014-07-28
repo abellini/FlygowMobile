@@ -7,7 +7,7 @@ public enum ServerController {
     PING("ping"),
     CONNECT("connect"),
     REGISTER_DETAILS("registerDetails"),
-    INITIALIZE_MEDIA_ADVERTISEMENTS("initializeMediaAdvertisements"),
+    INITIALIZE_VIDEO_PRODUCTS("initializeProductVideo"),
     INITIALIZE_PHOTO_PRODUCTS("initializeProductImages");
 
     private String name;

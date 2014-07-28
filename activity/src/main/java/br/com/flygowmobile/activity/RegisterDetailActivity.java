@@ -457,13 +457,7 @@ public class RegisterDetailActivity extends Activity {
                 food.setActive(Boolean.parseBoolean(obj.getString("active")));
                 food.setCategoryId(obj.getInt("categoryId"));
                 food.setPhotoName(obj.getString("photoName"));
-                byte[] photo = null;
-                try {
-                    photo = Base64.decode(obj.getString("photo"), Base64.DEFAULT);
-                } catch (JSONException je) {
-                    photo = null;
-                }
-                food.setPhoto(photo);
+                food.setVideoName(obj.getString("videoName"));
 
                 Log.i(REGISTER_DETAIL_ACTIVITY, "Save Food(s): " + food);
                 repositoryFood.save(food);
