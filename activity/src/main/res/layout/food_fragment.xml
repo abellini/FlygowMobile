@@ -41,7 +41,7 @@
         android:textStyle="bold"
         android:textColor="#40403e"
         android:text="basta clicar aqui!"
-        android:layout_marginTop="475px"
+        android:layout_marginTop="477px"
         android:layout_marginLeft="793px"
         />
 
@@ -56,7 +56,7 @@
         android:paddingLeft="10px"
         android:paddingRight="10px"
         android:background="@drawable/title_round_shape"
-        android:layout_marginTop="370px"
+        android:layout_marginTop="373px"
         android:layout_marginLeft="280px"
     />
 
@@ -80,17 +80,36 @@
         android:layout_height="61px"
         android:id="@+id/btnOrder"
         android:background="@drawable/btn_pedir"
-        android:layout_marginTop="475px"
+        android:layout_marginTop="380px"
         android:layout_marginLeft="960px"
     />
 
     <Button
         android:layout_width="62px"
-        android:layout_height="61px"
-        android:id="@+id/btnIdentifier"
-        android:background="@drawable/food_identifier"
-        android:layout_marginTop="385px"
+        android:layout_height="62px"
+        android:id="@+id/btnNutritionalInfo"
+        android:background="@drawable/food_info"
+        android:layout_marginTop="380px"
         android:layout_marginLeft="760px"
+    />
+
+
+    <Button
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:id="@+id/btnArrowLeft"
+        android:background="@drawable/arrow_left"
+        android:layout_marginTop="195px"
+        android:layout_marginLeft="15px"
+    />
+
+    <Button
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:id="@+id/btnArrowRight"
+        android:background="@drawable/arrow_right"
+        android:layout_marginTop="195px"
+        android:layout_marginLeft="940px"
     />
 
 </RelativeLayout>

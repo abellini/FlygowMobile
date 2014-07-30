@@ -50,6 +50,7 @@ import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Tablet;
+import br.com.flygowmobile.enums.PositionsEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
@@ -89,7 +90,6 @@ public class MainActivity extends Activity {
 
         menuIcons = getResources().obtainTypedArray(R.array.icons);
         menuItemsService = new BuildMenuItemsService(this, menuIcons);
-        clickProductContentService = new ClickProductContentService(MainActivity.this);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.slider_list);
@@ -117,6 +117,7 @@ public class MainActivity extends Activity {
             public void onDrawerClosed(View view) {
                 getActionBar().setTitle(mTitle);
                 alignFragmentToCenter();
+                showDirectionalArrows();
                 // calling onPrepareOptionsMenu() to show action bar icons
                 invalidateOptionsMenu();
             }
@@ -124,20 +125,16 @@ public class MainActivity extends Activity {
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(mDrawerTitle);
                 alignFragmentToRight();
+                hideDirectionalArrows();
                 // calling onPrepareOptionsMenu() to hide action bar icons
                 invalidateOptionsMenu();
             }
         };
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-
-        if (savedInstanceState == null) {
-            // on first time display view for first nav item
-            //updateDisplay(0);
-        }
-
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.openDrawer(Gravity.LEFT);
+
+        clickProductContentService = new ClickProductContentService(MainActivity.this, mDrawerLayout, mDrawerList);
 
         //Set the inicial fragment... photo foods...
         //After this, load the advertisements and change to the next activity
@@ -146,6 +143,28 @@ public class MainActivity extends Activity {
         List<Food> allFoods = repositoryFood.listAll();
         foodPhotoTask = new FoodPhotoTask(allFoods);
         foodPhotoTask.execute((Void) null);
+    }
+
+    private void showDirectionalArrows(){
+        try{
+            Button btnArrLeft = (Button)findViewById(R.id.btnArrowLeft);
+            Button btnArrRight = (Button)findViewById(R.id.btnArrowRight);
+            btnArrLeft.setVisibility(View.VISIBLE);
+            btnArrRight.setVisibility(View.VISIBLE);
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont SHOW directional arrows");
+        }
+    }
+
+    private void hideDirectionalArrows(){
+        try{
+            Button btnArrLeft = (Button)findViewById(R.id.btnArrowLeft);
+            Button btnArrRight = (Button)findViewById(R.id.btnArrowRight);
+            btnArrLeft.setVisibility(View.INVISIBLE);
+            btnArrRight.setVisibility(View.INVISIBLE);
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont HIDE directional arrows");
+        }
     }
 
     private void alignFragmentToCenter(){
@@ -187,7 +206,7 @@ public class MainActivity extends Activity {
 
 
     private void alignFoodDetailsToCenter(){
-        final int MARGIN = 120;
+        final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
         try{
             TextView priceView = (TextView)findViewById(R.id.productPrice);
             TextView clickHereView = (TextView)findViewById(R.id.productClickHere);
@@ -195,7 +214,7 @@ public class MainActivity extends Activity {
             TextView titleView = (TextView)findViewById(R.id.productTitle);
             TextView descriptionView = (TextView)findViewById(R.id.productDescription);
             Button btnOrder = (Button) findViewById(R.id.btnOrder);
-            Button btnIdentifier = (Button) findViewById(R.id.btnIdentifier);
+            Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
 
             priceView.setX(priceView.getLeft()-MARGIN);
             clickHereView.setX(clickHereView.getLeft()-MARGIN);
@@ -218,7 +237,7 @@ public class MainActivity extends Activity {
             TextView titleView = (TextView)findViewById(R.id.productTitle);
             TextView descriptionView = (TextView)findViewById(R.id.productDescription);
             Button btnOrder = (Button) findViewById(R.id.btnOrder);
-            Button btnIdentifier = (Button) findViewById(R.id.btnIdentifier);
+            Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
 
             priceView.setX(priceView.getLeft());
             clickHereView.setX(clickHereView.getLeft());
@@ -325,7 +344,7 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             RowItem item = (RowItem) parent.getItemAtPosition(position);
-            clickProductContentService.onClickProductItem(item);
+            clickProductContentService.onClickProductItem(item, position);
         }
     }
 

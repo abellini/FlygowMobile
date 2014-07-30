@@ -4,7 +4,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import br.com.flygowmobile.activity.R;
@@ -18,39 +23,56 @@ import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 public class ClickProductContentService {
 
     private Activity activity;
+    private DrawerLayout mDrawerLayout;
+    private ListView mDrawerList;
+    private int actualPositionItem;
 
-    public ClickProductContentService(Activity activity){
+    public ClickProductContentService(Activity activity, DrawerLayout mDrawerLayout, ListView mDrawerList){
         this.activity = activity;
+        this.mDrawerLayout = mDrawerLayout;
+        this.mDrawerList = mDrawerList;
     }
 
-    public void onClickProductItem(RowItem item){
-            updateDisplay(item);
+    public ClickProductContentService(Activity activity, int actualPositionItem){
+        this.activity = activity;
+        this.actualPositionItem = actualPositionItem;
     }
 
-    private void updateDisplay(RowItem item) {
+    public void onClickProductItem(final RowItem item, int position){
+        this.actualPositionItem = position;
+        boolean fromArrow = false;
+        updateDisplay(item, fromArrow);
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                //Close de drawer list after 0.5 sec
+                if(!item.isGroupHeader())
+                    mDrawerLayout.closeDrawer(mDrawerList);
+            }
+        }, 500);
+    }
+
+    public void updateDisplay(RowItem item, Boolean fromArrow) {
         FoodFragment fragment = null;
         if(!item.isGroupHeader()){
-            if(!item.isPromoItem()){
-                fragment = new FoodFragment();
-            } else if (item.isPromoItem()){
-                //TODO: Implements fragment of promotions
-            }
+            fragment = new FoodFragment();
         }
 
         if (fragment != null) {
             Bundle args = new Bundle();
             args.putSerializable("item", item);
+            args.putSerializable("itemPosition", actualPositionItem);
+            args.putSerializable("fromArrow", fromArrow);
             fragment.setArguments(args);
 
             FragmentManager fragmentManager = activity.getFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
             // update selected item and title, then close the drawer
             //setTitle(menutitles[position]);
-            //mDrawerLayout.closeDrawer(mDrawerList);
         } else {
             // error in creating fragment
             Log.e("MainActivity", "Error in creating fragment");
         }
-
     }
+
 }
