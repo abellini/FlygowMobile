@@ -20,10 +20,13 @@ public enum StaticMessages {
     DEFINE_CHOICES("Default values ​​are displayed. Please set your choices to proceed!"),
     MORE_DETAILS("+ details"),
     LOADING_ADVERTISEMENTS("Loading advertisements from server..."),
-    LOADING_PHOTO_PRODUCTS("Loading product photos from server..."),
+    LOADING_MEDIA_PRODUCTS("Loading product medias from server..."),
+    LOADING_MEDIA_PROMOTIONS("Loading promotion medias from server..."),
     LOAD_PRODUCT("Load product information..."),
-    WARNING_LOAD_PHOTO("Some photos of products are not loaded from the server. Please, verify!"),
-    WARNING_LOAD_ADVERTISEMENTS("Some advertisements are not loaded from the server. Please, verify!"),
+    LOAD_PROMOTION("Load promotion information..."),
+    WARNING_LOAD_PRODUCTS("Some medias of products are not loaded from the server. Please, verify!"),
+    WARNING_LOAD_PROMOTIONS("Some medias of promotions are not loaded from the server. Please, verify!"),
+    WARNING_LOAD_ADVERTISEMENTS("Some medias of advertisements are not loaded from the server. Please, verify!"),
     GENERIC("");
 
     private String name;

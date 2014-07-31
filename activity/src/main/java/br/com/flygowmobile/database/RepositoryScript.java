@@ -120,7 +120,8 @@ public class RepositoryScript {
                     RepositoryPromotion.Promotions.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     RepositoryPromotion.Promotions.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
                     RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO + BLOB_TYPE + COMMA_SEP +
-                    RepositoryPromotion.Promotions.COLUMN_NAME_VIDEO + BLOB_TYPE +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO_NAME + TEXT_TYPE+ COMMA_SEP +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_VIDEO_NAME + TEXT_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryFoodPromotion.FoodPromotions.TABLE_NAME + " (" +
                     RepositoryFoodPromotion.FoodPromotions.COLUMN_NAME_FOOD_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +

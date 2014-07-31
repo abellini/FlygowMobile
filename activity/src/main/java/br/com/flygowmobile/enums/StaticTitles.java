@@ -9,7 +9,8 @@ public enum StaticTitles {
     LOAD("Loading..."),
     SUCCESS("Successful!"),
     PROMOTIONS("Promotions"),
-    INFORMATION("Information")
+    INFORMATION("Information"),
+    PROMOTION_INFO("Promotion Items")
     ;
 
     private String name;

@@ -45,10 +45,12 @@ import br.com.flygowmobile.activity.navigationdrawer.WelcomeFragment;
 import br.com.flygowmobile.database.RepositoryAdvertisement;
 import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
+import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Advertisement;
 import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
+import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.PositionsEnum;
 import br.com.flygowmobile.enums.ServerController;
@@ -73,12 +75,15 @@ public class MainActivity extends Activity {
     private CustomAdapter adapter;
     private RepositoryAdvertisement repositoryAdvertisement;
     private RepositoryFood repositoryFood;
+    private RepositoryPromotion repositoryPromotion;
     private RepositoryTablet repositoryTablet;
     private RepositoryCoin repositoryCoin;
     private AdvertisementMediaTask advertisementMediaTask;
-    private FoodPhotoTask foodPhotoTask;
+    private FoodMediaTask foodMediaTask;
+    private PromotionMediaTask promotionMediaTask;
     private ProgressDialog progressAdvertisementDialog;
     private ProgressDialog progressFoodDialog;
+    private ProgressDialog progressPromotionDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +112,7 @@ public class MainActivity extends Activity {
         repositoryTablet = new RepositoryTablet(this);
         repositoryCoin = new RepositoryCoin(this);
         repositoryFood = new RepositoryFood(this);
+        repositoryPromotion = new RepositoryPromotion(this);
 
         // enabling action bar app icon and behaving it as toggle button
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -136,13 +142,14 @@ public class MainActivity extends Activity {
 
         clickProductContentService = new ClickProductContentService(MainActivity.this, mDrawerLayout, mDrawerList);
 
-        //Set the inicial fragment... photo foods...
-        //After this, load the advertisements and change to the next activity
-        progressFoodDialog = ProgressDialog.show(MainActivity.this, StaticTitles.LOAD.getName(),
-                StaticMessages.LOADING_PHOTO_PRODUCTS.getName(), true);
-        List<Food> allFoods = repositoryFood.listAll();
-        foodPhotoTask = new FoodPhotoTask(allFoods);
-        foodPhotoTask.execute((Void) null);
+        //Set the inicial fragment... promotions...
+        //After this, load the foods and after advertisements. After all, change to the next activity
+        progressPromotionDialog = ProgressDialog.show(MainActivity.this, StaticTitles.LOAD.getName(),
+                StaticMessages.LOADING_MEDIA_PROMOTIONS.getName(), true);
+
+        List<Promotion> allPromotions = repositoryPromotion.listAll();
+        promotionMediaTask = new PromotionMediaTask(allPromotions);
+        promotionMediaTask.execute((Void) null);
     }
 
     private void showDirectionalArrows(){
@@ -170,11 +177,13 @@ public class MainActivity extends Activity {
     private void alignFragmentToCenter(){
         alignAdvertisementFragmentToCenter();
         alignFoodDetailsToCenter();
+        alignPromotionDetailsToCenter();
     }
 
     private void alignFragmentToRight(){
         alignAdvertisementFragmentToRight();
         alignFoodDetailsToRight();
+        alignPromotionDetailsToRight();
     }
 
 
@@ -252,6 +261,53 @@ public class MainActivity extends Activity {
         }
     }
 
+
+    private void alignPromotionDetailsToCenter(){
+        final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
+        try{
+            TextView priceView = (TextView)findViewById(R.id.promotionPrice);
+            TextView clickHereView = (TextView)findViewById(R.id.promotionClickHere);
+            TextView pecaView = (TextView)findViewById(R.id.promotionPeca);
+            TextView titleView = (TextView)findViewById(R.id.promotionTitle);
+            TextView descriptionView = (TextView)findViewById(R.id.promotionDescription);
+            Button btnOrder = (Button) findViewById(R.id.btnOrder);
+            Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
+
+            priceView.setX(priceView.getLeft()-MARGIN);
+            clickHereView.setX(clickHereView.getLeft()-MARGIN);
+            pecaView.setX(pecaView.getLeft()-MARGIN);
+            titleView.setX(titleView.getLeft()-MARGIN);
+            descriptionView.setX(descriptionView.getLeft()-MARGIN);
+            btnOrder.setX(btnOrder.getLeft()-MARGIN);
+            btnIdentifier.setX(btnIdentifier.getLeft()-MARGIN);
+
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Promotion Details to CENTER");
+        }
+    }
+
+    private void alignPromotionDetailsToRight(){
+        try{
+            TextView priceView = (TextView)findViewById(R.id.promotionPrice);
+            TextView clickHereView = (TextView)findViewById(R.id.promotionClickHere);
+            TextView pecaView = (TextView)findViewById(R.id.promotionPeca);
+            TextView titleView = (TextView)findViewById(R.id.promotionTitle);
+            TextView descriptionView = (TextView)findViewById(R.id.promotionDescription);
+            Button btnOrder = (Button) findViewById(R.id.btnOrder);
+            Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
+
+            priceView.setX(priceView.getLeft());
+            clickHereView.setX(clickHereView.getLeft());
+            pecaView.setX(pecaView.getLeft());
+            titleView.setX(titleView.getLeft());
+            descriptionView.setX(descriptionView.getLeft());
+            btnOrder.setX(btnOrder.getLeft());
+            btnIdentifier.setX(btnIdentifier.getLeft());
+
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Promotion Details to RIGHT");
+        }
+    }
 
     @Override
     public void setTitle(CharSequence title) {
@@ -432,14 +488,13 @@ public class MainActivity extends Activity {
         }
     }
 
+    public class PromotionMediaTask extends AsyncTask<Void, Void, String> {
 
-    public class FoodPhotoTask extends AsyncTask<Void, Void, String> {
-
-        private final List<Food> foods;
+        private final List<Promotion> promotions;
         FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
 
-        public FoodPhotoTask(List<Food> foods) {
-            this.foods = foods;
+        public PromotionMediaTask(List<Promotion> promotions) {
+            this.promotions = promotions;
         }
 
         @Override
@@ -450,6 +505,92 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
                 Log.w(MAIN_ACTIVITY, "There aren't videos to remove!");
             }
+            String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_PRODUCTS);
+            JSONObject jsonSuccess = new JSONObject();
+            try {
+                for (Promotion promotion : promotions) {
+                    JSONObject dataObj = new JSONObject();
+                    dataObj.put("promoId", promotion.getPromotionId());
+                    try {
+                        if (StringUtils.isNotEmpty(promotion.getPhotoName())) {
+                            byte[] photo = MediaUtils.downloadPhotoByEntityId(
+                                    MainActivity.this,
+                                    serverUrl,
+                                    Promotion.class.getSimpleName(),
+                                    Long.parseLong(promotion.getPromotionId() + "")
+                            );
+                            if(photo != null && photo.length > 0){
+                                promotion.setPhoto(photo);
+                                repositoryPromotion.save(promotion);
+                            }
+                        }
+                        if(StringUtils.isNotEmpty(promotion.getVideoName())){
+                            serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_VIDEO_PRODUCTS);
+                            try {
+                                MediaUtils.downloadVideoByEntityId(
+                                        MainActivity.this,
+                                        serverUrl,
+                                        Promotion.class.getSimpleName(),
+                                        Integer.parseInt(promotion.getPromotionId() + ""),
+                                        promotion.getVideoName()
+                                );
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        jsonSuccess.put("success", true);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                        jsonSuccess.put("success", false);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        jsonSuccess.put("success", false);
+                    }
+                }
+                return jsonSuccess.toString();
+            } catch (Exception e) {
+                Log.i(MAIN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                progressPromotionDialog.dismiss();
+                return StaticMessages.NOT_SERVICE.getName();
+            }
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                if (!jsonObject.getBoolean("success")) {
+                    FlygowAlertDialog.createWarningPopup(
+                            MainActivity.this, StaticTitles.WARNING, StaticMessages.WARNING_LOAD_PROMOTIONS);
+                }
+
+                progressPromotionDialog.dismiss();
+            } catch (Exception e) {
+                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                progressPromotionDialog.dismiss();
+            }
+
+            //Set the inicial foods
+            progressFoodDialog = ProgressDialog.show(MainActivity.this, StaticTitles.LOAD.getName(),
+                    StaticMessages.LOADING_MEDIA_PRODUCTS.getName(), true);
+            List<Food> allFoods = repositoryFood.listAll();
+            foodMediaTask = new FoodMediaTask(allFoods);
+            foodMediaTask.execute((Void) null);
+        }
+    }
+
+
+    public class FoodMediaTask extends AsyncTask<Void, Void, String> {
+
+        private final List<Food> foods;
+        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+
+        public FoodMediaTask(List<Food> foods) {
+            this.foods = foods;
+        }
+
+        @Override
+        protected String doInBackground(Void... params) {
             String serverUrl = serverAddressObj.getServerUrl(ServerController.INITIALIZE_PHOTO_PRODUCTS);
             JSONObject jsonSuccess = new JSONObject();
             try {
@@ -506,7 +647,7 @@ public class MainActivity extends Activity {
                 JSONObject jsonObject = new JSONObject(response);
                 if (!jsonObject.getBoolean("success")) {
                     FlygowAlertDialog.createWarningPopup(
-                            MainActivity.this, StaticTitles.WARNING, StaticMessages.WARNING_LOAD_PHOTO);
+                            MainActivity.this, StaticTitles.WARNING, StaticMessages.WARNING_LOAD_PRODUCTS);
                 }
 
                 progressFoodDialog.dismiss();

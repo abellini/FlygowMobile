@@ -11,21 +11,19 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.VideoView;
-import android.widget.ViewFlipper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
@@ -33,10 +31,11 @@ import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.R;
-import br.com.flygowmobile.database.RepositoryFood;
+import br.com.flygowmobile.database.RepositoryFoodPromotion;
+import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.entity.Food;
+import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.enums.PositionsEnum;
-import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.ClickProductContentService;
@@ -44,35 +43,37 @@ import br.com.flygowmobile.service.ClickProductContentService;
 /**
  * Created by Tiago Rocha Gomes on 21/07/14.
  */
-public class FoodFragment extends Fragment {
+public class PromotionFragment extends Fragment {
 
-    private RepositoryFood repositoryFood;
+    private RepositoryPromotion repositoryPromotion;
+    private RepositoryFoodPromotion repositoryFoodPromotion;
     private RowItem item;
     private int itemPosition;
     private boolean fromArrow;
-    private Food foodItem;
+    private Promotion promotionItem;
     private ListView mDrawerList;
     private Activity activity;
-    private ProgressDialog progressProductInfoDialog;
+    private ProgressDialog progressPromotionInfoDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.food_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.promotion_fragment, container, false);
         activity = getActivity();
 
-        repositoryFood = new RepositoryFood(activity);
+        repositoryPromotion = new RepositoryPromotion(activity);
+        repositoryFoodPromotion = new RepositoryFoodPromotion(activity);
+
         item = (RowItem) getArguments().get("item");
         itemPosition = getArguments().getInt("itemPosition");
         fromArrow = getArguments().getBoolean("fromArrow");
         mDrawerList = (ListView) activity.findViewById(R.id.slider_list);
-
 
         defineFonts(rootView);
         setFoodMedia(rootView);
         setProductPrice(rootView);
         setProductTitle(rootView);
         setProductDescription(rootView);
-        setProductNutritionalInfo(rootView);
+        setInfo(rootView);
         defineDirectionalArrows(rootView);
 
         if(fromArrow){
@@ -88,12 +89,12 @@ public class FoodFragment extends Fragment {
         String fontErasMediumPath = "fonts/ERASMD.TTF";
 
         // text view label
-        TextView priceView = (TextView)rootView.findViewById(R.id.productPrice);
-        TextView clickHereView = (TextView)rootView.findViewById(R.id.productClickHere);
-        TextView pecaView = (TextView)rootView.findViewById(R.id.productPeca);
+        TextView priceView = (TextView)rootView.findViewById(R.id.promotionPrice);
+        TextView clickHereView = (TextView)rootView.findViewById(R.id.promotionClickHere);
+        TextView pecaView = (TextView)rootView.findViewById(R.id.promotionPeca);
 
-        TextView titleView = (TextView)rootView.findViewById(R.id.productTitle);
-        TextView descriptionView = (TextView)rootView.findViewById(R.id.productDescription);
+        TextView titleView = (TextView)rootView.findViewById(R.id.promotionTitle);
+        TextView descriptionView = (TextView)rootView.findViewById(R.id.promotionDescription);
 
         // Loading Font Face
         Typeface gabriola = Typeface.createFromAsset(activity.getAssets(), fontGabriolaPath );
@@ -110,12 +111,12 @@ public class FoodFragment extends Fragment {
     }
 
     private void setFoodMedia(View rootView){
-        foodItem = repositoryFood.findById(item.getId());
-        progressProductInfoDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
-                StaticMessages.LOAD_PRODUCT.getName(), true);
-        if(StringUtils.isNotEmpty(foodItem.getVideoName())){
+        promotionItem = repositoryPromotion.findById(item.getId());
+        progressPromotionInfoDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
+                StaticMessages.LOAD_PROMOTION.getName(), true);
+        if(StringUtils.isNotEmpty(promotionItem.getVideoName())){
             try {
-                String foodVideoPath = MediaUtils.getVideo(activity, foodItem.getVideoName());
+                String foodVideoPath = MediaUtils.getVideo(activity, promotionItem.getVideoName());
                 VideoView videoView = new VideoView(getActivity());
                 RelativeLayout.LayoutParams videoLayout = new RelativeLayout.LayoutParams(
                         480, 360);
@@ -123,44 +124,50 @@ public class FoodFragment extends Fragment {
                 videoView.setX(280);
                 videoView.setY(5);
                 videoView.setVideoPath(foodVideoPath);
-                RelativeLayout mainLayout = (RelativeLayout) rootView.findViewById(R.id.foodImageBackground);
+                RelativeLayout mainLayout = (RelativeLayout) rootView.findViewById(R.id.promotionImageBackground);
                 mainLayout.addView(videoView);
                 videoView.start();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        PhotoWorkerTask task = new PhotoWorkerTask(rootView, foodItem);
+        PhotoWorkerTask task = new PhotoWorkerTask(rootView, promotionItem);
         task.execute();
     }
 
 
     private void setProductPrice(View rootView){
-        TextView priceView = (TextView)rootView.findViewById(R.id.productPrice);
+        TextView priceView = (TextView)rootView.findViewById(R.id.promotionPrice);
         String price = item.getPrice();
         priceView.setText(price);
     }
 
     private void setProductTitle(View rootView){
-        TextView titleView = (TextView)rootView.findViewById(R.id.productTitle);
+        TextView titleView = (TextView)rootView.findViewById(R.id.promotionTitle);
         String title = item.getTitle();
         titleView.setText(title);
     }
 
     private void setProductDescription(View rootView){
-        TextView descriptionView = (TextView)rootView.findViewById(R.id.productDescription);
-        if(foodItem != null && foodItem.getDescription() != null && !foodItem.getDescription().isEmpty()){
-            descriptionView.setText(foodItem.getDescription());
+        TextView descriptionView = (TextView)rootView.findViewById(R.id.promotionDescription);
+        if(promotionItem != null && promotionItem.getDescription() != null && !promotionItem.getDescription().isEmpty()){
+            descriptionView.setText(promotionItem.getDescription());
         }
     }
 
-    private void setProductNutritionalInfo(View rootView){
+    private void setInfo(View rootView){
         Button btnInfo = (Button)rootView.findViewById(R.id.btnNutritionalInfo);
-        if(foodItem != null && foodItem.getNutritionalInfo() != null && !foodItem.getNutritionalInfo().isEmpty()){
+        List<Food> foods = repositoryFoodPromotion.listByPromotion(promotionItem.getPromotionId());
+        if(foods != null && !foods.isEmpty()){
             btnInfo.setVisibility(View.VISIBLE);
+            String info = "";
+            for(Food food : foods){
+                info += " - " + food.getName() + "<br>";
+            }
+            final String finalInfo = info;
             btnInfo.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    FlygowAlertDialog.createInfoPopup(activity, StaticTitles.INFORMATION, foodItem.getNutritionalInfo());
+                    FlygowAlertDialog.createInfoPopup(activity, StaticTitles.PROMOTION_INFO, finalInfo);
                 }
             });
         }else{
@@ -271,11 +278,11 @@ public class FoodFragment extends Fragment {
     private void alignProductDetailsToCenter(View rootView){
         final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
         try{
-            TextView priceView = (TextView)rootView.findViewById(R.id.productPrice);
-            TextView clickHereView = (TextView)rootView.findViewById(R.id.productClickHere);
-            TextView pecaView = (TextView)rootView.findViewById(R.id.productPeca);
-            TextView titleView = (TextView)rootView.findViewById(R.id.productTitle);
-            TextView descriptionView = (TextView)rootView.findViewById(R.id.productDescription);
+            TextView priceView = (TextView)rootView.findViewById(R.id.promotionPrice);
+            TextView clickHereView = (TextView)rootView.findViewById(R.id.promotionClickHere);
+            TextView pecaView = (TextView)rootView.findViewById(R.id.promotionPeca);
+            TextView titleView = (TextView)rootView.findViewById(R.id.promotionTitle);
+            TextView descriptionView = (TextView)rootView.findViewById(R.id.promotionDescription);
             Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
             Button btnIdentifier = (Button) rootView.findViewById(R.id.btnNutritionalInfo);
 
@@ -294,17 +301,17 @@ public class FoodFragment extends Fragment {
 
     class PhotoWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         private View rootView;
-        private Food foodItem;
+        private Promotion promotionItem;
         private byte[] photo;
         private byte[] video;
 
         FlygowServerUrl serverAddressObj = (FlygowServerUrl) activity.getApplication();
 
-        public PhotoWorkerTask(View rootView, Food foodItem) {
+        public PhotoWorkerTask(View rootView, Promotion promotionItem) {
             this.rootView = rootView;
-            this.foodItem = foodItem;
-            if(this.foodItem != null){
-                this.photo = foodItem.getPhoto();
+            this.promotionItem = promotionItem;
+            if(this.promotionItem != null){
+                this.photo = promotionItem.getPhoto();
             }
         }
 
@@ -328,7 +335,7 @@ public class FoodFragment extends Fragment {
             }else{
                 rootView.setBackgroundResource(R.drawable.wihout_product);
             }
-            progressProductInfoDialog.dismiss();
+            progressPromotionInfoDialog.dismiss();
         }
     }
 }

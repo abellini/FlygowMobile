@@ -16,8 +16,9 @@ public class Promotion implements Serializable {
         RepositoryPromotion.Promotions.COLUMN_NAME_NAME,
         RepositoryPromotion.Promotions.COLUMN_NAME_DESCRIPTION,
         RepositoryPromotion.Promotions.COLUMN_NAME_VALUE,
+        RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO_NAME,
         RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO,
-        RepositoryPromotion.Promotions.COLUMN_NAME_VIDEO
+        RepositoryPromotion.Promotions.COLUMN_NAME_VIDEO_NAME
     };
 
     private int promotionId;
@@ -25,7 +26,8 @@ public class Promotion implements Serializable {
     private String description;
     private Double value;
     private byte[] photo;
-    private byte[] video;
+    private String photoName;
+    private String videoName;
 
     public Promotion() {
     }
@@ -77,11 +79,19 @@ public class Promotion implements Serializable {
         this.photo = photo;
     }
 
-    public byte[] getVideo() {
-        return video;
+    public String getPhotoName() {
+        return photoName;
     }
 
-    public void setVideo(byte[] video) {
-        this.video = video;
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
+    }
+
+    public String getVideoName() {
+        return videoName;
+    }
+
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
     }
 }

@@ -473,19 +473,9 @@ public class RegisterDetailActivity extends Activity {
                 promotion.setName(obj.getString("name"));
                 promotion.setDescription(obj.getString("description"));
                 promotion.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
-                byte[] photo, video = null;
-                try{
-                    photo = Base64.decode(obj.getString("photo"), Base64.DEFAULT);
-                }catch (JSONException je){
-                    photo = null;
-                }
-                try{
-                    video = Base64.decode(obj.getString("video"), Base64.DEFAULT);
-                }catch (JSONException je){
-                    video = null;
-                }
-                promotion.setPhoto(photo);
-                promotion.setVideo(video);
+                promotion.setPhotoName(obj.getString("photoName"));
+                promotion.setVideoName(obj.getString("videoName"));
+
                 Log.i(REGISTER_DETAIL_ACTIVITY, "Save Promotion(s): " + promotion);
                 repositoryPromotion.save(promotion);
             }

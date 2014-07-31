@@ -15,6 +15,7 @@ import android.widget.Toast;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.activity.navigationdrawer.FB_Fragment;
 import br.com.flygowmobile.activity.navigationdrawer.FoodFragment;
+import br.com.flygowmobile.activity.navigationdrawer.PromotionFragment;
 import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 
 /**
@@ -53,9 +54,13 @@ public class ClickProductContentService {
     }
 
     public void updateDisplay(RowItem item, Boolean fromArrow) {
-        FoodFragment fragment = null;
+        Fragment fragment = null;
         if(!item.isGroupHeader()){
-            fragment = new FoodFragment();
+            if(item.isPromoItem()){
+                fragment = new PromotionFragment();
+            }else{
+                fragment = new FoodFragment();
+            }
         }
 
         if (fragment != null) {

@@ -51,7 +51,8 @@ public class RepositoryPromotion extends Repository<Promotion> {
         values.put(Promotions.COLUMN_NAME_VALUE, promotion.getValue());
         values.put(Promotions.COLUMN_NAME_DESCRIPTION, promotion.getDescription());
         values.put(Promotions.COLUMN_NAME_PHOTO, promotion.getPhoto());
-        values.put(Promotions.COLUMN_NAME_VIDEO, promotion.getVideo());
+        values.put(Promotions.COLUMN_NAME_PHOTO_NAME, promotion.getPhotoName());
+        values.put(Promotions.COLUMN_NAME_VIDEO_NAME, promotion.getVideoName());
 
         return values;
     }
@@ -98,7 +99,8 @@ public class RepositoryPromotion extends Repository<Promotion> {
             int idxValue =  c.getColumnIndex(Promotions.COLUMN_NAME_VALUE);
             int idxDescription =  c.getColumnIndex(Promotions.COLUMN_NAME_DESCRIPTION);
             int idxPhoto =  c.getColumnIndex(Promotions.COLUMN_NAME_PHOTO);
-            int idxVideo =  c.getColumnIndex(Promotions.COLUMN_NAME_VIDEO);
+            int idxPhotoName =  c.getColumnIndex(Promotions.COLUMN_NAME_PHOTO_NAME);
+            int idxVideoName =  c.getColumnIndex(Promotions.COLUMN_NAME_VIDEO_NAME);
 
             Promotion promotion = new Promotion();
 
@@ -107,7 +109,8 @@ public class RepositoryPromotion extends Repository<Promotion> {
             promotion.setValue(c.getDouble(idxValue));
             promotion.setDescription(c.getString(idxDescription));
             promotion.setPhoto(c.getBlob(idxPhoto));
-            promotion.setVideo(c.getBlob(idxVideo));
+            promotion.setPhotoName(c.getString(idxPhotoName));
+            promotion.setVideoName(c.getString(idxVideoName));
             return promotion;
         }
         return null;
@@ -125,7 +128,8 @@ public class RepositoryPromotion extends Repository<Promotion> {
             int idxValue =  c.getColumnIndex(Promotions.COLUMN_NAME_VALUE);
             int idxDescription =  c.getColumnIndex(Promotions.COLUMN_NAME_DESCRIPTION);
             int idxPhoto =  c.getColumnIndex(Promotions.COLUMN_NAME_PHOTO);
-            int idxVideo =  c.getColumnIndex(Promotions.COLUMN_NAME_VIDEO);
+            int idxPhotoName =  c.getColumnIndex(Promotions.COLUMN_NAME_PHOTO_NAME);
+            int idxVideoName =  c.getColumnIndex(Promotions.COLUMN_NAME_VIDEO_NAME);
 
             do {
                 Promotion promotion = new Promotion();
@@ -135,7 +139,8 @@ public class RepositoryPromotion extends Repository<Promotion> {
                 promotion.setValue(c.getDouble(idxValue));
                 promotion.setDescription(c.getString(idxDescription));
                 promotion.setPhoto(c.getBlob(idxPhoto));
-                promotion.setVideo(c.getBlob(idxVideo));
+                promotion.setPhotoName(c.getString(idxPhotoName));
+                promotion.setVideoName(c.getString(idxVideoName));
 
                 promotions.add(promotion);
             } while (c.moveToNext());
@@ -156,7 +161,8 @@ public class RepositoryPromotion extends Repository<Promotion> {
         public static final String COLUMN_NAME_NAME = "name";
         public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_VALUE = "value";
+        public static final String COLUMN_NAME_PHOTO_NAME = "photoName";
         public static final String COLUMN_NAME_PHOTO = "photo";
-        public static final String COLUMN_NAME_VIDEO = "video";
+        public static final String COLUMN_NAME_VIDEO_NAME = "videoName";
     }
 }
