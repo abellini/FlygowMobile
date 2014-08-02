@@ -10,7 +10,9 @@ public enum StaticTitles {
     SUCCESS("Successful!"),
     PROMOTIONS("Promotions"),
     INFORMATION("Information"),
-    PROMOTION_INFO("Promotion Items")
+    PROMOTION_INFO("Promotion Items"),
+    MENU("Menu"),
+    SUBTITLE_MENU("Choose any menu options above!")
     ;
 
     private String name;

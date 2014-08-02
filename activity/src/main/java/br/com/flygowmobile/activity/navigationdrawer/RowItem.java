@@ -15,6 +15,7 @@ public class RowItem implements Serializable {
     private byte[] image;
     private boolean isGroupHeader = false;
     private boolean isPromoItem = false;
+    private boolean isTitle = false;
 
     public RowItem(String title, int icon, boolean isGroupHeader) {
         this.title = title;
@@ -27,6 +28,12 @@ public class RowItem implements Serializable {
         this.title = title;
         this.icon = icon;
         this.isGroupHeader = isGroupHeader;
+    }
+
+    public RowItem(String title, boolean isGroupHeader) {
+        this.title = title;
+        this.isGroupHeader = isGroupHeader;
+        this.isTitle = true;
     }
 
     public long getId() {
@@ -97,5 +104,5 @@ public class RowItem implements Serializable {
         this.isPromoItem = isPromoItem;
     }
 
-
+    public boolean isTitle() { return isTitle; }
 }

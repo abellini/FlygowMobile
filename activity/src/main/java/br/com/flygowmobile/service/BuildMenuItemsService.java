@@ -53,6 +53,7 @@ public class BuildMenuItemsService {
     public List<RowItem> getMenuItems(){
         List<Category> headerTitles = getCategoryHeaders();
         List<RowItem> rowItems = new ArrayList<RowItem>();
+        addMenuTitle(rowItems);
         populateMenuItemsWithPromotions(rowItems);
         for(Category header : headerTitles){
 
@@ -77,6 +78,16 @@ public class BuildMenuItemsService {
             }
         }
         return rowItems;
+    }
+
+    private void addMenuTitle(List<RowItem> rowItems){
+        final String menuTitle = StaticTitles.MENU.getName();
+        RowItem titleMenuItem = new RowItem(
+                menuTitle,
+                true
+        );
+        titleMenuItem.setSubtitle(StaticTitles.SUBTITLE_MENU.getName());
+        rowItems.add(titleMenuItem);
     }
 
     private void populateMenuItemsWithPromotions(List<RowItem> rowItems) {

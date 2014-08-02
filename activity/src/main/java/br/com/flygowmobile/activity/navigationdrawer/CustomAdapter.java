@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,19 +64,30 @@ public class CustomAdapter extends BaseAdapter {
                 imgIcon.setImageResource(row_pos.getIcon());
             }
         }else{
-            convertView = mInflater.inflate(R.layout.drawer_group_header_item, null);
-            ImageView imgIcon = (ImageView) convertView.findViewById(R.id.headericon);
-            TextView txtTitle = (TextView) convertView.findViewById(R.id.header);
-
-            byte[] outImage = row_pos.getImage();
-            if(outImage != null && outImage.length > 0){
-                ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
-                Bitmap theImage = BitmapFactory.decodeStream(imageStream);
-                imgIcon.setImageBitmap(theImage);
+            if(row_pos.isTitle()){
+                convertView = mInflater.inflate(R.layout.drawer_menu_title_item, null);
+                String fontChillerPath = "fonts/CHILLER.TTF";
+                Typeface chiller = Typeface.createFromAsset(context.getAssets(), fontChillerPath );
+                TextView txtTitle = (TextView) convertView.findViewById(R.id.menu_title);
+                TextView txtDescr = (TextView) convertView.findViewById(R.id.menu_description);
+                txtTitle.setTypeface(chiller);
+                txtTitle.setText(row_pos.getTitle());
+                txtDescr.setText(row_pos.getSubtitle());
             }else{
-                imgIcon.setImageResource(row_pos.getIcon());
+                convertView = mInflater.inflate(R.layout.drawer_group_header_item, null);
+                ImageView imgIcon = (ImageView) convertView.findViewById(R.id.headericon);
+                TextView txtTitle = (TextView) convertView.findViewById(R.id.header);
+
+                byte[] outImage = row_pos.getImage();
+                if(outImage != null && outImage.length > 0){
+                    ByteArrayInputStream imageStream = new ByteArrayInputStream(outImage);
+                    Bitmap theImage = BitmapFactory.decodeStream(imageStream);
+                    imgIcon.setImageBitmap(theImage);
+                }else{
+                    imgIcon.setImageResource(row_pos.getIcon());
+                }
+                txtTitle.setText(row_pos.getTitle());
             }
-            txtTitle.setText(row_pos.getTitle());
         }
         return convertView;
     }

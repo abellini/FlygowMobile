@@ -176,14 +176,12 @@ public class MainActivity extends Activity {
 
     private void alignFragmentToCenter(){
         alignAdvertisementFragmentToCenter();
-        alignFoodDetailsToCenter();
-        alignPromotionDetailsToCenter();
+        alignProductDetailsToCenter();
     }
 
     private void alignFragmentToRight(){
         alignAdvertisementFragmentToRight();
-        alignFoodDetailsToRight();
-        alignPromotionDetailsToRight();
+        alignProductDetailsToRight();
     }
 
 
@@ -214,14 +212,14 @@ public class MainActivity extends Activity {
     }
 
 
-    private void alignFoodDetailsToCenter(){
+    private void alignProductDetailsToCenter(){
         final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
         try{
-            TextView priceView = (TextView)findViewById(R.id.productPrice);
-            TextView clickHereView = (TextView)findViewById(R.id.productClickHere);
-            TextView pecaView = (TextView)findViewById(R.id.productPeca);
-            TextView titleView = (TextView)findViewById(R.id.productTitle);
-            TextView descriptionView = (TextView)findViewById(R.id.productDescription);
+            TextView priceView = (TextView)findViewById(R.id.price);
+            TextView clickHereView = (TextView)findViewById(R.id.clickHere);
+            TextView pecaView = (TextView)findViewById(R.id.peca);
+            TextView titleView = (TextView)findViewById(R.id.title);
+            TextView descriptionView = (TextView)findViewById(R.id.description);
             Button btnOrder = (Button) findViewById(R.id.btnOrder);
             Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
 
@@ -238,13 +236,13 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void alignFoodDetailsToRight(){
+    private void alignProductDetailsToRight(){
         try{
-            TextView priceView = (TextView)findViewById(R.id.productPrice);
-            TextView clickHereView = (TextView)findViewById(R.id.productClickHere);
-            TextView pecaView = (TextView)findViewById(R.id.productPeca);
-            TextView titleView = (TextView)findViewById(R.id.productTitle);
-            TextView descriptionView = (TextView)findViewById(R.id.productDescription);
+            TextView priceView = (TextView)findViewById(R.id.price);
+            TextView clickHereView = (TextView)findViewById(R.id.clickHere);
+            TextView pecaView = (TextView)findViewById(R.id.peca);
+            TextView titleView = (TextView)findViewById(R.id.title);
+            TextView descriptionView = (TextView)findViewById(R.id.description);
             Button btnOrder = (Button) findViewById(R.id.btnOrder);
             Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
 
@@ -258,54 +256,6 @@ public class MainActivity extends Activity {
 
         }catch(Exception e){
             Log.w(MAIN_ACTIVITY, "Dont Align Food Details to RIGHT");
-        }
-    }
-
-
-    private void alignPromotionDetailsToCenter(){
-        final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
-        try{
-            TextView priceView = (TextView)findViewById(R.id.promotionPrice);
-            TextView clickHereView = (TextView)findViewById(R.id.promotionClickHere);
-            TextView pecaView = (TextView)findViewById(R.id.promotionPeca);
-            TextView titleView = (TextView)findViewById(R.id.promotionTitle);
-            TextView descriptionView = (TextView)findViewById(R.id.promotionDescription);
-            Button btnOrder = (Button) findViewById(R.id.btnOrder);
-            Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
-
-            priceView.setX(priceView.getLeft()-MARGIN);
-            clickHereView.setX(clickHereView.getLeft()-MARGIN);
-            pecaView.setX(pecaView.getLeft()-MARGIN);
-            titleView.setX(titleView.getLeft()-MARGIN);
-            descriptionView.setX(descriptionView.getLeft()-MARGIN);
-            btnOrder.setX(btnOrder.getLeft()-MARGIN);
-            btnIdentifier.setX(btnIdentifier.getLeft()-MARGIN);
-
-        }catch(Exception e){
-            Log.w(MAIN_ACTIVITY, "Dont Align Promotion Details to CENTER");
-        }
-    }
-
-    private void alignPromotionDetailsToRight(){
-        try{
-            TextView priceView = (TextView)findViewById(R.id.promotionPrice);
-            TextView clickHereView = (TextView)findViewById(R.id.promotionClickHere);
-            TextView pecaView = (TextView)findViewById(R.id.promotionPeca);
-            TextView titleView = (TextView)findViewById(R.id.promotionTitle);
-            TextView descriptionView = (TextView)findViewById(R.id.promotionDescription);
-            Button btnOrder = (Button) findViewById(R.id.btnOrder);
-            Button btnIdentifier = (Button) findViewById(R.id.btnNutritionalInfo);
-
-            priceView.setX(priceView.getLeft());
-            clickHereView.setX(clickHereView.getLeft());
-            pecaView.setX(pecaView.getLeft());
-            titleView.setX(titleView.getLeft());
-            descriptionView.setX(descriptionView.getLeft());
-            btnOrder.setX(btnOrder.getLeft());
-            btnIdentifier.setX(btnIdentifier.getLeft());
-
-        }catch(Exception e){
-            Log.w(MAIN_ACTIVITY, "Dont Align Promotion Details to RIGHT");
         }
     }
 

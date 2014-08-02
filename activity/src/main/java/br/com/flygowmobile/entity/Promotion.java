@@ -9,7 +9,7 @@ import br.com.flygowmobile.database.RepositoryPromotion;
 /**
  * Created by Tiago Rocha Gomes on 03/06/14.
  */
-public class Promotion implements Serializable {
+public class Promotion extends Product{
 
     public static String[] columns = new String[] {
         RepositoryPromotion.Promotions.COLUMN_NAME_PROMOTION_ID,
@@ -22,21 +22,13 @@ public class Promotion implements Serializable {
     };
 
     private int promotionId;
-    private String name;
-    private String description;
-    private Double value;
-    private byte[] photo;
-    private String photoName;
-    private String videoName;
 
     public Promotion() {
     }
 
     public Promotion(int promotionId, String name, String description, Double value) {
+        super(name, value, description);
         this.promotionId = promotionId;
-        this.name = name;
-        this.description = description;
-        this.value = value;
     }
 
     public int getPromotionId() {
@@ -45,53 +37,5 @@ public class Promotion implements Serializable {
 
     public void setPromotionId(int promotionId) {
         this.promotionId = promotionId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Double getValue() {
-        return value;
-    }
-
-    public void setValue(Double value) {
-        this.value = value;
-    }
-
-    public byte[] getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
-    }
-
-    public String getPhotoName() {
-        return photoName;
-    }
-
-    public void setPhotoName(String photoName) {
-        this.photoName = photoName;
-    }
-
-    public String getVideoName() {
-        return videoName;
-    }
-
-    public void setVideoName(String videoName) {
-        this.videoName = videoName;
     }
 }
