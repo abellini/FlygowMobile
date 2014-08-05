@@ -8,10 +8,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 
+import java.util.List;
+
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
+import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.database.RepositoryAccompaniment;
 import br.com.flygowmobile.database.RepositoryFood;
+import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
+import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
+import br.com.flygowmobile.entity.FoodAccompaniment;
 import br.com.flygowmobile.enums.StaticTitles;
 
 /**
@@ -20,10 +27,12 @@ import br.com.flygowmobile.enums.StaticTitles;
 public class FoodFragment extends ProductFragment {
 
     private RepositoryFood repositoryFood;
+    private RepositoryFoodAccompaniment repositoryFoodAccompaniment;
     private RowItem item;
     private int itemPosition;
     private boolean fromArrow;
     private Food foodItem;
+    private List<Accompaniment> accompanimentList;
     private ListView mDrawerList;
     private Activity activity;
 
@@ -34,12 +43,16 @@ public class FoodFragment extends ProductFragment {
         activity = getActivity();
 
         repositoryFood = new RepositoryFood(activity);
+        repositoryFoodAccompaniment = new RepositoryFoodAccompaniment(activity);
+
         item = (RowItem) getArguments().get("item");
         itemPosition = getArguments().getInt("itemPosition");
         fromArrow = getArguments().getBoolean("fromArrow");
         mDrawerList = (ListView) activity.findViewById(R.id.slider_list);
 
         foodItem = repositoryFood.findById(item.getId());
+        accompanimentList = repositoryFoodAccompaniment.findByFoodId(foodItem.getFoodId());
+
 
         defineFonts(activity, rootView);
         setFoodMedia(activity, rootView, foodItem);
@@ -47,8 +60,8 @@ public class FoodFragment extends ProductFragment {
         setProductTitle(rootView, item);
         setProductDescription(rootView, foodItem);
         setProductNutritionalInfo(rootView);
-        defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList);
-        defineOrderButton(activity, rootView);
+        defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList, fromArrow);
+        defineOrderButton(activity, rootView, accompanimentList);
 
         if(fromArrow){
             alignProductDetailsToCenter(rootView);

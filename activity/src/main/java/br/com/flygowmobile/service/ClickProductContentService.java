@@ -43,14 +43,14 @@ public class ClickProductContentService {
         this.actualPositionItem = position;
         boolean fromArrow = false;
         updateDisplay(item, fromArrow);
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
                 //Close de drawer list after 0.5 sec
                 if(!item.isGroupHeader())
                     mDrawerLayout.closeDrawer(mDrawerList);
             }
-        }, 500);
+        }, 500);*/
     }
 
     public void updateDisplay(RowItem item, Boolean fromArrow) {

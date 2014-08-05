@@ -12,7 +12,8 @@ public enum StaticTitles {
     INFORMATION("Information"),
     PROMOTION_INFO("Promotion Items"),
     MENU("Menu"),
-    SUBTITLE_MENU("Choose any menu options above!")
+    SUBTITLE_MENU("Choose any menu options above!"),
+    MAKE_ORDER("Complete your order!")
     ;
 
     private String name;

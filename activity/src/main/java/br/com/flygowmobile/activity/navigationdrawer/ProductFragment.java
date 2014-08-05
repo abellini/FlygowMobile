@@ -1,6 +1,7 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
@@ -10,16 +11,24 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
@@ -27,6 +36,7 @@ import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Product;
 import br.com.flygowmobile.enums.PositionsEnum;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -70,10 +80,15 @@ public abstract class ProductFragment extends Fragment{
             final Activity activity,
             View rootView,
             final int itemPosition,
-            final ListView mDrawerList
+            final ListView mDrawerList,
+            boolean fromArrow
     ){
         Button btnLeft = (Button)rootView.findViewById(R.id.btnArrowLeft);
         Button btnRight = (Button)rootView.findViewById(R.id.btnArrowRight);
+        if(fromArrow){
+            btnLeft.setVisibility(View.VISIBLE);
+            btnRight.setVisibility(View.VISIBLE);
+        }
         btnLeft.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 boolean fromArrow = true;
@@ -137,13 +152,11 @@ public abstract class ProductFragment extends Fragment{
         });
     }
 
-    protected void defineOrderButton(final Activity activity, View rootView){
+    protected void defineOrderButton(final Activity activity, View rootView, List<Accompaniment> accompanimentList){
         Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
-        btnOrder.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                FlygowAlertDialog.createWarningPopup(activity, StaticTitles.WARNING, StaticMessages.TIMEOUT);
-            }
-        });
+        TextView price = (TextView) rootView.findViewById(R.id.price);
+        price.setOnClickListener(getOrderClick(activity, rootView, accompanimentList));
+        btnOrder.setOnClickListener(getOrderClick(activity, rootView, accompanimentList));
     }
 
     protected void setFoodMedia(Activity activity, View rootView, Product item){
@@ -260,6 +273,49 @@ public abstract class ProductFragment extends Fragment{
             return null;
         }
     }
+
+    private List<AccompanimentRowItem> accompanimentToRowItem(List<Accompaniment> accompanimentList){
+        List<AccompanimentRowItem> accompanimentRowItems = null;
+        if(accompanimentList != null && !accompanimentList.isEmpty()){
+            accompanimentRowItems = new ArrayList<AccompanimentRowItem>();
+            for(Accompaniment accompaniment : accompanimentList){
+                accompanimentRowItems.add(
+                    new AccompanimentRowItem(
+                            accompaniment.getAccompanimentId(),
+                            accompaniment.getName(),
+                            accompaniment.getDescription(),
+                            "R$ " + accompaniment.getValue(),
+                            R.drawable.plus
+                    )
+                );
+            }
+        }
+        return accompanimentRowItems;
+    }
+
+    private View.OnClickListener getOrderClick(final Activity activity, final View rootView, final List<Accompaniment> accompanimentList){
+
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                AlertDialog dialog = null;
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                builder.setTitle("Flowers");
+                ListView list = new ListView(activity);
+                list.setAdapter(new AccompanimentAdapter(activity, accompanimentToRowItem(accompanimentList)));
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1,
+                                            int position, long arg3) {
+                        Toast.makeText(activity, "Clicked at Position" + position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setView(list);
+                dialog = builder.create();
+                dialog.show();
+            }
+        };
+    };
 
     class PhotoWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         private View rootView;

@@ -14,6 +14,7 @@ import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.database.RepositoryFoodPromotion;
 import br.com.flygowmobile.database.RepositoryPromotion;
+import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.enums.StaticTitles;
@@ -53,8 +54,8 @@ public class PromotionFragment extends ProductFragment {
         setProductTitle(rootView, item);
         setProductDescription(rootView, promotionItem);
         setInfo(rootView);
-        defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList);
-        defineOrderButton(activity, rootView);
+        defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList, fromArrow);
+        defineOrderButton(activity, rootView, null);
 
         if(fromArrow){
             alignProductDetailsToCenter(rootView);

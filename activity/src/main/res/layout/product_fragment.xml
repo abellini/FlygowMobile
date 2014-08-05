@@ -101,6 +101,7 @@
         android:background="@drawable/arrow_left"
         android:layout_marginTop="195px"
         android:layout_marginLeft="15px"
+        android:visibility="invisible"
     />
 
     <Button
@@ -110,6 +111,7 @@
         android:background="@drawable/arrow_right"
         android:layout_marginTop="195px"
         android:layout_marginLeft="940px"
+        android:visibility="invisible"
     />
 
 </RelativeLayout>

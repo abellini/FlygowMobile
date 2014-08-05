@@ -152,7 +152,7 @@ public class MainActivity extends Activity {
         promotionMediaTask.execute((Void) null);
     }
 
-    private void showDirectionalArrows(){
+    public void showDirectionalArrows(){
         try{
             Button btnArrLeft = (Button)findViewById(R.id.btnArrowLeft);
             Button btnArrRight = (Button)findViewById(R.id.btnArrowRight);
@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void hideDirectionalArrows(){
+    public void hideDirectionalArrows(){
         try{
             Button btnArrLeft = (Button)findViewById(R.id.btnArrowLeft);
             Button btnArrRight = (Button)findViewById(R.id.btnArrowRight);

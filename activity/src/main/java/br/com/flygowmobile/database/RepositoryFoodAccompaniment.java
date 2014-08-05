@@ -6,18 +6,23 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import br.com.flygowmobile.entity.Accompaniment;
+import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.FoodAccompaniment;
+import br.com.flygowmobile.entity.FoodPromotion;
 
 
 public class RepositoryFoodAccompaniment extends Repository<FoodAccompaniment> {
 
     private static final String REPOSITORY_FOOD_ACCOMPANIMENT = "RepositoryFoodAccompaniment";
-
+    private RepositoryAccompaniment repositoryAccompaniment;
 
     public RepositoryFoodAccompaniment(Context ctx) {
         db = ctx.openOrCreateDatabase(RepositoryScript.DATABASE_NAME, Context.MODE_PRIVATE, null);
+        repositoryAccompaniment = new RepositoryAccompaniment(ctx);
     }
 
     @Override
@@ -74,6 +79,21 @@ public class RepositoryFoodAccompaniment extends Repository<FoodAccompaniment> {
         int count = db.delete(FoodAccompaniments.TABLE_NAME, where, whereArgs);
         Log.i(REPOSITORY_FOOD_ACCOMPANIMENT, "Delete [" + count + "] FoodAccompaniments record(s)");
         return count;
+    }
+
+    public List<Accompaniment> findByFoodId(long id){
+        Cursor c = db.query(true, FoodAccompaniments.TABLE_NAME, FoodAccompaniment.columns, FoodAccompaniments.COLUMN_NAME_FOOD_ID+ "=" + id, null, null, null, null, null);
+        List<Accompaniment> accompaniments = new ArrayList<Accompaniment>();
+        if (c.moveToFirst()) {
+            int idxAccId = c.getColumnIndex(FoodAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID);
+            do {
+                Accompaniment accompaniment = repositoryAccompaniment.findById(c.getInt(idxAccId));
+                if (accompaniment != null) {
+                    accompaniments.add(accompaniment);
+                }
+            } while(c.moveToNext());
+        }
+        return accompaniments;
     }
 
     @Override
