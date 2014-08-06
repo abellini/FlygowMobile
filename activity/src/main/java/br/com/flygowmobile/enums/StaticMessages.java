@@ -27,6 +27,7 @@ public enum StaticMessages {
     WARNING_LOAD_PRODUCTS("Some medias of products are not loaded from the server. Please, verify!"),
     WARNING_LOAD_PROMOTIONS("Some medias of promotions are not loaded from the server. Please, verify!"),
     WARNING_LOAD_ADVERTISEMENTS("Some medias of advertisements are not loaded from the server. Please, verify!"),
+    FREE("Free"),
     GENERIC("");
 
     private String name;

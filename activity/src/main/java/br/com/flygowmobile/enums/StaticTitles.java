@@ -13,7 +13,10 @@ public enum StaticTitles {
     PROMOTION_INFO("Promotion Items"),
     MENU("Menu"),
     SUBTITLE_MENU("Choose any menu options above!"),
-    MAKE_ORDER("Complete your order!")
+    MAKE_ORDER("Complete your order!"),
+    ACCOMPANIMENT_POPUP("Choose yours accompaniments!"),
+    CONTINUE("Continue"),
+    CANCEL("Cancel")
     ;
 
     private String name;
