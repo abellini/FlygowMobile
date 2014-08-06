@@ -57,7 +57,7 @@ public class ProductFragment extends Fragment{
 
         // text view label
         TextView priceView = (TextView)rootView.findViewById(R.id.price);
-        TextView clickHereView = (TextView) rootView.findViewById(R.id.productClickHere);
+        TextView clickHereView = (TextView) rootView.findViewById(R.id.clickHere);
         TextView pecaView = (TextView)rootView.findViewById(R.id.peca);
         TextView titleView = (TextView)rootView.findViewById(R.id.title);
         TextView descriptionView = (TextView)rootView.findViewById(R.id.description);
@@ -198,7 +198,7 @@ public class ProductFragment extends Fragment{
         final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
         try{
             TextView priceView = (TextView)rootView.findViewById(R.id.price);
-            TextView clickHereView = (TextView) rootView.findViewById(R.id.productClickHere);
+            TextView clickHereView = (TextView) rootView.findViewById(R.id.clickHere);
             TextView pecaView = (TextView)rootView.findViewById(R.id.peca);
             TextView titleView = (TextView)rootView.findViewById(R.id.title);
             TextView descriptionView = (TextView)rootView.findViewById(R.id.description);
