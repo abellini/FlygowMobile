@@ -6,20 +6,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.service.AccompanimentItemClickService;
 
 public class AccompanimentAdapter extends BaseAdapter {
 
-    Context context;
-    List<AccompanimentRowItem> rowItem;
+    private Context context;
+    private List<AccompanimentRowItem> rowItem;
+    private Map<Long, CheckBox> selects;
 
-    public AccompanimentAdapter(Context context, List<AccompanimentRowItem> rowItem) {
+    public AccompanimentAdapter(Context context, List<AccompanimentRowItem> rowItem, Map<Long, CheckBox> selects) {
         this.context = context;
         this.rowItem = rowItem;
+        this.selects = selects;
     }
 
 
@@ -34,13 +42,25 @@ public class AccompanimentAdapter extends BaseAdapter {
             if (row_pos != null) {
                 convertView = mInflater.inflate(R.layout.accompaniment_fragment_layout, null);
 
+                ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
                 TextView title = (TextView) convertView.findViewById(R.id.title);
                 TextView subtitle = (TextView) convertView.findViewById(R.id.subtitle);
                 TextView price = (TextView) convertView.findViewById(R.id.price);
 
+                imageView.setImageResource(row_pos.getIcon());
                 title.setText(row_pos.getTitle());
                 subtitle.setText(row_pos.getSubtitle());
                 price.setText(row_pos.getPrice());
+
+                CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkbox);
+                checkBox.setTag(row_pos.getId());
+                checkBox.setChecked(selects.containsKey(row_pos.getId()));
+                checkBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AccompanimentItemClickService.onMarkItemClick(selects, (CheckBox)v, false);
+                    }
+                });
             }
         }
         return convertView;

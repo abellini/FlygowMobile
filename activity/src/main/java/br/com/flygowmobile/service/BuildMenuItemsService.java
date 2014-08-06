@@ -48,7 +48,14 @@ public class BuildMenuItemsService {
         this.menuIcons = menuIcons;
     }
 
-
+    public BuildMenuItemsService(Context ctx){
+        repositoryTablet = new RepositoryTablet(ctx);
+        repositoryCategory = new RepositoryCategory(ctx);
+        repositoryFood = new RepositoryFood(ctx);
+        repositoryPromotion = new RepositoryPromotion(ctx);
+        repositoryFoodPromotion = new RepositoryFoodPromotion(ctx);
+        repositoryCoin = new RepositoryCoin(ctx);
+    }
 
     public List<RowItem> getMenuItems(){
         List<Category> headerTitles = getCategoryHeaders();
@@ -136,7 +143,7 @@ public class BuildMenuItemsService {
         return foodsByCategory;
     }
 
-    private String formatItemValue(Double value){
+    public String formatItemValue(Double value){
         Coin coin = repositoryCoin.findLast();
         return coin.getSymbol() + CHARACTER_SPACE + String.format("%.2f", value);
     }

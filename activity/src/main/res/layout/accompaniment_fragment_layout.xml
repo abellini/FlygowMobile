@@ -1,4 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    >
+
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+    />
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="32dp"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5px"
+        android:layout_marginTop="10dp"
+        android:clickable="false"
+        />
+
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -24,13 +49,14 @@
 
     <TextView
         android:id="@+id/price"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/subtitle"
         android:layout_below="@id/title"
-        android:layout_marginLeft="58px"
-        android:layout_marginTop="-2px"
         android:textColor="#1b5869"
+        android:gravity="right"
+        android:layout_marginRight="15px"
         android:textSize="17dp" />
 
-</RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
