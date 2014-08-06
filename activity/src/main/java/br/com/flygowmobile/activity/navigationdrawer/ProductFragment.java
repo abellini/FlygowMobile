@@ -46,7 +46,7 @@ import br.com.flygowmobile.service.ClickProductContentService;
 /**
  * Created by Tiago Rocha Gomes on 02/08/14.
  */
-public abstract class ProductFragment extends Fragment{
+public class ProductFragment extends Fragment{
 
     protected  void defineFonts(Activity activity, View rootView){
         // Font path
@@ -152,12 +152,7 @@ public abstract class ProductFragment extends Fragment{
         });
     }
 
-    protected void defineOrderButton(final Activity activity, View rootView, List<Accompaniment> accompanimentList){
-        Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
-        TextView price = (TextView) rootView.findViewById(R.id.price);
-        price.setOnClickListener(getOrderClick(activity, rootView, accompanimentList));
-        btnOrder.setOnClickListener(getOrderClick(activity, rootView, accompanimentList));
-    }
+
 
     protected void setFoodMedia(Activity activity, View rootView, Product item){
         ProgressDialog progressPromotionInfoDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
@@ -273,49 +268,6 @@ public abstract class ProductFragment extends Fragment{
             return null;
         }
     }
-
-    private List<AccompanimentRowItem> accompanimentToRowItem(List<Accompaniment> accompanimentList){
-        List<AccompanimentRowItem> accompanimentRowItems = null;
-        if(accompanimentList != null && !accompanimentList.isEmpty()){
-            accompanimentRowItems = new ArrayList<AccompanimentRowItem>();
-            for(Accompaniment accompaniment : accompanimentList){
-                accompanimentRowItems.add(
-                    new AccompanimentRowItem(
-                            accompaniment.getAccompanimentId(),
-                            accompaniment.getName(),
-                            accompaniment.getDescription(),
-                            "R$ " + accompaniment.getValue(),
-                            R.drawable.plus
-                    )
-                );
-            }
-        }
-        return accompanimentRowItems;
-    }
-
-    private View.OnClickListener getOrderClick(final Activity activity, final View rootView, final List<Accompaniment> accompanimentList){
-
-        return new View.OnClickListener() {
-            public void onClick(View v) {
-                AlertDialog dialog = null;
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setTitle("Flowers");
-                ListView list = new ListView(activity);
-                list.setAdapter(new AccompanimentAdapter(activity, accompanimentToRowItem(accompanimentList)));
-                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1,
-                                            int position, long arg3) {
-                        Toast.makeText(activity, "Clicked at Position" + position, Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setView(list);
-                dialog = builder.create();
-                dialog.show();
-            }
-        };
-    };
 
     class PhotoWorkerTask extends AsyncTask<Integer, Void, Bitmap> {
         private View rootView;

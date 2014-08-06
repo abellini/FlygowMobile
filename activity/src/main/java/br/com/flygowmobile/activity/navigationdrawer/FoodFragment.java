@@ -1,14 +1,22 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.activity.MainActivity;
@@ -20,6 +28,8 @@ import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.FoodAccompaniment;
 import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.mapper.AccompanimentMapper;
+import br.com.flygowmobile.service.AccompanimentItemClickService;
 
 /**
  * Created by Tiago Rocha Gomes on 21/07/14.
@@ -28,6 +38,7 @@ public class FoodFragment extends ProductFragment {
 
     private RepositoryFood repositoryFood;
     private RepositoryFoodAccompaniment repositoryFoodAccompaniment;
+    private AccompanimentMapper accompanimentMapper;
     private RowItem item;
     private int itemPosition;
     private boolean fromArrow;
@@ -35,6 +46,8 @@ public class FoodFragment extends ProductFragment {
     private List<Accompaniment> accompanimentList;
     private ListView mDrawerList;
     private Activity activity;
+
+    private Map<Long, CheckBox> selects = new HashMap<Long, CheckBox>();
 
 
     @Override
@@ -44,6 +57,8 @@ public class FoodFragment extends ProductFragment {
 
         repositoryFood = new RepositoryFood(activity);
         repositoryFoodAccompaniment = new RepositoryFoodAccompaniment(activity);
+
+        accompanimentMapper = new AccompanimentMapper(activity);
 
         item = (RowItem) getArguments().get("item");
         itemPosition = getArguments().getInt("itemPosition");
@@ -61,7 +76,7 @@ public class FoodFragment extends ProductFragment {
         setProductDescription(rootView, foodItem);
         setProductNutritionalInfo(rootView);
         defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList, fromArrow);
-        defineOrderButton(activity, rootView, accompanimentList);
+        defineOrderButton(rootView);
 
         if(fromArrow){
             alignProductDetailsToCenter(rootView);
@@ -83,4 +98,58 @@ public class FoodFragment extends ProductFragment {
             btnInfo.setVisibility(View.INVISIBLE);
         }
     }
+
+    private void defineOrderButton(View rootView){
+        Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
+        TextView price = (TextView) rootView.findViewById(R.id.price);
+        price.setOnClickListener(getOrderClick(rootView));
+        btnOrder.setOnClickListener(getOrderClick(rootView));
+    }
+
+    private View.OnClickListener getOrderClick(final View rootView){
+
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+                if(accompanimentList != null && !accompanimentList.isEmpty()){
+                    AlertDialog dialog = null;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(StaticTitles.ACCOMPANIMENT_POPUP.getName());
+                    builder.setPositiveButton(StaticTitles.CONTINUE.getName(), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        });
+                    builder.setNegativeButton(StaticTitles.CANCEL.getName(), new
+                            DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+                    final ListView list = new ListView(activity);
+                    list.setAdapter(
+                            new AccompanimentAdapter(
+                                    activity,
+                                    accompanimentMapper.accompanimentToRowItem(accompanimentList),
+                                    selects
+                            )
+                    );
+                    list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                        @Override
+                        public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3){
+                            CheckBox chk = (CheckBox) view.findViewById(R.id.checkbox);
+                            chk.setTag(((AccompanimentRowItem)list.getItemAtPosition(position)).getId());
+                            AccompanimentItemClickService.onMarkItemClick(selects, chk , true);
+                        }
+                    });
+                    builder.setView(list);
+                    dialog = builder.create();
+                    dialog.show();
+                } else {
+                    //TODO: Implements dialog wihout accompaniments
+                }
+
+            }
+        };
+    };
 }

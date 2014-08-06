@@ -1,12 +1,16 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -55,7 +59,7 @@ public class PromotionFragment extends ProductFragment {
         setProductDescription(rootView, promotionItem);
         setInfo(rootView);
         defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList, fromArrow);
-        defineOrderButton(activity, rootView, null);
+        defineOrderButton(rootView);
 
         if(fromArrow){
             alignProductDetailsToCenter(rootView);
@@ -82,4 +86,20 @@ public class PromotionFragment extends ProductFragment {
             btnInfo.setVisibility(View.INVISIBLE);
         }
     }
+
+    private void defineOrderButton(View rootView){
+        Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
+        TextView price = (TextView) rootView.findViewById(R.id.price);
+        price.setOnClickListener(getOrderClick(rootView));
+        btnOrder.setOnClickListener(getOrderClick(rootView));
+    }
+
+    private View.OnClickListener getOrderClick(final View rootView){
+
+        return new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        };
+    };
 }
