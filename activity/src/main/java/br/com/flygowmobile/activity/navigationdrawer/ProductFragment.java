@@ -11,14 +11,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
@@ -62,7 +57,7 @@ public abstract class ProductFragment extends Fragment{
 
         // text view label
         TextView priceView = (TextView)rootView.findViewById(R.id.price);
-        TextView clickHereView = (TextView)rootView.findViewById(R.id.clickHere);
+        TextView clickHereView = (TextView) rootView.findViewById(R.id.productClickHere);
         TextView pecaView = (TextView)rootView.findViewById(R.id.peca);
         TextView titleView = (TextView)rootView.findViewById(R.id.title);
         TextView descriptionView = (TextView)rootView.findViewById(R.id.description);
@@ -208,7 +203,7 @@ public abstract class ProductFragment extends Fragment{
         final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
         try{
             TextView priceView = (TextView)rootView.findViewById(R.id.price);
-            TextView clickHereView = (TextView)rootView.findViewById(R.id.clickHere);
+            TextView clickHereView = (TextView) rootView.findViewById(R.id.productClickHere);
             TextView pecaView = (TextView)rootView.findViewById(R.id.peca);
             TextView titleView = (TextView)rootView.findViewById(R.id.title);
             TextView descriptionView = (TextView)rootView.findViewById(R.id.description);

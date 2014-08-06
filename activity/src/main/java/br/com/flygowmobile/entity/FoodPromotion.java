@@ -2,7 +2,6 @@ package br.com.flygowmobile.entity;
 
 import java.io.Serializable;
 
-import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 import br.com.flygowmobile.database.RepositoryFoodPromotion;
 
 public class FoodPromotion implements Serializable {
@@ -14,6 +13,14 @@ public class FoodPromotion implements Serializable {
 
     private long promotionId;
     private long foodId;
+
+    public FoodPromotion() {
+    }
+
+    public FoodPromotion(long promotionId, long foodId) {
+        this.promotionId = promotionId;
+        this.foodId = foodId;
+    }
 
     public long getPromotionId() {
         return promotionId;

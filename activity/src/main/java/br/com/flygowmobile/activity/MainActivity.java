@@ -216,7 +216,7 @@ public class MainActivity extends Activity {
         final int MARGIN = PositionsEnum.PRODUCT_DETAILS.getMargin();
         try{
             TextView priceView = (TextView)findViewById(R.id.price);
-            TextView clickHereView = (TextView)findViewById(R.id.clickHere);
+            TextView clickHereView = (TextView) findViewById(R.id.productClickHere);
             TextView pecaView = (TextView)findViewById(R.id.peca);
             TextView titleView = (TextView)findViewById(R.id.title);
             TextView descriptionView = (TextView)findViewById(R.id.description);
@@ -239,7 +239,7 @@ public class MainActivity extends Activity {
     private void alignProductDetailsToRight(){
         try{
             TextView priceView = (TextView)findViewById(R.id.price);
-            TextView clickHereView = (TextView)findViewById(R.id.clickHere);
+            TextView clickHereView = (TextView) findViewById(R.id.productClickHere);
             TextView pecaView = (TextView)findViewById(R.id.peca);
             TextView titleView = (TextView)findViewById(R.id.title);
             TextView descriptionView = (TextView)findViewById(R.id.description);
