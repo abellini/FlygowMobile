@@ -54,6 +54,7 @@ public class RepositoryFood extends Repository<Food> {
         values.put(Foods.COLUMN_NAME_PHOTO, food.getPhoto());
         values.put(Foods.COLUMN_NAME_PHOTO_NAME, food.getPhotoName());
         values.put(Foods.COLUMN_NAME_VIDEO_NAME, food.getVideoName());
+        values.put(Foods.COLUMN_NAME_MAX_QTD_ACC, food.getMaxQtdAccompaniments());
         return values;
     }
 
@@ -104,7 +105,8 @@ public class RepositoryFood extends Repository<Food> {
                     c.getInt(6),
                     c.getBlob(7),
                     c.getString(8),
-                    c.getString(9)
+                    c.getString(9),
+                    c.getInt(10)
             );
             return food;
         }
@@ -125,6 +127,7 @@ public class RepositoryFood extends Repository<Food> {
             int idxPhoto = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO);
             int idxPhotoName = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO_NAME);
             int idxVideoName = c.getColumnIndex(Foods.COLUMN_NAME_VIDEO_NAME);
+            int idxMaxQtdAcc = c.getColumnIndex(Foods.COLUMN_NAME_MAX_QTD_ACC);
 
             do {
                 Food food = new Food();
@@ -135,6 +138,7 @@ public class RepositoryFood extends Repository<Food> {
                 food.setValue(c.getDouble(idxValue));
                 food.setDescription(c.getString(idxDescription));
                 food.setNutritionalInfo(c.getString(idxNutrionalInfo));
+                food.setMaxQtdAccompaniments(c.getInt(idxMaxQtdAcc));
                 food.setActive(Boolean.parseBoolean(c.getString(idxIsActive)));
                 food.setCategoryId(c.getInt(idxCategory));
                 food.setPhoto(c.getBlob(idxPhoto));
@@ -161,6 +165,7 @@ public class RepositoryFood extends Repository<Food> {
             int idxPhoto = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO);
             int idxPhotoName = c.getColumnIndex(Foods.COLUMN_NAME_PHOTO_NAME);
             int idxVideoName = c.getColumnIndex(Foods.COLUMN_NAME_VIDEO_NAME);
+            int idxMaxQtdAcc = c.getColumnIndex(Foods.COLUMN_NAME_MAX_QTD_ACC);
 
             do {
                 Food food = new Food();
@@ -171,6 +176,7 @@ public class RepositoryFood extends Repository<Food> {
                 food.setValue(c.getDouble(idxValue));
                 food.setDescription(c.getString(idxDescription));
                 food.setNutritionalInfo(c.getString(idxNutrionalInfo));
+                food.setMaxQtdAccompaniments(c.getInt(idxMaxQtdAcc));
                 food.setActive(Boolean.parseBoolean(c.getString(idxIsActive)));
                 food.setCategoryId(c.getInt(idxCategory));
                 food.setPhoto(c.getBlob(idxPhoto));
@@ -200,6 +206,7 @@ public class RepositoryFood extends Repository<Food> {
         public static final String COLUMN_NAME_CATEGORY_ID = "categoryId";
         public static final String COLUMN_NAME_OPERATION_AREA_ID = "operationAreaId";
         public static final String COLUMN_NAME_NUTRITIONAL_INFO = "nutritionalInfo";
+        public static final String COLUMN_NAME_MAX_QTD_ACC = "maxQtdAccompaniments";
         public static final String COLUMN_NAME_IS_ACTIVE = "isActive";
         public static final String COLUMN_NAME_PHOTO_NAME = "photoName";
         public static final String COLUMN_NAME_VIDEO_NAME = "videoName";

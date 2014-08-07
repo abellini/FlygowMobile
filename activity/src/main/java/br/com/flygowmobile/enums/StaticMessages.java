@@ -28,6 +28,8 @@ public enum StaticMessages {
     WARNING_LOAD_PROMOTIONS("Some medias of promotions are not loaded from the server. Please, verify!"),
     WARNING_LOAD_ADVERTISEMENTS("Some medias of advertisements are not loaded from the server. Please, verify!"),
     FREE("Free"),
+    MAXIMUM_OF("Maximum of"),
+    OPTIONS("options"),
     GENERIC("");
 
     private String name;

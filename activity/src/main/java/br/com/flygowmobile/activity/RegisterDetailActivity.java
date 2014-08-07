@@ -455,6 +455,7 @@ public class RegisterDetailActivity extends Activity {
                 food.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
                 food.setDescription(obj.getString("description"));
                 food.setNutritionalInfo(obj.getString("nutritionalInfo"));
+                food.setMaxQtdAccompaniments(obj.getInt("maxQtdAccompaniments"));
                 food.setActive(Boolean.parseBoolean(obj.getString("active")));
                 food.setCategoryId(obj.getInt("categoryId"));
                 food.setPhotoName(obj.getString("photoName"));

@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import br.com.flygowmobile.activity.R;
-import br.com.flygowmobile.activity.navigationdrawer.FB_Fragment;
 import br.com.flygowmobile.activity.navigationdrawer.FoodFragment;
 import br.com.flygowmobile.activity.navigationdrawer.PromotionFragment;
 import br.com.flygowmobile.activity.navigationdrawer.RowItem;

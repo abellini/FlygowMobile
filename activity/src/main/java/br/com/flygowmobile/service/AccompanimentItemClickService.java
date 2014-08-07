@@ -9,12 +9,17 @@ import java.util.Map;
  */
 public class AccompanimentItemClickService {
 
-    public static void onMarkItemClick(Map<Long, CheckBox> selects, CheckBox chk, boolean fromList){
+    public static void onMarkItemClick(Map<Long, CheckBox> selects, Integer maxQtdSelects, CheckBox chk, boolean fromList){
         Long itemId = (Long) chk.getTag();
         if(!fromList){
             if (chk.isChecked()) {
-                if(!selects.keySet().contains(itemId))
-                    selects.put(itemId, chk);
+                if(!selects.keySet().contains(itemId)) {
+                    if(selects.size() < maxQtdSelects){
+                        selects.put(itemId, chk);
+                    } else if(maxQtdSelects == 0 || maxQtdSelects == null){
+                        selects.put(itemId, chk);
+                    }
+                }
             } else {
                 if(selects.keySet().contains(itemId))
                     selects.remove(itemId);
@@ -24,8 +29,13 @@ public class AccompanimentItemClickService {
                 selects.remove(itemId);
                 chk.setChecked(false);
             } else {
-                selects.put(itemId, chk);
-                chk.setChecked(true);
+                if(selects.size() < maxQtdSelects) {
+                    selects.put(itemId, chk);
+                    chk.setChecked(true);
+                } else if(maxQtdSelects == 0 || maxQtdSelects == null){
+                    selects.put(itemId, chk);
+                    chk.setChecked(true);
+                }
             }
         }
     }

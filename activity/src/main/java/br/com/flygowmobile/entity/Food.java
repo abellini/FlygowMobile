@@ -16,22 +16,25 @@ public class Food extends Product {
             RepositoryFood.Foods.COLUMN_NAME_CATEGORY_ID,
             RepositoryFood.Foods.COLUMN_NAME_PHOTO,
             RepositoryFood.Foods.COLUMN_NAME_PHOTO_NAME,
-            RepositoryFood.Foods.COLUMN_NAME_VIDEO_NAME
+            RepositoryFood.Foods.COLUMN_NAME_VIDEO_NAME,
+            RepositoryFood.Foods.COLUMN_NAME_MAX_QTD_ACC
     };
 
     private long foodId;
     private String nutritionalInfo;
     private int categoryId;
+    private int maxQtdAccompaniments;
 
     public Food(){
 
     }
 
-    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo, String photoName, String videoName) {
+    public Food(long foodId, String name, Double value, String description, String nutritionalInfo, boolean isActive, int categoryId, byte[] photo, String photoName, String videoName, Integer maxQtdAccompaniments) {
         super(name, value, description, isActive, photo, photoName, videoName);
         this.foodId = foodId;
         this.nutritionalInfo = nutritionalInfo;
         this.categoryId = categoryId;
+        this.maxQtdAccompaniments = maxQtdAccompaniments;
     }
 
     public long getFoodId() {
@@ -58,6 +61,14 @@ public class Food extends Product {
         this.categoryId = categoryId;
     }
 
+    public int getMaxQtdAccompaniments() {
+        return maxQtdAccompaniments;
+    }
+
+    public void setMaxQtdAccompaniments(int maxQtdAccompaniments) {
+        this.maxQtdAccompaniments = maxQtdAccompaniments;
+    }
+
     public String toJSON() {
         return "{" +
                 "\"foodId\": "+ getFoodId() + ", " +
@@ -67,6 +78,7 @@ public class Food extends Product {
                 "\"nutritionalInfo\": " + "\"" + getNutritionalInfo() + ", " +
                 "\"isActive\": " + "\"" + isActive() + ", " +
                 "\"categoryId\": " + "\"" + getCategoryId() + ", " +
+                "\"maxQtdAccompaniments\": " + "\"" + getMaxQtdAccompaniments() + ", " +
                 "\"photo\": " + "\"" + getPhoto() + ", " +
                 "\"photoName\": " + "\"" + getPhotoName() + ", " +
                 "\"videoName\": " + "\"" + getVideoName() + " " +

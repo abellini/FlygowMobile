@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.service.AccompanimentItemClickService;
 
 public class AccompanimentAdapter extends BaseAdapter {
@@ -23,11 +24,13 @@ public class AccompanimentAdapter extends BaseAdapter {
     private Context context;
     private List<AccompanimentRowItem> rowItem;
     private Map<Long, CheckBox> selects;
+    private Food food;
 
-    public AccompanimentAdapter(Context context, List<AccompanimentRowItem> rowItem, Map<Long, CheckBox> selects) {
+    public AccompanimentAdapter(Context context, List<AccompanimentRowItem> rowItem, Map<Long, CheckBox> selects, Food food) {
         this.context = context;
         this.rowItem = rowItem;
         this.selects = selects;
+        this.food = food;
     }
 
 
@@ -58,7 +61,7 @@ public class AccompanimentAdapter extends BaseAdapter {
                 checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AccompanimentItemClickService.onMarkItemClick(selects, (CheckBox)v, false);
+                        AccompanimentItemClickService.onMarkItemClick(selects, food.getMaxQtdAccompaniments(), (CheckBox)v, false);
                     }
                 });
             }

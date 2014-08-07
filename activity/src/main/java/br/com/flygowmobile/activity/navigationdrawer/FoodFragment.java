@@ -27,6 +27,7 @@ import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.FoodAccompaniment;
+import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.mapper.AccompanimentMapper;
 import br.com.flygowmobile.service.AccompanimentItemClickService;
@@ -113,17 +114,21 @@ public class FoodFragment extends ProductFragment {
                 if(accompanimentList != null && !accompanimentList.isEmpty()){
                     AlertDialog dialog = null;
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                    builder.setTitle(StaticTitles.ACCOMPANIMENT_POPUP.getName());
+                    String popupTitle = StaticTitles.ACCOMPANIMENT_POPUP.getName();
+                    if(foodItem.getMaxQtdAccompaniments() > 0){
+                        popupTitle += " (" + StaticMessages.MAXIMUM_OF + foodItem.getMaxQtdAccompaniments() + StaticMessages.OPTIONS + ")" ;
+                    }
+                    builder.setTitle(popupTitle);
                     builder.setPositiveButton(StaticTitles.CONTINUE.getName(), new
                         DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-
+                                //TODO: Implements continue buttom
                             }
                         });
                     builder.setNegativeButton(StaticTitles.CANCEL.getName(), new
                             DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-
+                                    //TODO: Implements cancel buttom
                                 }
                             });
                     final ListView list = new ListView(activity);
@@ -131,7 +136,8 @@ public class FoodFragment extends ProductFragment {
                             new AccompanimentAdapter(
                                     activity,
                                     accompanimentMapper.accompanimentToRowItem(accompanimentList),
-                                    selects
+                                    selects,
+                                    foodItem
                             )
                     );
                     list.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -139,7 +145,7 @@ public class FoodFragment extends ProductFragment {
                         public void onItemClick(AdapterView<?> arg0, View view, int position, long arg3){
                             CheckBox chk = (CheckBox) view.findViewById(R.id.checkbox);
                             chk.setTag(((AccompanimentRowItem)list.getItemAtPosition(position)).getId());
-                            AccompanimentItemClickService.onMarkItemClick(selects, chk , true);
+                            AccompanimentItemClickService.onMarkItemClick(selects, foodItem.getMaxQtdAccompaniments(), chk , true);
                         }
                     });
                     builder.setView(list);
