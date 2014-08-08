@@ -18,6 +18,8 @@ public class AccompanimentItemClickService {
                         selects.put(itemId, chk);
                     } else if(maxQtdSelects == 0 || maxQtdSelects == null){
                         selects.put(itemId, chk);
+                    } else {
+                        chk.setChecked(false);
                     }
                 }
             } else {

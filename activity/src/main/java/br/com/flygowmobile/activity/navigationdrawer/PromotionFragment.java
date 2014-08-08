@@ -22,6 +22,7 @@ import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.service.OrderService;
 
 /**
  * Created by Tiago Rocha Gomes on 21/07/14.
@@ -39,6 +40,8 @@ public class PromotionFragment extends ProductFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
+
         View rootView = inflater.inflate(R.layout.product_fragment, container, false);
         activity = getActivity();
 
@@ -52,15 +55,15 @@ public class PromotionFragment extends ProductFragment {
 
         promotionItem = repositoryPromotion.findById(item.getId());
 
-        defineFonts(activity, rootView);
-        setFoodMedia(activity, rootView, promotionItem);
+        defineFonts(rootView);
+        setFoodMedia(rootView, promotionItem);
         setProductPrice(rootView, item);
         setProductTitle(rootView, item);
         setProductDescription(rootView, promotionItem);
         setInfo(rootView);
-        defineDirectionalArrows(activity, rootView, itemPosition, mDrawerList, fromArrow);
+        defineDirectionalArrows(rootView, itemPosition, mDrawerList, fromArrow);
+        defineSwipe(rootView, itemPosition, mDrawerList);
         defineOrderButton(rootView);
-
         if(fromArrow){
             alignProductDetailsToCenter(rootView);
         }
@@ -90,16 +93,7 @@ public class PromotionFragment extends ProductFragment {
     private void defineOrderButton(View rootView){
         Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
         TextView price = (TextView) rootView.findViewById(R.id.price);
-        price.setOnClickListener(getOrderClick(rootView));
-        btnOrder.setOnClickListener(getOrderClick(rootView));
+        price.setOnClickListener(getOrderClick(null, promotionItem, null));
+        btnOrder.setOnClickListener(getOrderClick(null, promotionItem, null));
     }
-
-    private View.OnClickListener getOrderClick(final View rootView){
-
-        return new View.OnClickListener() {
-            public void onClick(View v) {
-
-            }
-        };
-    };
 }
