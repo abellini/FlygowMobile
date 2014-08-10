@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:gravity="center|center_horizontal"
+    android:layout_height="48dp"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        >
+            <TextView
+                android:id="@+id/qtdTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
+                android:textColor="#6f2020"
+                android:textSize="60dp" />
+
+            <TextView
+                android:id="@+id/qtdSubTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|center_horizontal"
+                android:textColor="#4d4d4d"
+                android:textStyle="italic"
+                android:layout_alignBottom="@id/qtdTitle"
+                android:textSize="12dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:gravity="center|center_horizontal"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="20dp"
+    >
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:orientation="horizontal"
+            >
+            <Button
+                android:layout_width="50px"
+                android:layout_height="47px"
+                android:id="@+id/btn_minus"
+                android:background="@drawable/btn_down"
+                />
+
+            <TextView
+                android:id="@+id/qtdNumber"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:gravity="center|center_horizontal"
+                android:textColor="#4d4d4d"
+                android:background="@drawable/obs_qtd_popup_round_shape"
+                android:textSize="70dp"
+                />
+
+            <Button
+                android:layout_width="50px"
+                android:layout_height="47px"
+                android:id="@+id/btn_plus"
+                android:background="@drawable/btn_up"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <TextView
+            android:id="@+id/obsTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:textColor="#6f2020"
+            android:textSize="60dp" />
+        <TextView
+            android:id="@+id/obsSubTitle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:textColor="#4d4d4d"
+            android:textStyle="italic"
+            android:layout_alignBottom="@id/obsTitle"
+            android:textSize="12dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        >
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|center_horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="horizontal">
+
+            <EditText
+                android:layout_width="350dp"
+                android:id="@+id/obsDesc"
+                android:background="@drawable/obs_qtd_popup_round_shape"
+                android:layout_height="100dp"
+                android:nextFocusUp="@id/obsDesc"
+                android:nextFocusLeft="@id/obsDesc"
+                android:textStyle="italic"
+                android:textSize="15dp"
+                android:gravity="center|center_horizontal"
+                android:padding="10dp"
+            />
+
+        </LinearLayout>
+    </RelativeLayout>
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="15dp" />
+</LinearLayout>

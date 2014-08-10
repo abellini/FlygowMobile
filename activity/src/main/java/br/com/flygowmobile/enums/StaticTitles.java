@@ -16,7 +16,9 @@ public enum StaticTitles {
     MAKE_ORDER("Complete your order!"),
     ACCOMPANIMENT_POPUP("Choose yours accompaniments!"),
     CONTINUE("Continue"),
-    CANCEL("Cancel")
+    CANCEL("Cancel"),
+    QUANTITY_CHOICES("Choice the Quantity"),
+    ENTER_OBSERVATIONS("Enter with Observations")
     ;
 
     private String name;

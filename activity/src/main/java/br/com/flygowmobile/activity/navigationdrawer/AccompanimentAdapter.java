@@ -9,9 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +41,7 @@ public class AccompanimentAdapter extends BaseAdapter {
         if(rowItem != null) {
             AccompanimentRowItem row_pos = rowItem.get(position);
             if (row_pos != null) {
-                convertView = mInflater.inflate(R.layout.accompaniment_fragment_layout, null);
+                convertView = mInflater.inflate(R.layout.accompaniment_popup_layout, null);
 
                 ImageView imageView = (ImageView) convertView.findViewById(R.id.icon);
                 TextView title = (TextView) convertView.findViewById(R.id.title);

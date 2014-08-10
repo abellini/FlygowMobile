@@ -30,6 +30,10 @@ public enum StaticMessages {
     FREE("Free"),
     MAXIMUM_OF("Maximum of"),
     OPTIONS("options"),
+    QUANTITY_SUBTILE("Use the buttons to define the quantity of products in this order"),
+    OBSERVATIONS_SUBTITLE("Describe your observations about this order"),
+    OBSERVATIONS_EMPTY_TEXT("Click here and enter your observations..."),
+    DEFAULT_QTD_ORDER("01"),
     GENERIC("");
 
     private String name;
