@@ -10,21 +10,19 @@ import br.com.flygowmobile.entity.Order;
 
 public class RepositoryOrder extends Repository<Order> {
 
-    public static abstract class Orders implements BaseColumns {
-
-        public static final String TABLE_NAME = "OrderTab";
-
-        public static final String COLUMN_NAME_ORDER_ID = "orderId";
-        public static final String COLUMN_NAME_CLIENT_ID = "clientId";
-        public static final String COLUMN_NAME_TABLET_ID = "tabletId";
-        public static final String COLUMN_NAME_TOTAL_VALUE = "totalValue";
-        public static final String COLUMN_NAME_ORDER_HOUR = "orderHour";
-        public static final String COLUMN_NAME_ATTENDANT_ID = "attendantId";
-
-    }
-
     @Override
-    public long save(Order obj) {
+    public long save(Order order) {
+        //long id = order.getTabletId();
+
+        //Order o = findById(id);
+        // if (o != null) {
+        //if (o.getTabletId() != 0) {
+        //       update(order);
+        // }
+        //} else {
+        //  id = insert(order);
+        //}
+        //return id;
         return 0;
     }
 
@@ -61,5 +59,18 @@ public class RepositoryOrder extends Repository<Order> {
     @Override
     public Cursor getCursor() {
         return null;
+    }
+
+    public static abstract class Orders implements BaseColumns {
+
+        public static final String TABLE_NAME = "OrderTab";
+
+        public static final String COLUMN_NAME_ORDER_ID = "orderId";
+        public static final String COLUMN_NAME_CLIENT_ID = "clientId";
+        public static final String COLUMN_NAME_TABLET_ID = "tabletId";
+        public static final String COLUMN_NAME_TOTAL_VALUE = "totalValue";
+        public static final String COLUMN_NAME_ORDER_HOUR = "orderHour";
+        public static final String COLUMN_NAME_ATTENDANT_ID = "attendantId";
+
     }
 }
