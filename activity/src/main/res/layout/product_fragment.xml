@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/price"
-        android:layout_width="170dp"
-        android:layout_height="85dp"
+        android:layout_width="190dp"
+        android:layout_height="95dp"
         android:layout_marginLeft="785dp"
-        android:layout_marginTop="425dp"
+        android:layout_marginTop="420dp"
         android:background="@drawable/price_round_shape"
         android:gravity="center|center_vertical"
         android:textColor="#6f2020"
-        android:textSize="35dp"
+        android:textSize="50dp"
         android:textStyle="bold"
     />
 
@@ -23,12 +23,12 @@
         android:id="@+id/peca"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="775dp"
-        android:layout_marginTop="415dp"
+        android:layout_marginLeft="780dp"
+        android:layout_marginTop="412dp"
         android:gravity="center|center_vertical"
         android:text="faça seu pedido..."
         android:textColor="#40403e"
-        android:textSize="25dp"
+        android:textSize="22dp"
         android:textStyle="bold"
     />
 
@@ -36,8 +36,8 @@
         android:id="@+id/clickHere"
         android:layout_width="200dp"
         android:layout_height="50dp"
-        android:layout_marginLeft="775dp"
-        android:layout_marginTop="472dp"
+        android:layout_marginLeft="780dp"
+        android:layout_marginTop="477dp"
         android:gravity="center|center_vertical"
         android:text="basta clicar aqui!"
         android:textColor="#40403e"
@@ -79,7 +79,7 @@
         android:id="@+id/btnOrder"
         android:layout_width="62dp"
         android:layout_height="61dp"
-        android:layout_marginLeft="920dp"
+        android:layout_marginLeft="935dp"
         android:layout_marginTop="382dp"
         android:background="@drawable/btn_pedir"
     />

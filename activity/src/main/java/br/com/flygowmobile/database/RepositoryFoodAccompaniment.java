@@ -27,15 +27,11 @@ public class RepositoryFoodAccompaniment extends Repository<FoodAccompaniment> {
 
     @Override
     public long save(FoodAccompaniment foodAccompaniment) {
-        long id = 0;
+        long id = -1;
         long foodId = foodAccompaniment.getFoodId();
         long accompanimentId = foodAccompaniment.getAccompanimentId();
         FoodAccompaniment f = findById(foodId, accompanimentId);
-        if (f != null) {
-            if (f.getFoodId() != 0) {
-                this.update(foodAccompaniment);
-            }
-        } else {
+        if (f == null) {
             id = this.insert(foodAccompaniment);
         }
         return id;

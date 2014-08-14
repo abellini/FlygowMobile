@@ -4,7 +4,7 @@ import br.com.flygowmobile.database.RepositoryOrderItem;
 
 public class OrderItem {
 
-    private static String[] columns = new String[]{
+    public static String[] columns = new String[]{
             RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_ID,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_QUANTITY,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_OBSERVATIONS,

@@ -45,6 +45,9 @@ import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 import br.com.flygowmobile.database.RepositoryFoodPromotion;
+import br.com.flygowmobile.database.RepositoryOrder;
+import br.com.flygowmobile.database.RepositoryOrderItem;
+import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
 import br.com.flygowmobile.database.RepositoryPaymentForm;
 import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
@@ -68,17 +71,20 @@ import br.com.flygowmobile.service.ServiceHandler;
 public class RegisterDetailActivity extends Activity {
 
     private static final String REGISTER_DETAIL_ACTIVITY = "RegisterDetailActivity";
-    public static RepositoryCoin repositoryCoin;
-    public static RepositoryAttendant repositoryAttendant;
-    public static RepositoryAdvertisement repositoryAdvertisement;
-    public static RepositoryTablet repositoryTablet;
-    public static RepositoryCategory repositoryCategory;
-    public static RepositoryFood repositoryFood;
-    public static RepositoryPromotion repositoryPromotion;
-    public static RepositoryPaymentForm repositoryPaymentForm;
-    public static RepositoryAccompaniment repositoryAccompaniment;
-    public static RepositoryFoodAccompaniment repositoryFoodAccompaniment;
-    public static RepositoryFoodPromotion repositoryFoodPromotion;
+    private static RepositoryCoin repositoryCoin;
+    private static RepositoryAttendant repositoryAttendant;
+    private static RepositoryAdvertisement repositoryAdvertisement;
+    private static RepositoryTablet repositoryTablet;
+    private static RepositoryCategory repositoryCategory;
+    private static RepositoryFood repositoryFood;
+    private static RepositoryPromotion repositoryPromotion;
+    private static RepositoryPaymentForm repositoryPaymentForm;
+    private static RepositoryAccompaniment repositoryAccompaniment;
+    private static RepositoryFoodAccompaniment repositoryFoodAccompaniment;
+    private static RepositoryFoodPromotion repositoryFoodPromotion;
+    private static RepositoryOrder repositoryOrder;
+    private static RepositoryOrderItem repositoryOrderItem;
+    private static RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
     private RegisterDetailsTabletTask mRegisterDetailsTask = null;
     private Spinner spinnerCoin, spinnerAttendant;
     private MultiSelectionSpinner spinnerAdvertisements;
@@ -125,7 +131,10 @@ public class RegisterDetailActivity extends Activity {
         repositoryPaymentForm = new RepositoryPaymentForm(this);
         repositoryAccompaniment = new RepositoryAccompaniment(this);
         repositoryFoodAccompaniment = new RepositoryFoodAccompaniment(this);
+        repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(this);
         repositoryFoodPromotion = new RepositoryFoodPromotion(this);
+        repositoryOrder = new RepositoryOrder(this);
+        repositoryOrderItem = new RepositoryOrderItem(this);
 
         try {
             if (json != null) {
@@ -410,8 +419,11 @@ public class RegisterDetailActivity extends Activity {
         repositoryFood.removeAll();
         repositoryPromotion.removeAll();
         repositoryFoodPromotion.removeAll();
+        repositoryOrderItemAccompaniment.removeAll();
         repositoryPaymentForm.removeAll();
         repositoryAccompaniment.removeAll();
+        repositoryOrderItem.removeAll();
+        repositoryOrder.removeAll();
     }
 
     private void saveMenuInformations(JSONObject initialData) {

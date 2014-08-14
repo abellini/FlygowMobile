@@ -1,5 +1,7 @@
 package br.com.flygowmobile.enums;
 
+import br.com.flygowmobile.activity.R;
+
 /**
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
@@ -34,12 +36,18 @@ public enum StaticMessages {
     OBSERVATIONS_SUBTITLE("Describe your observations about this order"),
     OBSERVATIONS_EMPTY_TEXT("Click here and enter your observations..."),
     DEFAULT_QTD_ORDER("01"),
+    LOAD_ORDER_ITEM("Adding order item..."),
     GENERIC("");
 
     private String name;
+    private int resId;
 
     StaticMessages(String name) {
         this.name = name;
+    }
+
+    StaticMessages(int resId) {
+        this.resId = resId;
     }
 
     public static StaticMessages getCustomMessage(String message) {

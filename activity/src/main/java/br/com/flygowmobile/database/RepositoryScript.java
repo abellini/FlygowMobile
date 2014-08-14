@@ -45,7 +45,7 @@ public class RepositoryScript {
                     RepositoryAdvertisement.Advertisements.COLUMN_NAME_VIDEO_NAME + TEXT_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryOrder.Orders.TABLE_NAME + " (" +
-                    RepositoryOrder.Orders.COLUMN_NAME_ORDER_ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    RepositoryOrder.Orders.COLUMN_NAME_ORDER_ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     RepositoryOrder.Orders.COLUMN_NAME_CLIENT_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_TABLET_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_TOTAL_VALUE + REAL_TYPE + COMMA_SEP +
@@ -53,7 +53,7 @@ public class RepositoryScript {
                     RepositoryOrder.Orders.COLUMN_NAME_ATTENDANT_ID + INTEGER_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryOrderItem.OrderItems.TABLE_NAME + " (" +
-                    RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_ID + INTEGER_TYPE + " PRIMARY KEY," +
+                    RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_QUANTITY + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_OBSERVATIONS + TEXT_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
@@ -128,6 +128,11 @@ public class RepositoryScript {
                     RepositoryFoodPromotion.FoodPromotions.COLUMN_NAME_FOOD_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
                     RepositoryFoodPromotion.FoodPromotions.COLUMN_NAME_PROMOTION_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
                     " PRIMARY KEY (" + RepositoryFoodPromotion.FoodPromotions.COLUMN_NAME_FOOD_ID + ", " + RepositoryFoodPromotion.FoodPromotions.COLUMN_NAME_PROMOTION_ID + ")" +
+                    " )",
+            "CREATE TABLE " + RepositoryOrderItemAccompaniment.OrderItemAccompaniments.TABLE_NAME + " (" +
+                    RepositoryOrderItemAccompaniment.OrderItemAccompaniments.COLUMN_NAME_ORDER_ITEM_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
+                    RepositoryOrderItemAccompaniment.OrderItemAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + INTEGER_TYPE + NOT_NULL + COMMA_SEP +
+                    " PRIMARY KEY (" + RepositoryOrderItemAccompaniment.OrderItemAccompaniments.COLUMN_NAME_ORDER_ITEM_ID + ", " + RepositoryOrderItemAccompaniment.OrderItemAccompaniments.COLUMN_NAME_ACCOMPANIMENT_ID + ")" +
                     " )"
     };
 
@@ -145,7 +150,8 @@ public class RepositoryScript {
             "DROP TABLE IF EXISTS " + RepositoryAccompaniment.Accompaniments.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryFoodAccompaniment.FoodAccompaniments.TABLE_NAME,
             "DROP TABLE IF EXISTS " + RepositoryPromotion.Promotions.TABLE_NAME,
-            "DROP TABLE IF EXISTS " + RepositoryFoodPromotion.FoodPromotions.TABLE_NAME
+            "DROP TABLE IF EXISTS " + RepositoryFoodPromotion.FoodPromotions.TABLE_NAME,
+            "DROP TABLE IF EXISTS " + RepositoryOrderItemAccompaniment.OrderItemAccompaniments.TABLE_NAME
     };
     protected SQLiteDatabase db;
     private SQLiteHelper dbHelper;

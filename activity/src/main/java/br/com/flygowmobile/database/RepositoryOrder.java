@@ -1,12 +1,15 @@
 package br.com.flygowmobile.database;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.util.Log;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.flygowmobile.entity.Order;
@@ -15,15 +18,17 @@ public class RepositoryOrder extends Repository<Order> {
 
     private static final String REPOSITORY_ORDER = "RepositoryOrder";
 
+    public RepositoryOrder(Context ctx) {
+        db = ctx.openOrCreateDatabase(RepositoryScript.DATABASE_NAME, Context.MODE_PRIVATE, null);
+    }
+
     @Override
     public long save(Order order) {
         long id = order.getOrderId();
 
         Order o = findById(id);
         if (o != null) {
-            if (o.getTabletId() != 0) {
-                update(order);
-            }
+            update(order);
         } else {
             id = insert(order);
         }
@@ -32,9 +37,8 @@ public class RepositoryOrder extends Repository<Order> {
 
     @Override
     protected ContentValues populateContentValues(Order order) {
-        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         ContentValues values = new ContentValues();
-        values.put(Orders.COLUMN_NAME_ORDER_ID, order.getOrderId());
         values.put(Orders.COLUMN_NAME_ATTENDANT_ID, order.getAttendantId());
         values.put(Orders.COLUMN_NAME_CLIENT_ID, order.getClientId());
         values.put(Orders.COLUMN_NAME_ORDER_HOUR, fm.format(order.getHour()));
@@ -73,6 +77,12 @@ public class RepositoryOrder extends Repository<Order> {
         return count;
     }
 
+    public int removeAll() {
+        int count = db.delete(Orders.TABLE_NAME, null, null);
+        Log.i(REPOSITORY_ORDER, "Delete [" + count + "] record(s)");
+        return count;
+    }
+
     @Override
     public Order findById(long id) {
         DateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -80,12 +90,20 @@ public class RepositoryOrder extends Repository<Order> {
             Cursor c = db.query(true, Orders.TABLE_NAME, Order.columns, Orders.COLUMN_NAME_ORDER_ID + "=" + id, null, null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
+                int idxId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_ID);
+                int idxAttendantId = c.getColumnIndex(Orders.COLUMN_NAME_ATTENDANT_ID);
+                int idxClientId = c.getColumnIndex(Orders.COLUMN_NAME_CLIENT_ID);
+                int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
+                int idxTabletId = c.getColumnIndex(Orders.COLUMN_NAME_TABLET_ID);
+                int idxTotalValue = c.getColumnIndex(Orders.COLUMN_NAME_TOTAL_VALUE);
+
                 Order order = new Order();
-                order.setOrderId(c.getLong(0));
-                order.setClientId(c.getInt(1));
-                order.setTotalValue(c.getDouble(2));
-                order.setHour(fm.parse(c.getString(3)));
-                order.setAttendantId(c.getInt(4));
+                order.setOrderId(c.getLong(idxId));
+                order.setClientId(c.getInt(idxClientId));
+                order.setTotalValue(c.getDouble(idxTotalValue));
+                order.setHour(fm.parse(c.getString(idxOrderHour)));
+                order.setAttendantId(c.getInt(idxAttendantId));
+                order.setTabletId(c.getLong(idxTabletId));
                 return order;
             }
         } catch (Exception e) {
@@ -96,7 +114,33 @@ public class RepositoryOrder extends Repository<Order> {
 
     @Override
     public List<Order> listAll() {
-        return null;
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Cursor c = getCursor();
+        List<Order> orders = new ArrayList<Order>();
+        if (c.moveToFirst()) {
+            int idxId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_ID);
+            int idxAttendantId = c.getColumnIndex(Orders.COLUMN_NAME_ATTENDANT_ID);
+            int idxClientId = c.getColumnIndex(Orders.COLUMN_NAME_CLIENT_ID);
+            int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
+            int idxTabletId = c.getColumnIndex(Orders.COLUMN_NAME_TABLET_ID);
+            int idxTotalValue = c.getColumnIndex(Orders.COLUMN_NAME_TOTAL_VALUE);
+
+            do {
+                Order order = new Order();
+                orders.add(order);
+                order.setOrderId(c.getLong(idxId));
+                order.setClientId(c.getInt(idxClientId));
+                order.setTotalValue(c.getDouble(idxTotalValue));
+                try {
+                    order.setHour(fm.parse(c.getString(idxOrderHour)));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                order.setAttendantId(c.getInt(idxAttendantId));
+                order.setTabletId(c.getLong(idxTabletId));
+            } while (c.moveToNext());
+        }
+        return orders;
     }
 
     @Override

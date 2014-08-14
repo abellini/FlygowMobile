@@ -2,9 +2,11 @@ package br.com.flygowmobile.service;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Typeface;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,9 +23,14 @@ import java.util.Map;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentRowItem;
+import br.com.flygowmobile.database.RepositoryOrder;
+import br.com.flygowmobile.database.RepositoryOrderItem;
+import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Order;
+import br.com.flygowmobile.entity.OrderItem;
+import br.com.flygowmobile.entity.OrderItemAccompaniment;
 import br.com.flygowmobile.entity.Product;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -43,11 +50,18 @@ public class OrderService {
 
     private View qtdObservationsPopup;
 
+    private RepositoryOrder repositoryOrder;
+    private RepositoryOrderItem repositoryOrderItem;
+    private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
+
     private static final int MAX_QUANTITY = 99;
     private static final int MIN_QUANTITY = 1;
 
     public OrderService(Context ctx){
         accompanimentMapper = new AccompanimentMapper(ctx);
+        repositoryOrder = new RepositoryOrder(ctx);
+        repositoryOrderItem = new RepositoryOrderItem(ctx);
+        repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(ctx);
     }
 
     public void orderAction(
@@ -228,7 +242,33 @@ public class OrderService {
     }
 
     private void saveOrderItem(Product item){
-        final TextView quantityView = (TextView)qtdObservationsPopup.findViewById(R.id.qtdNumber);
-        EditText obsDescView = (EditText)qtdObservationsPopup.findViewById(R.id.obsDesc);
+        ProgressDialog progressOrderItemDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
+                StaticMessages.LOAD_ORDER_ITEM.getName(), true);;
+        try{
+            final TextView quantityView = (TextView)qtdObservationsPopup.findViewById(R.id.qtdNumber);
+            EditText obsDescView = (EditText)qtdObservationsPopup.findViewById(R.id.obsDesc);
+            OrderItem orderItem = new OrderItem();
+            if(item instanceof Food){
+                orderItem.setFoodId(((Food)item).getFoodId());
+            } else if (item instanceof Promotion){
+                orderItem.setFoodId(((Promotion)item).getPromotionId());
+            }
+            orderItem.setQuantity(Integer.parseInt(quantityView.getText().toString()));
+            orderItem.setValue(item.getValue());
+            orderItem.setObservations(obsDescView.getText().toString());
+            orderItem.setOrderItemId(repositoryOrderItem.save(orderItem));
+            if(orderItem.getOrderItemId() != -1 && selects != null && !selects.isEmpty()){
+                for(Long accId : selects.keySet()){
+                    OrderItemAccompaniment orderItemAccompaniment = new OrderItemAccompaniment();
+                    orderItemAccompaniment.setAccompanimentId(accId);
+                    orderItemAccompaniment.setOrderItemId(orderItem.getOrderItemId());
+                    repositoryOrderItemAccompaniment.save(orderItemAccompaniment);
+                }
+            }
+            progressOrderItemDialog.dismiss();
+        }catch (Exception e){
+            Log.e("OrderService", e.getMessage());
+            progressOrderItemDialog.dismiss();
+        }
     }
 }

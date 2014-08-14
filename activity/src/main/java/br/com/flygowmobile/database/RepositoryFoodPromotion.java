@@ -26,15 +26,11 @@ public class RepositoryFoodPromotion extends Repository<FoodPromotion> {
     @Override
     public long save(FoodPromotion foodPromotion) {
 
-        long id = 0;
+        long id = -1;
         long promotionId = foodPromotion.getPromotionId();
         long foodId = foodPromotion.getFoodId();
         FoodPromotion f = findById(promotionId, foodId);
-        if (f != null) {
-            if (f.getFoodId() != 0) {
-                this.update(foodPromotion);
-            }
-        } else {
+        if (f == null) {
             id = this.insert(foodPromotion);
         }
         return id;

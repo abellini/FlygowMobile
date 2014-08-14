@@ -10,7 +10,7 @@ public enum StaticTitles {
     SUCCESS("Successful!"),
     PROMOTIONS("Promotions"),
     INFORMATION("Information"),
-    PROMOTION_INFO("Promotion Items"),
+    PROMOTION_INFO("The items included in this promotion are:"),
     MENU("Menu"),
     SUBTITLE_MENU("Choose any menu options above!"),
     MAKE_ORDER("Complete your order!"),
