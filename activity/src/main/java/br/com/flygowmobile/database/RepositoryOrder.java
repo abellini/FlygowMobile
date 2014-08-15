@@ -44,6 +44,7 @@ public class RepositoryOrder extends Repository<Order> {
         values.put(Orders.COLUMN_NAME_ORDER_HOUR, fm.format(order.getHour()));
         values.put(Orders.COLUMN_NAME_TABLET_ID, order.getTabletId());
         values.put(Orders.COLUMN_NAME_TOTAL_VALUE, order.getTotalValue());
+        values.put(Orders.COLUMN_NAME_STATUS_TYPE, order.getStatusType());
 
         return values;
     }
@@ -96,6 +97,7 @@ public class RepositoryOrder extends Repository<Order> {
                 int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
                 int idxTabletId = c.getColumnIndex(Orders.COLUMN_NAME_TABLET_ID);
                 int idxTotalValue = c.getColumnIndex(Orders.COLUMN_NAME_TOTAL_VALUE);
+                int idxStatusType = c.getColumnIndex(Orders.COLUMN_NAME_STATUS_TYPE);
 
                 Order order = new Order();
                 order.setOrderId(c.getLong(idxId));
@@ -104,6 +106,37 @@ public class RepositoryOrder extends Repository<Order> {
                 order.setHour(fm.parse(c.getString(idxOrderHour)));
                 order.setAttendantId(c.getInt(idxAttendantId));
                 order.setTabletId(c.getLong(idxTabletId));
+                order.setStatusType(c.getInt(idxStatusType));
+                return order;
+            }
+        } catch (Exception e) {
+            Log.e(REPOSITORY_ORDER, "Error [" + e.getMessage() + "]");
+        }
+        return null;
+    }
+
+    public Order getByStatusType(int statusType) {
+        DateFormat fm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Cursor c = db.query(true, Orders.TABLE_NAME, Order.columns, Orders.COLUMN_NAME_STATUS_TYPE + "=" + statusType, null, null, null, null, null);
+            if (c.getCount() > 0) {
+                c.moveToFirst();
+                int idxId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_ID);
+                int idxAttendantId = c.getColumnIndex(Orders.COLUMN_NAME_ATTENDANT_ID);
+                int idxClientId = c.getColumnIndex(Orders.COLUMN_NAME_CLIENT_ID);
+                int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
+                int idxTabletId = c.getColumnIndex(Orders.COLUMN_NAME_TABLET_ID);
+                int idxTotalValue = c.getColumnIndex(Orders.COLUMN_NAME_TOTAL_VALUE);
+                int idxStatusType = c.getColumnIndex(Orders.COLUMN_NAME_STATUS_TYPE);
+
+                Order order = new Order();
+                order.setOrderId(c.getLong(idxId));
+                order.setClientId(c.getInt(idxClientId));
+                order.setTotalValue(c.getDouble(idxTotalValue));
+                order.setHour(fm.parse(c.getString(idxOrderHour)));
+                order.setAttendantId(c.getInt(idxAttendantId));
+                order.setTabletId(c.getLong(idxTabletId));
+                order.setStatusType(c.getInt(idxStatusType));
                 return order;
             }
         } catch (Exception e) {
@@ -124,6 +157,7 @@ public class RepositoryOrder extends Repository<Order> {
             int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
             int idxTabletId = c.getColumnIndex(Orders.COLUMN_NAME_TABLET_ID);
             int idxTotalValue = c.getColumnIndex(Orders.COLUMN_NAME_TOTAL_VALUE);
+            int idxStatusType = c.getColumnIndex(Orders.COLUMN_NAME_STATUS_TYPE);
 
             do {
                 Order order = new Order();
@@ -138,6 +172,7 @@ public class RepositoryOrder extends Repository<Order> {
                 }
                 order.setAttendantId(c.getInt(idxAttendantId));
                 order.setTabletId(c.getLong(idxTabletId));
+                order.setStatusType(c.getInt(idxStatusType));
             } while (c.moveToNext());
         }
         return orders;
@@ -158,6 +193,7 @@ public class RepositoryOrder extends Repository<Order> {
         public static final String COLUMN_NAME_TOTAL_VALUE = "totalValue";
         public static final String COLUMN_NAME_ORDER_HOUR = "orderHour";
         public static final String COLUMN_NAME_ATTENDANT_ID = "attendantId";
+        public static final String COLUMN_NAME_STATUS_TYPE = "statusType";
 
     }
 }

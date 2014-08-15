@@ -17,6 +17,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ import br.com.flygowmobile.activity.navigationdrawer.AccompanimentRowItem;
 import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
+import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Order;
@@ -33,6 +36,9 @@ import br.com.flygowmobile.entity.OrderItem;
 import br.com.flygowmobile.entity.OrderItemAccompaniment;
 import br.com.flygowmobile.entity.Product;
 import br.com.flygowmobile.entity.Promotion;
+import br.com.flygowmobile.entity.Tablet;
+import br.com.flygowmobile.enums.OrderStatusTypeEnum;
+import br.com.flygowmobile.enums.ProductTypeEnum;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.mapper.AccompanimentMapper;
@@ -50,6 +56,7 @@ public class OrderService {
 
     private View qtdObservationsPopup;
 
+    private RepositoryTablet repositoryTablet;
     private RepositoryOrder repositoryOrder;
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
@@ -59,6 +66,7 @@ public class OrderService {
 
     public OrderService(Context ctx){
         accompanimentMapper = new AccompanimentMapper(ctx);
+        repositoryTablet = new RepositoryTablet(ctx);
         repositoryOrder = new RepositoryOrder(ctx);
         repositoryOrderItem = new RepositoryOrderItem(ctx);
         repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(ctx);
@@ -245,13 +253,17 @@ public class OrderService {
         ProgressDialog progressOrderItemDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
                 StaticMessages.LOAD_ORDER_ITEM.getName(), true);;
         try{
+            Order order = getCurrentOrder();
             final TextView quantityView = (TextView)qtdObservationsPopup.findViewById(R.id.qtdNumber);
             EditText obsDescView = (EditText)qtdObservationsPopup.findViewById(R.id.obsDesc);
             OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(order.getOrderId());
             if(item instanceof Food){
                 orderItem.setFoodId(((Food)item).getFoodId());
+                orderItem.setProductType(ProductTypeEnum.FOOD.getName());
             } else if (item instanceof Promotion){
                 orderItem.setFoodId(((Promotion)item).getPromotionId());
+                orderItem.setProductType(ProductTypeEnum.PROMOTION.getName());
             }
             orderItem.setQuantity(Integer.parseInt(quantityView.getText().toString()));
             orderItem.setValue(item.getValue());
@@ -266,9 +278,31 @@ public class OrderService {
                 }
             }
             progressOrderItemDialog.dismiss();
+            //TODO: GO TO THE CART ACTIVITY
         }catch (Exception e){
             Log.e("OrderService", e.getMessage());
             progressOrderItemDialog.dismiss();
         }
+    }
+
+    private Order getCurrentOrder(){
+        Order order = null;
+        try{
+            order = repositoryOrder.getByStatusType(OrderStatusTypeEnum.OPENED.getId());
+            if(order == null){
+                Tablet thisTablet = repositoryTablet.findLast();
+                order = new Order();
+                order.setTabletId(thisTablet.getTabletId());
+                order.setAttendantId(thisTablet.getAttendantId());
+                //order.setClientId(); TODO: future, implements the client in the order
+                order.setHour(new Date(new java.util.Date().getTime()));
+                order.setStatusType(OrderStatusTypeEnum.OPENED.getId());
+                order.setTotalValue(BigDecimal.ZERO.doubleValue());
+                order.setOrderId(repositoryOrder.save(order));
+            }
+        }catch (Exception e){
+            Log.e("OrderService", e.getMessage());
+        }
+        return order;
     }
 }

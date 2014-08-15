@@ -10,7 +10,8 @@ public class OrderItem {
             RepositoryOrderItem.OrderItems.COLUMN_NAME_OBSERVATIONS,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_FOOD_ID,
-            RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ID
+            RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ID,
+            RepositoryOrderItem.OrderItems.COLUMN_NAME_PRODUCT_TYPE
     };
 
     private long orderItemId;
@@ -19,6 +20,7 @@ public class OrderItem {
     private Double value;
     private long foodId;
     private long orderId;
+    private String productType;
 
     public OrderItem() {
     }
@@ -81,6 +83,14 @@ public class OrderItem {
         this.orderId = orderId;
     }
 
+    public String getProductType() {
+        return productType;
+    }
+
+    public void setProductType(String productType) {
+        this.productType = productType;
+    }
+
     public String toJSONInitialConfig() {
         return "{" +
                 "\"orderItemId\": " + getOrderItemId() + ", " +
@@ -88,7 +98,8 @@ public class OrderItem {
                 "\"observations\": " + getObservations() + ", " +
                 "\"value\": " + "\"" + getValue() + "\", " +
                 "\"foodId\": " + "\"" + getFoodId() + "\", " +
-                "\"orderId\": " + getOrderId() +
+                "\"orderId\": " + getOrderId() + "\", " +
+                "\"productType\": " + getProductType() +
                 "}";
     }
 }

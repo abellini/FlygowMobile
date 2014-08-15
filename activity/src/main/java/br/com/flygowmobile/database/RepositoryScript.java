@@ -50,7 +50,8 @@ public class RepositoryScript {
                     RepositoryOrder.Orders.COLUMN_NAME_TABLET_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_TOTAL_VALUE + REAL_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_ORDER_HOUR + TEXT_TYPE + COMMA_SEP +
-                    RepositoryOrder.Orders.COLUMN_NAME_ATTENDANT_ID + INTEGER_TYPE +
+                    RepositoryOrder.Orders.COLUMN_NAME_ATTENDANT_ID + INTEGER_TYPE + COMMA_SEP +
+                    RepositoryOrder.Orders.COLUMN_NAME_STATUS_TYPE + INTEGER_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryOrderItem.OrderItems.TABLE_NAME + " (" +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
@@ -58,7 +59,8 @@ public class RepositoryScript {
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_OBSERVATIONS + TEXT_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_FOOD_ID + INTEGER_TYPE + COMMA_SEP +
-                    RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ID + INTEGER_TYPE +
+                    RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ID + INTEGER_TYPE + COMMA_SEP +
+                    RepositoryOrderItem.OrderItems.COLUMN_NAME_PRODUCT_TYPE + TEXT_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryCategory.Categories.TABLE_NAME + " (" +
                     RepositoryCategory.Categories.COLUMN_NAME_CATEGORY_ID + INTEGER_TYPE + " PRIMARY KEY," +

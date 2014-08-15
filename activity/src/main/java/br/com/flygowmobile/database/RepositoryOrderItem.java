@@ -29,6 +29,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         public static final String COLUMN_NAME_VALUE = "value";
         public static final String COLUMN_NAME_FOOD_ID = "foodId";
         public static final String COLUMN_NAME_ORDER_ID = "orderId";
+        public static final String COLUMN_NAME_PRODUCT_TYPE = "productType";
 
     }
 
@@ -59,7 +60,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         values.put(OrderItems.COLUMN_NAME_ORDER_ID, orderItem.getOrderId());
         values.put(OrderItems.COLUMN_NAME_QUANTITY, orderItem.getQuantity());
         values.put(OrderItems.COLUMN_NAME_VALUE, orderItem.getValue());
-
+        values.put(OrderItems.COLUMN_NAME_PRODUCT_TYPE, orderItem.getProductType());
         return values;
     }
 
@@ -112,6 +113,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
                 int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
                 int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
+                int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderItemId(c.getLong(idxId));
@@ -120,6 +122,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 orderItem.setOrderId(c.getLong(idxOrderId));
                 orderItem.setQuantity(c.getInt(idxQuantity));
                 orderItem.setValue(c.getDouble(idxValue));
+                orderItem.setProductType(c.getString(idxProductType));
                 return orderItem;
             }
         } catch (Exception e) {
@@ -140,6 +143,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
             int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
             int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
             int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
+            int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
 
             do {
                 OrderItem orderItem = new OrderItem();
@@ -150,6 +154,34 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 orderItem.setOrderId(c.getLong(idxOrderId));
                 orderItem.setQuantity(c.getInt(idxQuantity));
                 orderItem.setValue(c.getDouble(idxValue));
+                orderItem.setProductType(c.getString(idxProductType));
+            } while (c.moveToNext());
+        }
+        return orderItems;
+    }
+
+    public List<OrderItem> listAllByOrder(long orderId) {
+        Cursor c = db.query(true, OrderItems.TABLE_NAME, OrderItem.columns, OrderItems.COLUMN_NAME_ORDER_ID + "=" + orderId, null, null, null, null, null);
+        List<OrderItem> orderItems = new ArrayList<OrderItem>();
+        if (c.moveToFirst()) {
+            int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
+            int idxFood = c.getColumnIndex(OrderItems.COLUMN_NAME_FOOD_ID);
+            int idxObs = c.getColumnIndex(OrderItems.COLUMN_NAME_OBSERVATIONS);
+            int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
+            int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
+            int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
+            int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
+
+            do {
+                OrderItem orderItem = new OrderItem();
+                orderItems.add(orderItem);
+                orderItem.setOrderItemId(c.getLong(idxId));
+                orderItem.setFoodId(c.getLong(idxFood));
+                orderItem.setObservations(c.getString(idxObs));
+                orderItem.setOrderId(c.getLong(idxOrderId));
+                orderItem.setQuantity(c.getInt(idxQuantity));
+                orderItem.setValue(c.getDouble(idxValue));
+                orderItem.setProductType(c.getString(idxProductType));
             } while (c.moveToNext());
         }
         return orderItems;

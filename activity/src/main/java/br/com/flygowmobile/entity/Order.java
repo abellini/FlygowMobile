@@ -13,7 +13,8 @@ public class Order {
             RepositoryOrder.Orders.COLUMN_NAME_TABLET_ID,
             RepositoryOrder.Orders.COLUMN_NAME_TOTAL_VALUE,
             RepositoryOrder.Orders.COLUMN_NAME_ORDER_HOUR,
-            RepositoryOrder.Orders.COLUMN_NAME_ATTENDANT_ID
+            RepositoryOrder.Orders.COLUMN_NAME_ATTENDANT_ID,
+            RepositoryOrder.Orders.COLUMN_NAME_STATUS_TYPE
     };
 
     private long orderId;
@@ -21,9 +22,10 @@ public class Order {
     private long tabletId;
     private Double totalValue;
     private Date hour;
-    private int attendantId;
+    private long attendantId;
+    private int statusType;
 
-    public Order(long orderId, int clientId, long tabletId, Double totalValue, Time hour, int attendantId) {
+    public Order(long orderId, int clientId, long tabletId, Double totalValue, Time hour, long attendantId) {
         this.setOrderId(orderId);
         this.setClientId(clientId);
         this.setTabletId(tabletId);
@@ -75,12 +77,20 @@ public class Order {
         this.hour = hour;
     }
 
-    public int getAttendantId() {
+    public long getAttendantId() {
         return attendantId;
     }
 
-    public void setAttendantId(int attendantId) {
+    public void setAttendantId(long attendantId) {
         this.attendantId = attendantId;
+    }
+
+    public int getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(int statusType) {
+        this.statusType = statusType;
     }
 
     public String toJSONInitialConfig() {
@@ -91,7 +101,8 @@ public class Order {
                 "\"tabletId\": " + getTabletId() + ", " +
                 "\"totalValue\": " + "\"" + getTotalValue() + "\", " +
                 "\"hour\": " + "\"" + getHour() + "\", " +
-                "\"attendantId\": " + getAttendantId() +
+                "\"attendantId\": " + getAttendantId() + "\", " +
+                "\"statusType\": " + getStatusType() +
                 "}";
     }
 }
