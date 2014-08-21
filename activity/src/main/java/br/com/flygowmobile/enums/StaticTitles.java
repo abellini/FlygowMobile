@@ -18,7 +18,8 @@ public enum StaticTitles {
     CONTINUE("Continue"),
     CANCEL("Cancel"),
     QUANTITY_CHOICES("Choice the Quantity"),
-    ENTER_OBSERVATIONS("Enter with Observations")
+    ENTER_OBSERVATIONS("Enter with Observations"),
+    MAIN_APP_TITLE("Flygow - Digital Menu")
     ;
 
     private String name;

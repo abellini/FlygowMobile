@@ -1,6 +1,7 @@
 package br.com.flygowmobile.activity;
 
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -8,21 +9,25 @@ import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import org.json.JSONObject;
@@ -64,8 +69,6 @@ public class MainActivity extends Activity {
     private static final String MAIN_ACTIVITY = "MainActivity";
     TypedArray menuIcons;
     // nav drawer title
-    private CharSequence mDrawerTitle;
-    private CharSequence mTitle;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -87,18 +90,14 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mTitle = mDrawerTitle = getTitle();
 
         menuIcons = getResources().obtainTypedArray(R.array.icons);
         menuItemsService = new BuildMenuItemsService(this, menuIcons);
-
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.slider_list);
-
         mDrawerLayout.setScrimColor(Color.TRANSPARENT);
 
         rowItems = menuItemsService.getMenuItems();
@@ -114,29 +113,10 @@ public class MainActivity extends Activity {
         repositoryFood = new RepositoryFood(this);
         repositoryPromotion = new RepositoryPromotion(this);
 
-        // enabling action bar app icon and behaving it as toggle button
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
+        //build the main action bar
+        buildCustomActionBar();
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-                R.drawable.ic_drawer, R.string.app_name,R.string.app_name) {
-            public void onDrawerClosed(View view) {
-                getActionBar().setTitle(mTitle);
-                alignFragmentToCenter();
-                showDirectionalArrows();
-                // calling onPrepareOptionsMenu() to show action bar icons
-                invalidateOptionsMenu();
-            }
-
-            public void onDrawerOpened(View drawerView) {
-                getActionBar().setTitle(mDrawerTitle);
-                alignFragmentToRight();
-                hideDirectionalArrows();
-                // calling onPrepareOptionsMenu() to hide action bar icons
-                invalidateOptionsMenu();
-            }
-        };
-
+        mDrawerToggle = buildDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.openDrawer(Gravity.LEFT);
 
@@ -150,6 +130,56 @@ public class MainActivity extends Activity {
         List<Promotion> allPromotions = repositoryPromotion.listAll();
         promotionMediaTask = new PromotionMediaTask(allPromotions);
         promotionMediaTask.execute((Void) null);
+    }
+
+    private void buildCustomActionBar(){
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        LayoutInflater mInflater = LayoutInflater.from(this);
+
+        View mCustomView = mInflater.inflate(R.layout.custom_action_bar, null);
+        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
+        mTitleTextView.setText(StaticTitles.MAIN_APP_TITLE.getName());
+
+        String fontChillerPath = "fonts/CHILLER.TTF";
+
+        Typeface chiller = Typeface.createFromAsset(getAssets(), fontChillerPath );
+        mTitleTextView.setTypeface(chiller);
+
+
+        /*ImageButton imageButton = (ImageButton) mCustomView
+                .findViewById(R.id.imageButton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Refresh Clicked!",
+                        Toast.LENGTH_LONG).show();
+            }
+        });*/
+
+        actionBar.setCustomView(mCustomView);
+        actionBar.setDisplayShowCustomEnabled(true);
+    }
+
+    private ActionBarDrawerToggle buildDrawerToggle(){
+        return new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.drawable.ic_drawer, R.string.app_name,R.string.app_name) {
+            public void onDrawerClosed(View view) {
+                alignFragmentToCenter();
+                showDirectionalArrows();
+                // calling onPrepareOptionsMenu() to show action bar icons
+                invalidateOptionsMenu();
+            }
+
+            public void onDrawerOpened(View drawerView) {
+                alignFragmentToRight();
+                hideDirectionalArrows();
+                // calling onPrepareOptionsMenu() to hide action bar icons
+                invalidateOptionsMenu();
+            }
+        };
     }
 
     public void showDirectionalArrows(){
@@ -260,61 +290,12 @@ public class MainActivity extends Activity {
     }
 
     @Override
-    public void setTitle(CharSequence title) {
-        mTitle = title;
-        getActionBar().setTitle(mTitle);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity_actions, menu);
-
-        initializeOrderValue(menu);
-
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    private void initializeOrderValue(Menu menu){
-        final String initialValue = "0,00";
-        MenuItem menuItem = menu.findItem(R.id.allPrice);
-        Tablet tablet = repositoryTablet.findLast();
-        if(tablet != null){
-            Coin coin = repositoryCoin.findById(tablet.getCoinId());
-            if(coin != null && menuItem != null){
-                menuItem.setTitle(coin.getSymbol() + " " + initialValue);
-            }
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // toggle nav drawer on selecting action bar app icon/title
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        Fragment fragment;
-        FragmentManager fragmentManager = getFragmentManager();
-        // Handle action bar actions click
-        switch (item.getItemId()) {
-            case R.id.callAtendant:
-                fragment = new CallAtendantFragment();
-                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-                return true;
-            case R.id.basket:
-                fragment = new BasketFragment();
-                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-                return true;
-            case R.id.finalizeService:
-                fragment = new FinalizeServiceFragment();
-                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-
+        return false;
     }
 
     /**
