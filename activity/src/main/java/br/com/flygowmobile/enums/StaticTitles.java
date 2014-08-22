@@ -19,7 +19,8 @@ public enum StaticTitles {
     CANCEL("Cancel"),
     QUANTITY_CHOICES("Choice the Quantity"),
     ENTER_OBSERVATIONS("Enter with Observations"),
-    MAIN_APP_TITLE("Flygow - Digital Menu")
+    MAIN_APP_TITLE("Flygow - Digital Menu"),
+    YOUR_ACCOUNT("Your Account");
     ;
 
     private String name;

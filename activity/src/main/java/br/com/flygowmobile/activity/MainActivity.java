@@ -1,7 +1,6 @@
 package br.com.flygowmobile.activity;
 
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -9,7 +8,6 @@ import android.app.ProgressDialog;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -18,16 +16,13 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import org.json.JSONObject;
@@ -41,10 +36,7 @@ import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.navigationdrawer.AdvertisementFragment;
-import br.com.flygowmobile.activity.navigationdrawer.BasketFragment;
-import br.com.flygowmobile.activity.navigationdrawer.CallAtendantFragment;
 import br.com.flygowmobile.activity.navigationdrawer.CustomAdapter;
-import br.com.flygowmobile.activity.navigationdrawer.FinalizeServiceFragment;
 import br.com.flygowmobile.activity.navigationdrawer.RowItem;
 import br.com.flygowmobile.activity.navigationdrawer.WelcomeFragment;
 import br.com.flygowmobile.database.RepositoryAdvertisement;
@@ -53,14 +45,13 @@ import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Advertisement;
-import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Promotion;
-import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.PositionsEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.service.BuildMainActionBarService;
 import br.com.flygowmobile.service.BuildMenuItemsService;
 import br.com.flygowmobile.service.ClickProductContentService;
 
@@ -74,6 +65,9 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private BuildMenuItemsService menuItemsService;
     private ClickProductContentService clickProductContentService;
+
+    public BuildMainActionBarService mainActionBarService;
+
     private List<RowItem> rowItems;
     private CustomAdapter adapter;
     private RepositoryAdvertisement repositoryAdvertisement;
@@ -92,7 +86,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         menuIcons = getResources().obtainTypedArray(R.array.icons);
         menuItemsService = new BuildMenuItemsService(this, menuIcons);
@@ -114,7 +107,10 @@ public class MainActivity extends Activity {
         repositoryPromotion = new RepositoryPromotion(this);
 
         //build the main action bar
-        buildCustomActionBar();
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View actionBarView = mInflater.inflate(R.layout.custom_action_bar, null);
+        mainActionBarService = new BuildMainActionBarService(this, actionBarView);
+        mainActionBarService.buildActionBar();
 
         mDrawerToggle = buildDrawerToggle();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
@@ -132,36 +128,6 @@ public class MainActivity extends Activity {
         promotionMediaTask.execute((Void) null);
     }
 
-    private void buildCustomActionBar(){
-        ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        LayoutInflater mInflater = LayoutInflater.from(this);
-
-        View mCustomView = mInflater.inflate(R.layout.custom_action_bar, null);
-        TextView mTitleTextView = (TextView) mCustomView.findViewById(R.id.title_text);
-        mTitleTextView.setText(StaticTitles.MAIN_APP_TITLE.getName());
-
-        String fontChillerPath = "fonts/CHILLER.TTF";
-
-        Typeface chiller = Typeface.createFromAsset(getAssets(), fontChillerPath );
-        mTitleTextView.setTypeface(chiller);
-
-
-        /*ImageButton imageButton = (ImageButton) mCustomView
-                .findViewById(R.id.imageButton);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Refresh Clicked!",
-                        Toast.LENGTH_LONG).show();
-            }
-        });*/
-
-        actionBar.setCustomView(mCustomView);
-        actionBar.setDisplayShowCustomEnabled(true);
-    }
 
     private ActionBarDrawerToggle buildDrawerToggle(){
         return new ActionBarDrawerToggle(this, mDrawerLayout,

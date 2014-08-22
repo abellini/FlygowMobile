@@ -22,14 +22,18 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
+import br.com.flygowmobile.Utils.FunctionUtils;
+import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentRowItem;
+import br.com.flygowmobile.database.RepositoryCoin;
 import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Accompaniment;
+import br.com.flygowmobile.entity.Coin;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Order;
 import br.com.flygowmobile.entity.OrderItem;
@@ -57,6 +61,7 @@ public class OrderService {
     private View qtdObservationsPopup;
 
     private RepositoryTablet repositoryTablet;
+    private RepositoryCoin repositoryCoin;
     private RepositoryOrder repositoryOrder;
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
@@ -67,6 +72,7 @@ public class OrderService {
     public OrderService(Context ctx){
         accompanimentMapper = new AccompanimentMapper(ctx);
         repositoryTablet = new RepositoryTablet(ctx);
+        repositoryCoin = new RepositoryCoin(ctx);
         repositoryOrder = new RepositoryOrder(ctx);
         repositoryOrderItem = new RepositoryOrderItem(ctx);
         repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(ctx);
@@ -82,12 +88,30 @@ public class OrderService {
         this.productItem = productItem;
         this.accompanimentList = accompanimentList;
         this.selects = selects;
-
         if(this.productItem instanceof Food){
             foodOrderAction();
         } else if (this.productItem instanceof Promotion) {
             promotionOrderAction();
         }
+    }
+
+    public Double getTotalOrderValue(){
+        double totalValue = 0.0;
+        List<OrderItem> orderItems = repositoryOrderItem.listAll();
+        for(OrderItem orderItem : orderItems){
+            totalValue += (orderItem.getQuantity() * orderItem.getValue());
+            List<Accompaniment> accompaniments =
+                    repositoryOrderItemAccompaniment.findByOrderItemId(orderItem.getOrderItemId());
+            for(Accompaniment accompaniment : accompaniments){
+                totalValue += accompaniment.getValue();
+            }
+        }
+        return totalValue;
+    }
+
+    public String getFormatedTotalValue(){
+        Coin coin = repositoryCoin.findById(repositoryTablet.findLast().getCoinId());
+        return FunctionUtils.getMonetaryString(coin, getTotalOrderValue());
     }
 
     private void foodOrderAction(){
@@ -225,7 +249,7 @@ public class OrderService {
         int actualQtd = Integer.parseInt(view.getText() + "");
         if(actualQtd < MAX_QUANTITY){
             actualQtd++;
-            view.setText(addZero(actualQtd));
+            view.setText(FunctionUtils.addZero(actualQtd));
         }
     }
 
@@ -233,15 +257,8 @@ public class OrderService {
         int actualQtd = Integer.parseInt(view.getText()+"");
         if(actualQtd > MIN_QUANTITY){
             actualQtd--;
-            view.setText(addZero(actualQtd));
+            view.setText(FunctionUtils.addZero(actualQtd));
         }
-    }
-
-    private String addZero(int value){
-        if(value < 10){
-            return "0" + value;
-        }
-        return value + "";
     }
 
     private void promotionOrderAction(){
@@ -278,6 +295,9 @@ public class OrderService {
                 }
             }
             progressOrderItemDialog.dismiss();
+            //Refresh the actionBar total order
+            ((MainActivity)activity).mainActionBarService.refreshActionBarPrice();
+
             //TODO: GO TO THE CART ACTIVITY
         }catch (Exception e){
             Log.e("OrderService", e.getMessage());
