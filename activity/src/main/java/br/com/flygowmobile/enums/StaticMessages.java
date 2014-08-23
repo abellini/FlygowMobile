@@ -37,6 +37,10 @@ public enum StaticMessages {
     OBSERVATIONS_EMPTY_TEXT("Click here and enter your observations..."),
     DEFAULT_QTD_ORDER("01"),
     LOAD_ORDER_ITEM("Adding order item..."),
+    CALLING_ATTENDANT("Calling attendant..."),
+    CONFIRM_CALL_ATTENDANT("Click in 'Yes' to call the attendant."),
+    CALL_ATTENDANT("The attendant was called. Wait, it will come to his table."),
+    CALL_ATTENDANT_ERROR("There was an error call attendant. Please call it the conventional way."),
     GENERIC("");
 
     private String name;

@@ -8,7 +8,8 @@ public enum ServerController {
     CONNECT("connect"),
     REGISTER_DETAILS("registerDetails"),
     INITIALIZE_VIDEO_PRODUCTS("initializeProductVideo"),
-    INITIALIZE_PHOTO_PRODUCTS("initializeProductImages");
+    INITIALIZE_PHOTO_PRODUCTS("initializeProductImages"),
+    CALL_ATTENDANT("callAttendant");
 
     private String name;
 

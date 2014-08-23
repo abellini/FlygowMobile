@@ -20,7 +20,10 @@ public enum StaticTitles {
     QUANTITY_CHOICES("Choice the Quantity"),
     ENTER_OBSERVATIONS("Enter with Observations"),
     MAIN_APP_TITLE("Flygow - Digital Menu"),
-    YOUR_ACCOUNT("Your Account");
+    YOUR_ACCOUNT("Your Account"),
+    CALL_ATTENDANT("Calling Attendant"),
+    YES("Yes"),
+    NO("No")
     ;
 
     private String name;
