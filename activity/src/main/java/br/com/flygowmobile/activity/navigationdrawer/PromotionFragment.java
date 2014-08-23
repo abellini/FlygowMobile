@@ -1,16 +1,13 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,11 +15,9 @@ import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.database.RepositoryFoodPromotion;
 import br.com.flygowmobile.database.RepositoryPromotion;
-import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.enums.StaticTitles;
-import br.com.flygowmobile.service.OrderService;
 
 /**
  * Created by Tiago Rocha Gomes on 21/07/14.
@@ -64,19 +59,19 @@ public class PromotionFragment extends ProductFragment {
         defineDirectionalArrows(rootView, itemPosition, mDrawerList, fromArrow);
         defineSwipe(rootView, itemPosition, mDrawerList);
         defineOrderButton(rootView);
-        if(fromArrow){
+        if (fromArrow) {
             alignProductDetailsToCenter(rootView);
         }
         return rootView;
     }
 
-    private void setInfo(View rootView){
-        Button btnInfo = (Button)rootView.findViewById(R.id.btnNutritionalInfo);
+    private void setInfo(View rootView) {
+        Button btnInfo = (Button) rootView.findViewById(R.id.btnNutritionalInfo);
         List<Food> foods = repositoryFoodPromotion.listByPromotion(promotionItem.getPromotionId());
-        if(foods != null && !foods.isEmpty()){
+        if (foods != null && !foods.isEmpty()) {
             btnInfo.setVisibility(View.VISIBLE);
             String info = "";
-            for(Food food : foods){
+            for (Food food : foods) {
                 info += " - " + food.getName() + "<br>";
             }
             final String finalInfo = info;
@@ -85,12 +80,12 @@ public class PromotionFragment extends ProductFragment {
                     FlygowAlertDialog.createInfoPopup(activity, StaticTitles.PROMOTION_INFO, finalInfo);
                 }
             });
-        }else{
+        } else {
             btnInfo.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void defineOrderButton(View rootView){
+    private void defineOrderButton(View rootView) {
         Button btnOrder = (Button) rootView.findViewById(R.id.btnOrder);
         TextView price = (TextView) rootView.findViewById(R.id.price);
         price.setOnClickListener(getOrderClick(null, promotionItem, null));

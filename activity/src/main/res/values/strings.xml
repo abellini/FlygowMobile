@@ -21,5 +21,11 @@
     </array>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="enviar_pedido">Enviar Order</string>
+    <string name="total_value">Total Value</string>
+    <string name="price_unit">Unit Value</string>
+    <string name="qtde">Qtd</string>
+    <string name="pedido">Order:</string>
+    <string name="acompanhamentos">Accompaniments</string>
 
 </resources>

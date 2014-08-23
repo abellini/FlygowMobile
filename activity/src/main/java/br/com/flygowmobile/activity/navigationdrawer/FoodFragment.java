@@ -1,40 +1,25 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
-import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
-import br.com.flygowmobile.database.RepositoryAccompaniment;
 import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryFoodAccompaniment;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
-import br.com.flygowmobile.entity.FoodAccompaniment;
-import br.com.flygowmobile.entity.Product;
-import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
-import br.com.flygowmobile.mapper.AccompanimentMapper;
-import br.com.flygowmobile.service.AccompanimentItemClickService;
-import br.com.flygowmobile.service.OrderService;
 
 /**
  * Created by Tiago Rocha Gomes on 21/07/14.
@@ -80,22 +65,22 @@ public class FoodFragment extends ProductFragment {
         defineDirectionalArrows(rootView, itemPosition, mDrawerList, fromArrow);
         defineSwipe(rootView, itemPosition, mDrawerList);
         defineOrderButton(rootView, accompanimentList, foodItem, selects);
-        if(fromArrow){
+        if (fromArrow) {
             alignProductDetailsToCenter(rootView);
         }
         return rootView;
     }
 
-    private void setProductNutritionalInfo(View rootView){
-        Button btnInfo = (Button)rootView.findViewById(R.id.btnNutritionalInfo);
-        if(foodItem != null && foodItem.getNutritionalInfo() != null && !foodItem.getNutritionalInfo().isEmpty()){
+    private void setProductNutritionalInfo(View rootView) {
+        Button btnInfo = (Button) rootView.findViewById(R.id.btnNutritionalInfo);
+        if (foodItem != null && foodItem.getNutritionalInfo() != null && !foodItem.getNutritionalInfo().isEmpty()) {
             btnInfo.setVisibility(View.VISIBLE);
             btnInfo.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     FlygowAlertDialog.createInfoPopup(activity, StaticTitles.INFORMATION, foodItem.getNutritionalInfo());
                 }
             });
-        }else{
+        } else {
             btnInfo.setVisibility(View.INVISIBLE);
         }
     }

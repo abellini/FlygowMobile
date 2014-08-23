@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1">
+
+    <TextView
+        android:id="@+id/lbTotalPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/vlTotal"
+        android:text="Total: "
+        android:textColor="#40403e"
+        android:textSize="26dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/vlTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/btnEnviarPedido"
+        android:inputType="number"
+        android:textColor="#1b5869"
+        android:textSize="26dp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnEnviarPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/vlTotal"
+        android:text="@string/enviar_pedido" />
+</RelativeLayout>
+
+
+
+

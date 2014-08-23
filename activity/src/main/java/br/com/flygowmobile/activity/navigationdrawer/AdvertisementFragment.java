@@ -17,29 +17,23 @@ import android.widget.VideoView;
 import android.widget.ViewFlipper;
 
 import java.io.ByteArrayInputStream;
-
 import java.io.IOException;
 import java.util.List;
 
-
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.activity.R;
-
 import br.com.flygowmobile.database.RepositoryAdvertisement;
 import br.com.flygowmobile.entity.Advertisement;
 
 public class AdvertisementFragment extends Fragment {
 
+    private static final String ADVERTISEMENT_FRAGMENT_ACTIVITY = "AdvertisementFragment";
     private ViewFlipper viewFlipper;
     private RepositoryAdvertisement repositoryAdvertisement;
 
-
-    private static final String ADVERTISEMENT_FRAGMENT_ACTIVITY = "AdvertisementFragment";
-
-
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        viewFlipper = (ViewFlipper)inflater.inflate(R.layout.advertisement_fragment, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        viewFlipper = (ViewFlipper) inflater.inflate(R.layout.advertisement_fragment, container, false);
         repositoryAdvertisement = new RepositoryAdvertisement(getActivity());
         List<Advertisement> allAdvertisements = repositoryAdvertisement.listAll();
         defineAdvertisementViews(viewFlipper, allAdvertisements);
@@ -61,16 +55,19 @@ public class AdvertisementFragment extends Fragment {
                 }
             }
 
-            public void onAnimationRepeat(Animation animation) {}
-            public void onAnimationEnd(Animation animation) {}
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            public void onAnimationEnd(Animation animation) {
+            }
         });
 
-        if(allAdvertisements.size() > 1){
+        if (allAdvertisements.size() > 1) {
             viewFlipper.startFlipping();
         }
 
         //Tenta executar caso a primeira view seja do tipo vídeo. Se não, cai no catch e continua o flipper
-        try{
+        try {
             final VideoView videoView = (VideoView) viewFlipper.getCurrentView();
             viewFlipper.stopFlipping();
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
@@ -82,7 +79,7 @@ public class AdvertisementFragment extends Fragment {
                 }
             });
             videoView.start();
-        }catch (Exception e){
+        } catch (Exception e) {
             Log.w(ADVERTISEMENT_FRAGMENT_ACTIVITY, "First advertisements element is not a video!");
         }
 
@@ -90,9 +87,9 @@ public class AdvertisementFragment extends Fragment {
     }
 
 
-    private void defineAdvertisementViews(ViewFlipper viewFlipper, List<Advertisement> allAdvertisements){
-        if(viewFlipper != null && allAdvertisements != null && !allAdvertisements.isEmpty()){
-            for(Advertisement advertisement : allAdvertisements){
+    private void defineAdvertisementViews(ViewFlipper viewFlipper, List<Advertisement> allAdvertisements) {
+        if (viewFlipper != null && allAdvertisements != null && !allAdvertisements.isEmpty()) {
+            for (Advertisement advertisement : allAdvertisements) {
 
                 ImageView imgview = new ImageView(getActivity());
                 ViewFlipper.LayoutParams imgLayout = new ViewFlipper.LayoutParams(
@@ -108,7 +105,7 @@ public class AdvertisementFragment extends Fragment {
                 videoLayout.setMargins(137, 0, 0, 0);
                 videoView.setLayoutParams(videoLayout);
 
-                if(advertisement.getVideoName() != null && !advertisement.getVideoName().equals("")){
+                if (advertisement.getVideoName() != null && !advertisement.getVideoName().equals("")) {
                     try {
                         String videoPath = MediaUtils.getVideo(getActivity().getApplicationContext(), advertisement.getVideoName());
                         videoView.setVideoPath(videoPath);
@@ -124,7 +121,7 @@ public class AdvertisementFragment extends Fragment {
                             viewFlipper.addView(imgview);
                         }
                     }
-                }else {
+                } else {
                     byte[] photo = advertisement.getPhoto();
                     if (photo != null && photo.length > 0) {
                         ByteArrayInputStream imageStream = new ByteArrayInputStream(photo);

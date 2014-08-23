@@ -15,10 +15,10 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +27,9 @@ import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentRowItem;
+import br.com.flygowmobile.activity.navigationdrawer.OrderRowItem;
 import br.com.flygowmobile.database.RepositoryCoin;
+import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
@@ -52,30 +54,31 @@ import br.com.flygowmobile.mapper.AccompanimentMapper;
  */
 public class OrderService {
 
+    private static final String BASKET_FRAGMENT = "OrderService";
+    private static final int MAX_QUANTITY = 99;
+    private static final int MIN_QUANTITY = 1;
     private AccompanimentMapper accompanimentMapper;
     private Activity activity;
     private Product productItem;
     private List<Accompaniment> accompanimentList;
     private Map<Long, CheckBox> selects;
-
     private View qtdObservationsPopup;
-
     private RepositoryTablet repositoryTablet;
     private RepositoryCoin repositoryCoin;
     private RepositoryOrder repositoryOrder;
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
-
-    private static final int MAX_QUANTITY = 99;
-    private static final int MIN_QUANTITY = 1;
+    private RepositoryFood repositoryFood;
 
     public OrderService(Context ctx){
-        accompanimentMapper = new AccompanimentMapper(ctx);
-        repositoryTablet = new RepositoryTablet(ctx);
-        repositoryCoin = new RepositoryCoin(ctx);
-        repositoryOrder = new RepositoryOrder(ctx);
-        repositoryOrderItem = new RepositoryOrderItem(ctx);
-        repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(ctx);
+        this.accompanimentMapper = new AccompanimentMapper(ctx);
+        this.repositoryTablet = new RepositoryTablet(ctx);
+        this.repositoryCoin = new RepositoryCoin(ctx);
+        this.repositoryOrder = new RepositoryOrder(ctx);
+        this.repositoryOrderItem = new RepositoryOrderItem(ctx);
+        this.repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(ctx);
+        this.repositoryOrderItem = new RepositoryOrderItem(ctx);
+        this.repositoryFood = new RepositoryFood(ctx);
     }
 
     public void orderAction(
@@ -112,6 +115,28 @@ public class OrderService {
     public String getFormatedTotalValue(){
         Coin coin = repositoryCoin.findById(repositoryTablet.findLast().getCoinId());
         return FunctionUtils.getMonetaryString(coin, getTotalOrderValue());
+    }
+
+    public String getFormatedValue(Double value) {
+        Coin coin = repositoryCoin.findById(repositoryTablet.findLast().getCoinId());
+        return FunctionUtils.getMonetaryString(coin, value);
+    }
+
+    public List<OrderRowItem> populateOrderItemList() {
+
+        List<OrderItem> itemsList = this.repositoryOrderItem.listAll();
+        List<OrderRowItem> orderRowItemList = new ArrayList<OrderRowItem>();
+        for (OrderItem item : itemsList) {
+            Food food = repositoryFood.findById(item.getFoodId());
+            OrderRowItem row = new OrderRowItem(item.getFoodId(), 0, food.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+            orderRowItemList.add(row);
+        }
+        return orderRowItemList;
+    }
+
+
+    public void sendOrderToServer() {
+
     }
 
     private void foodOrderAction(){
@@ -325,4 +350,6 @@ public class OrderService {
         }
         return order;
     }
+
+
 }

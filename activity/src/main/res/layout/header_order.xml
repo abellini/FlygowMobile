@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingBottom="2dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:paddingTop="2dp">
+
+        <TextView
+            android:id="@+id/lblPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="16dp"
+            android:text="@string/pedido"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lblNrPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/lblPedido"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lblCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblPedido"
+            android:layout_toLeftOf="@+id/lblDescription"
+            android:paddingRight="68dp" />
+
+        <TextView
+            android:id="@+id/lblDescriptionOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblPedido"
+            android:layout_toRightOf="@+id/lblCheckbox"
+            android:paddingRight="520dp"
+            android:text="@string/description"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lblAcompOrderItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblPedido"
+            android:layout_toRightOf="@+id/lblDescriptionOrder"
+            android:paddingRight="50dp"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lblQtdTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblPedido"
+            android:layout_toRightOf="@+id/lblAcompOrderItem"
+            android:paddingRight="60dp"
+            android:text="@string/qtde"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lblPriceUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblPedido"
+            android:layout_toRightOf="@+id/lblQtdTitle"
+            android:paddingRight="62dp"
+            android:text="@string/price_unit"
+            android:textSize="20dp" />
+
+        <TextView
+            android:id="@+id/lblPriceTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblPedido"
+            android:layout_toRightOf="@+id/lblPriceUnit"
+            android:text="@string/total_value"
+            android:textSize="20dp" />
+
+    </RelativeLayout>
+</LinearLayout>
