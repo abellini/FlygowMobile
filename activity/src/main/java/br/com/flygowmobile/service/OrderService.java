@@ -33,6 +33,7 @@ import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
+import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Coin;
@@ -69,6 +70,7 @@ public class OrderService {
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
     private RepositoryFood repositoryFood;
+    private RepositoryPromotion repositoryPromotion;
 
     public OrderService(Context ctx){
         this.accompanimentMapper = new AccompanimentMapper(ctx);
@@ -79,6 +81,7 @@ public class OrderService {
         this.repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(ctx);
         this.repositoryOrderItem = new RepositoryOrderItem(ctx);
         this.repositoryFood = new RepositoryFood(ctx);
+        this.repositoryPromotion = new RepositoryPromotion(ctx);
     }
 
     public void orderAction(
@@ -127,9 +130,15 @@ public class OrderService {
         List<OrderItem> itemsList = this.repositoryOrderItem.listAll();
         List<OrderRowItem> orderRowItemList = new ArrayList<OrderRowItem>();
         for (OrderItem item : itemsList) {
-            Food food = repositoryFood.findById(item.getFoodId());
-            OrderRowItem row = new OrderRowItem(item.getFoodId(), 0, food.getName(), item.getObservations(), item.getQuantity(), item.getValue());
-            orderRowItemList.add(row);
+            if(ProductTypeEnum.FOOD.getName().equals(item.getProductType())){
+                Food food = repositoryFood.findById(item.getFoodId());
+                OrderRowItem row = new OrderRowItem(item.getFoodId(), 0, food.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+                orderRowItemList.add(row);
+            } else if (ProductTypeEnum.PROMOTION.getName().equals(item.getProductType())){
+                Promotion promotion = repositoryPromotion.findById(item.getFoodId());
+                OrderRowItem row = new OrderRowItem(item.getFoodId(), 0, promotion.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+                orderRowItemList.add(row);
+            }
         }
         return orderRowItemList;
     }
@@ -293,7 +302,7 @@ public class OrderService {
 
     private void saveOrderItem(Product item){
         ProgressDialog progressOrderItemDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
-                StaticMessages.LOAD_ORDER_ITEM.getName(), true);;
+                StaticMessages.LOAD_ORDER_ITEM.getName(), true);
         try{
             Order order = getCurrentOrder();
             final TextView quantityView = (TextView)qtdObservationsPopup.findViewById(R.id.qtdNumber);
@@ -309,8 +318,9 @@ public class OrderService {
             }
             orderItem.setQuantity(Integer.parseInt(quantityView.getText().toString()));
             orderItem.setValue(item.getValue());
-            orderItem.setObservations(obsDescView.getText().toString());
+            orderItem.setObservations(obsDescView.getText().toString().isEmpty() ? StaticMessages.NO_OBSERVATIONS.getName() : obsDescView.getText().toString());
             orderItem.setOrderItemId(repositoryOrderItem.save(orderItem));
+
             if(orderItem.getOrderItemId() != -1 && selects != null && !selects.isEmpty()){
                 for(Long accId : selects.keySet()){
                     OrderItemAccompaniment orderItemAccompaniment = new OrderItemAccompaniment();

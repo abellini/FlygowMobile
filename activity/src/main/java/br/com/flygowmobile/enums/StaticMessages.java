@@ -35,6 +35,7 @@ public enum StaticMessages {
     QUANTITY_SUBTILE("Use the buttons to define the quantity of products in this order"),
     OBSERVATIONS_SUBTITLE("Describe your observations about this order"),
     OBSERVATIONS_EMPTY_TEXT("Click here and enter your observations..."),
+    NO_OBSERVATIONS("No Observations"),
     DEFAULT_QTD_ORDER("01"),
     LOAD_ORDER_ITEM("Adding order item..."),
     CALLING_ATTENDANT("Calling attendant..."),

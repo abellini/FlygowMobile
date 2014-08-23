@@ -22,16 +22,18 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
 
     @Override
     public long save(OrderItem orderItem) {
-        long id = orderItem.getFoodId();
-
+        long orderItemId = orderItem.getOrderItemId() > 0 ? orderItem.getOrderItemId() : -1;
         // Pesquisa por Food porque o id do Item ainda não existe
-        OrderItem o = findByFood(id);
-        if (o != null) {
-            update(orderItem);
-        } else {
-            id = insert(orderItem);
+        OrderItem o = null;
+        if(orderItemId > 0){
+            o = findById(orderItemId);
         }
-        return id;
+        if (o != null) {
+            orderItemId = update(orderItem);
+        } else {
+            orderItemId = insert(orderItem);
+        }
+        return orderItemId;
     }
 
     @Override
@@ -113,9 +115,9 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         return null;
     }
 
-    public OrderItem findByFood(long foodId) {
+    public OrderItem findByFood(long orderId, long foodId) {
         try {
-            Cursor c = db.query(true, OrderItems.TABLE_NAME, OrderItem.columns, OrderItems.COLUMN_NAME_FOOD_ID + "=" + foodId, null, null, null, null, null);
+            Cursor c = db.query(true, OrderItems.TABLE_NAME, OrderItem.columns, OrderItems.COLUMN_NAME_FOOD_ID + "=" + foodId + " AND " + OrderItems.COLUMN_NAME_ORDER_ID + "=" + orderId, null, null, null, null, null);
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
