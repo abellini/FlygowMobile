@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -23,8 +24,8 @@ import org.json.JSONObject;
 import java.util.Arrays;
 
 import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.R;
-import br.com.flygowmobile.activity.navigationdrawer.BasketFragment;
 
 import br.com.flygowmobile.activity.navigationdrawer.FinalizeServiceFragment;
 import br.com.flygowmobile.database.RepositoryTablet;
@@ -114,9 +115,9 @@ public class BuildMainActionBarService {
 
             @Override
             public void onClick(View view) {
-                Fragment fragment = new BasketFragment();
-                FragmentManager fragmentManager = activity.getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+                Intent it = new Intent(activity, CartActivity.class);
+                activity.startActivity(it);
+                activity.finish();
             }
         });
     }

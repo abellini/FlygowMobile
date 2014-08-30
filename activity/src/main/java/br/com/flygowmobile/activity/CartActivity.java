@@ -1,6 +1,6 @@
-package br.com.flygowmobile.activity.navigationdrawer;
+package br.com.flygowmobile.activity;
 
-import android.app.ListFragment;
+import android.app.Activity;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,39 +15,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.activity.navigationdrawer.OrderAdapter;
+import br.com.flygowmobile.activity.navigationdrawer.OrderRowItem;
 import br.com.flygowmobile.service.OrderService;
 
-public class BasketFragment extends ListFragment {
+/**
+ * Created by Tiago Rocha Gomes on 30/08/14.
+ */
+public class CartActivity extends Activity {
+
+    private static final String CART_ACTIVITY = "CartActivity";
 
     private ViewGroup header;
     private ViewGroup footer;
+    private View cartView;
     private OrderService orderService;
     private Map<Long, CheckBox> selects = new HashMap<Long, CheckBox>();
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LayoutInflater inflater = LayoutInflater.from(this);
 
-        View rootView = inflater.inflate(R.layout.list_basket_fragment, container, false);
+        this.cartView = inflater.inflate(R.layout.cart_list_orders, null);
+        setContentView(cartView);
 
         this.header = (ViewGroup) inflater.inflate(R.layout.header_order, null, false);
         this.footer = (ViewGroup) inflater.inflate(R.layout.footer_order, null, false);
+        this.orderService = new OrderService(this);
 
-        this.orderService = new OrderService(getActivity());
-
-        defineFonts(rootView);
-
-        return rootView;
+        defineFonts();
+        fillCartOrders();
     }
 
-    protected void defineFonts(View rootView) {
+    protected void defineFonts() {
         // Font path
         String fontGabriolaPath = "fonts/GABRIOLA.TTF";
         String fontErasBoldPath = "fonts/ERASBD.TTF";
         String fontErasMediumPath = "fonts/ERASMD.TTF";
 
-        Typeface gabriola = Typeface.createFromAsset(getActivity().getAssets(), fontGabriolaPath);
+        Typeface gabriola = Typeface.createFromAsset(getAssets(), fontGabriolaPath);
 
         //Header
         TextView txtCheckbox = (TextView) this.header.findViewById(R.id.lblCheckbox);
@@ -69,17 +76,14 @@ public class BasketFragment extends ListFragment {
 
     }
 
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        ListView listView = (ListView) getListView();
+    private void fillCartOrders() {
+        ListView listView = (ListView) cartView.findViewById(R.id.cartList);
 
         listView.addHeaderView(this.header);
         listView.addFooterView(this.footer);
 
         List<OrderRowItem> orderItemRow = this.orderService.populateOrderItemList();
-        setListAdapter(new OrderAdapter(getActivity(), orderItemRow, selects));
+        listView.setAdapter(new OrderAdapter(this, orderItemRow, selects));
 
         TextView txtTotal = (TextView) footer.findViewById(R.id.vlTotal);
         txtTotal.setText(this.orderService.getFormatedTotalValue());
@@ -92,6 +96,4 @@ public class BasketFragment extends ListFragment {
             }
         });
     }
-
-
 }

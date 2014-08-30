@@ -65,7 +65,6 @@ public class SplashScreen extends Activity implements Runnable {
 
     private void proceed(Tablet configs) {
         Intent it = new Intent(this, RegisterActivity.class);
-        ;
         if (configs == null) {
             it.putExtra("configs", false);
             progressDialog.dismiss();
