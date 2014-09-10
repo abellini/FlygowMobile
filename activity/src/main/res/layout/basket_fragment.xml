@@ -2,76 +2,119 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="@drawable/item_cart_round_shape">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:paddingBottom="2dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="4dp"
-        android:paddingTop="2dp">
-
-        <CheckBox
-            android:id="@+id/checkboxOrder"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="72dp"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:paddingRight="32dp" />
+            android:gravity="center_vertical|center_horizontal">
+            <CheckBox
+                android:id="@+id/checkboxOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="348dp"
+            android:layout_height="wrap_content"
+            android:gravity="left">
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:textColor="#4d4d4d"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/observations"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginLeft="2dp"
+                android:textStyle="italic"
+                android:textColor="#1b5869"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="213dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/accIcon"
+            android:layout_width="32dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/acc_icon"
+            android:clickable="false"
+            />
         <TextView
-            android:id="@+id/title"
+            android:id="@+id/accTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/checkboxOrder"
-            android:paddingRight="460dp"
+            android:layout_toRightOf="@id/accIcon"
+            android:text="Clique Aqui!"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="3dp"
             android:textColor="#4d4d4d"
             android:textSize="18sp" />
 
         <TextView
-            android:id="@+id/observations"
+            android:id="@+id/accSubtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:layout_toRightOf="@+id/checkboxOrder"
+            android:layout_toRightOf="@id/accIcon"
+            android:layout_below="@+id/accTitle"
+            android:text="Visualize os selecionados"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="-2dp"
+            android:textStyle="italic"
             android:textColor="#1b5869"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
-        <Button
-            android:id="@+id/btnAccompOrderItem"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/title" />
-
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:gravity="center">
         <TextView
             android:id="@+id/quantity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/btnAccompOrderItem"
+            android:layout_marginTop="12dp"
             android:inputType="number"
-            android:paddingRight="64dp"
             android:textColor="#1b5869"
             android:textSize="18sp" />
-
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="132dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="32dp"
+        android:gravity="center|center_horizontal">
         <TextView
             android:id="@+id/priceUnit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/quantity"
-            android:inputType="numberDecimal"
-            android:paddingRight="64dp"
+            android:layout_marginTop="12dp"
             android:textColor="#1b5869"
             android:textSize="18sp" />
-
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="23dp"
+        android:gravity="center|center_horizontal">
         <TextView
             android:id="@+id/priceTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/priceUnit"
-            android:inputType="numberDecimal"
+            android:layout_marginTop="12dp"
             android:textColor="#1b5869"
             android:textSize="18sp" />
-
     </RelativeLayout>
 </LinearLayout>

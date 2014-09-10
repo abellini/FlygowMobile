@@ -117,7 +117,6 @@ public class BuildMainActionBarService {
             public void onClick(View view) {
                 Intent it = new Intent(activity, CartActivity.class);
                 activity.startActivity(it);
-                activity.finish();
             }
         });
     }

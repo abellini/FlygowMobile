@@ -2,6 +2,8 @@ package br.com.flygowmobile.activity.navigationdrawer;
 
 import java.io.Serializable;
 
+import br.com.flygowmobile.Utils.FunctionUtils;
+
 /**
  * Created by alexandre on 8/13/14.
  */
@@ -13,6 +15,8 @@ public class OrderRowItem implements Serializable {
     private int quantity;
     private Double priceUnit;
     private Double priceTotal;
+
+    private static String UNIT_SULFIX = "un.";
 
     public OrderRowItem() {
     }
@@ -60,8 +64,8 @@ public class OrderRowItem implements Serializable {
         this.observations = observations;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public String getQuantity() {
+        return FunctionUtils.addZero(quantity) + " " + UNIT_SULFIX;
     }
 
     public void setQuantity(int quantity) {

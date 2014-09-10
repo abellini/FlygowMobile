@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">FlyGow</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main">FlyGow Digital Menu</string>
     <string name="title_activity_splash_screen">FlyGow</string>
     <string name="title_activity_register_detail">Register Detail</string>
-    <string name="description">Description:</string>
-    <string name="nutritional">Nutritional Information:</string>
-    <string name="action_btn_basket">Meus Pedidos</string>
-    <string name="value">Value:</string>
-    <string name="action_btn_call_attendant">Chamar Atendente</string>
-    <string name="finalizeService">Pedir a Conta</string>
-    <string name="defaultAllPrice">0,00</string>
-
     <array name="icons">
         <item>@drawable/lanche_header</item>
         <item>@drawable/plus</item>
         <item>@drawable/promotion</item>
     </array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="enviar_pedido">Enviar Order</string>
-    <string name="total_value">Total Value</string>
-    <string name="price_unit">Unit Value</string>
-    <string name="qtde">Qtd</string>
-    <string name="pedido">Order:</string>
-    <string name="acompanhamentos">Accompaniments</string>
-
 </resources>

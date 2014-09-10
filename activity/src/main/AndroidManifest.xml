@@ -29,7 +29,7 @@
             android:parentActivityName="br.com.flygowmobile.activity.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="MainActivity" />
+                android:value="br.com.flygowmobile.activity.MainActivity" />
         </activity>
         <activity
             android:name="br.com.flygowmobile.activity.RegisterDetailActivity"
@@ -37,7 +37,7 @@
             android:parentActivityName="br.com.flygowmobile.activity.RegisterActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="RegisterActivity" />
+                android:value="br.com.flygowmobile.activity.RegisterActivity" />
         </activity>
     </application>
 

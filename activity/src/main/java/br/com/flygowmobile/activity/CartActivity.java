@@ -50,29 +50,35 @@ public class CartActivity extends Activity {
 
     protected void defineFonts() {
         // Font path
-        String fontGabriolaPath = "fonts/GABRIOLA.TTF";
-        String fontErasBoldPath = "fonts/ERASBD.TTF";
-        String fontErasMediumPath = "fonts/ERASMD.TTF";
+        String fontChillerPath = "fonts/CHILLER.TTF";
+        Typeface chiller = Typeface.createFromAsset(getAssets(), fontChillerPath);
 
-        Typeface gabriola = Typeface.createFromAsset(getAssets(), fontGabriolaPath);
+        String fontErasPath = "fonts/ERASMD.TTF";
+        Typeface eras = Typeface.createFromAsset(getAssets(), fontErasPath);
+
+        //Title
+        TextView cartTitle = (TextView) this.cartView.findViewById(R.id.cartTitle);
+        TextView cartSubTitle = (TextView) this.cartView.findViewById(R.id.cartSubTitle);
+        cartTitle.setTypeface(chiller);
+        cartSubTitle.setTypeface(eras);
 
         //Header
-        TextView txtCheckbox = (TextView) this.header.findViewById(R.id.lblCheckbox);
         TextView txtDescription = (TextView) this.header.findViewById(R.id.lblDescriptionOrder);
         TextView txtQtde = (TextView) this.header.findViewById(R.id.lblQtdTitle);
+        TextView txtAccompaniments = (TextView) this.header.findViewById(R.id.lblAccompaniments);
         TextView txtPriceUnit = (TextView) this.header.findViewById(R.id.lblPriceUnit);
         TextView txtPriceTotal = (TextView) this.header.findViewById(R.id.lblPriceTotal);
-        txtCheckbox.setTypeface(gabriola);
-        txtDescription.setTypeface(gabriola);
-        txtQtde.setTypeface(gabriola);
-        txtPriceUnit.setTypeface(gabriola);
-        txtPriceTotal.setTypeface(gabriola);
+        txtDescription.setTypeface(chiller);
+        txtQtde.setTypeface(chiller);
+        txtAccompaniments.setTypeface(chiller);
+        txtPriceUnit.setTypeface(chiller);
+        txtPriceTotal.setTypeface(chiller);
 
         // Footer
         TextView txtTotal = (TextView) this.footer.findViewById(R.id.vlTotal);
         TextView txtVlTotal = (TextView) this.footer.findViewById(R.id.lbTotalPedido);
-        txtTotal.setTypeface(gabriola);
-        txtVlTotal.setTypeface(gabriola);
+        txtTotal.setTypeface(chiller);
+        txtVlTotal.setTypeface(chiller);
 
     }
 
@@ -88,7 +94,7 @@ public class CartActivity extends Activity {
         TextView txtTotal = (TextView) footer.findViewById(R.id.vlTotal);
         txtTotal.setText(this.orderService.getFormatedTotalValue());
 
-        Button mRegisterButton = (Button) footer.findViewById(R.id.btnEnviarPedido);
+        Button mRegisterButton = (Button) cartView.findViewById(R.id.btnEnviarPedido);
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
