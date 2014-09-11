@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_cart">
+    android:orientation="vertical">
+    <!--android:background="@drawable/background_cart">-->
 
     <RelativeLayout
-        android:layout_height="100dp"
-        android:layout_width="match_parent">
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
         <TextView
             android:id="@+id/cartTitle"
             android:layout_width="230dp"
             android:layout_height="110dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="20dp"
             android:background="@drawable/title_round_shape"
             android:gravity="top|center_horizontal"
             android:paddingTop="5dp"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="20dp"
+            android:text="Meus Pedidos"
             android:textColor="#6f2020"
             android:textSize="45dp"
-            android:textStyle="bold"
-            android:text="Meus Pedidos"
-        />
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/cartSubTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|center_horizontal"
-            android:textColor="#4d4d4d"
-            android:textStyle="italic"
             android:layout_alignBottom="@id/cartTitle"
+            android:gravity="center|center_horizontal"
             android:paddingBottom="5dp"
             android:text="Visualize seu pedidos e confirme-os \n clicando em ‘Enviar Pedido’"
-            android:textSize="12dp" />
+            android:textColor="#4d4d4d"
+            android:textSize="12dp"
+            android:textStyle="italic" />
     </RelativeLayout>
+
     <RelativeLayout
-        android:layout_height="0dp"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_vertical">
+
         <ListView
             android:id="@+id/cartList"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:dividerHeight="5dp"
             android:divider="#00ffffff"
+            android:dividerHeight="5dp"
             android:scrollbarStyle="outsideInset" />
     </RelativeLayout>
+
     <RelativeLayout
-        android:layout_height="100dp"
         android:layout_width="match_parent"
+        android:layout_height="100dp"
         android:gravity="right">
 
         <Button

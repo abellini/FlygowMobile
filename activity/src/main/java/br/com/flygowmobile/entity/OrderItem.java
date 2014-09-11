@@ -1,5 +1,8 @@
 package br.com.flygowmobile.entity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import br.com.flygowmobile.database.RepositoryOrderItem;
 
 public class OrderItem {
@@ -95,11 +98,31 @@ public class OrderItem {
         return "{" +
                 "\"orderItemId\": " + getOrderItemId() + ", " +
                 "\"quantity\": " + "\"" + getQuantity() + "\", " +
-                "\"observations\": " + getObservations() + ", " +
+                "\"observations\": " + "\"" + null + "\", " +
                 "\"value\": " + "\"" + getValue() + "\", " +
                 "\"foodId\": " + "\"" + getFoodId() + "\", " +
                 "\"orderId\": " + getOrderId() + "\", " +
-                "\"productType\": " + getProductType() +
+                "\"productType\": " + "\"" + getProductType() + "\" " +
                 "}";
     }
+
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderItemId", getOrderItemId());
+            jsonObject.put("quantity", getQuantity());
+            jsonObject.put("observations", getObservations());
+            jsonObject.put("value", getValue());
+            jsonObject.put("foodId", getFoodId());
+            jsonObject.put("orderId", getOrderId());
+            jsonObject.put("productType", getProductType());
+            return jsonObject;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 }

@@ -5,6 +5,9 @@
     <string name="title_activity_main">FlyGow Digital Menu</string>
     <string name="title_activity_splash_screen">FlyGow</string>
     <string name="title_activity_register_detail">Register Detail</string>
+    <string name="value">Value</string>
+    <string name="description">Description</string>
+    <string name="nutritional">Nutritional</string>
     <array name="icons">
         <item>@drawable/lanche_header</item>
         <item>@drawable/plus</item>

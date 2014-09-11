@@ -1,7 +1,5 @@
 package br.com.flygowmobile.enums;
 
-import br.com.flygowmobile.activity.R;
-
 /**
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
@@ -42,6 +40,7 @@ public enum StaticMessages {
     CONFIRM_CALL_ATTENDANT("Click in 'Yes' to call the attendant."),
     CALL_ATTENDANT("The attendant was called. Wait, it will come to his table."),
     CALL_ATTENDANT_ERROR("There was an error call attendant. Please call it the conventional way."),
+    SAVE_ORDER_FROM_SERVER("Please, wait while save order into server!"),
     GENERIC("");
 
     private String name;

@@ -144,8 +144,8 @@ public class OrderService {
     }
 
 
-    public void sendOrderToServer() {
-
+    public List<OrderItem> getOrderListToServer() {
+        return this.repositoryOrderItem.listAll();
     }
 
     private void foodOrderAction(){
@@ -359,6 +359,11 @@ public class OrderService {
             Log.e("OrderService", e.getMessage());
         }
         return order;
+    }
+
+    public Integer getNumberTablet() {
+        Tablet tablet = repositoryTablet.findLast();
+        return tablet.getNumber();
     }
 
 
