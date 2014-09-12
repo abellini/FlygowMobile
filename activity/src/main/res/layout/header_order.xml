@@ -12,7 +12,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="67dp"
-            android:text="Descrição"
             android:textSize="35dp"/>
 
         <TextView
@@ -23,7 +22,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="231dp"
-            android:text="Acompanhamentos"
             android:textSize="35dp" />
 
 
@@ -35,7 +33,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="9dp"
-            android:text="Quantidade"
             android:textSize="35dp" />
 
         <TextView
@@ -46,7 +43,6 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="9dp"
-            android:text="Val. Unit"
             android:textSize="35dp" />
 
         <TextView
@@ -57,6 +53,5 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="9dp"
-            android:text="Val. Total"
             android:textSize="35dp" />
 </LinearLayout>

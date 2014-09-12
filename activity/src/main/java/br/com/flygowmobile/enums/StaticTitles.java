@@ -23,7 +23,16 @@ public enum StaticTitles {
     YOUR_ACCOUNT("Your Account"),
     CALL_ATTENDANT("Calling Attendant"),
     YES("Yes"),
-    NO("No")
+    NO("No"),
+    CART_TITLE("My Orders"),
+    CART_SUBTITLE("See your orders and confirm it \n clicking in 'Send Order'"),
+    CART_HEADER_DESCRIPTION("Description"),
+    CART_HEADER_ACCOMPANIMENTS("Accompaniments"),
+    CART_HEADER_QUANTITY("Quantity"),
+    CART_HEADER_UNIT_VALUE("Unit. Val"),
+    CART_HEADER_TOTAL_VALUE("Total. Val"),
+    CART_ROW_ACC_TITLE("Click Here!"),
+    CART_ROW_ACC_SUBTITLE("View the selected")
     ;
 
     private String name;

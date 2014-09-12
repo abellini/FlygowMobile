@@ -50,6 +50,7 @@ public class PromotionFragment extends ProductFragment {
 
         promotionItem = repositoryPromotion.findById(item.getId());
 
+        defineTexts(rootView);
         defineFonts(rootView);
         setFoodMedia(rootView, promotionItem);
         setProductPrice(rootView, item);

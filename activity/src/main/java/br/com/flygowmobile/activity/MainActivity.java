@@ -128,6 +128,21 @@ public class MainActivity extends Activity {
         promotionMediaTask.execute((Void) null);
     }
 
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        mainActionBarService.refreshActionBarPrice();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     private ActionBarDrawerToggle buildDrawerToggle(){
         return new ActionBarDrawerToggle(this, mDrawerLayout,

@@ -56,6 +56,7 @@ public class FoodFragment extends ProductFragment {
         foodItem = repositoryFood.findById(item.getId());
         accompanimentList = repositoryFoodAccompaniment.findByFoodId(foodItem.getFoodId());
 
+        defineTexts(rootView);
         defineFonts(rootView);
         setFoodMedia(rootView, foodItem);
         setProductPrice(rootView, item);

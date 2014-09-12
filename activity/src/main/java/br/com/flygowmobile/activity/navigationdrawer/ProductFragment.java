@@ -61,6 +61,14 @@ public class ProductFragment extends Fragment {
         return null;
     }
 
+    protected void defineTexts(View rootView){
+        TextView pecaView = (TextView) rootView.findViewById(R.id.peca);
+        TextView clickHereView = (TextView) rootView.findViewById(R.id.clickHere);
+
+        pecaView.setText(StaticMessages.PRICE_DESCRIPTION.getName());
+        clickHereView.setText(StaticMessages.PRICE_SUBDESCRIPTION.getName());
+    }
+
     protected void defineFonts(View rootView) {
         // Font path
         String fontGabriolaPath = "fonts/GABRIOLA.TTF";

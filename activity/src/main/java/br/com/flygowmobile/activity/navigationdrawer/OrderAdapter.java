@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.service.AccompanimentItemClickService;
+import br.com.flygowmobile.service.CartItemClickService;
 import br.com.flygowmobile.service.OrderService;
 
 public class OrderAdapter extends BaseAdapter {
@@ -55,18 +58,19 @@ public class OrderAdapter extends BaseAdapter {
 
                 title.setText(row_pos.getTitle());
                 observations.setText(row_pos.getObservations());
+                titleAcc.setText(StaticTitles.CART_ROW_ACC_TITLE.getName());
+                subTitleAcc.setText(StaticTitles.CART_ROW_ACC_SUBTITLE.getName());
                 quantity.setText(row_pos.getQuantity());
                 priceUnit.setText(orderService.getFormatedValue(row_pos.getPriceUnit()));
                 priceTotal.setText(orderService.getFormatedValue(row_pos.getPriceTotal()));
 
                 CheckBox checkBox = (CheckBox) convertView.findViewById(R.id.checkboxOrder);
-                checkBox.setTag(row_pos.getId());
-                checkBox.setChecked(selects.containsKey(row_pos.getId()));
+                checkBox.setTag(row_pos.getOrderItemId());
+                checkBox.setChecked(selects.containsKey(row_pos.getOrderItemId()));
                 checkBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast toast = Toast.makeText(context, "Action!", Toast.LENGTH_LONG);
-                        toast.show();
+                        CartItemClickService.onMarkItemClick(selects, (CheckBox) v);
                     }
                 });
 

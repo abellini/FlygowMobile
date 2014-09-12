@@ -9,6 +9,7 @@ import br.com.flygowmobile.Utils.FunctionUtils;
  */
 public class OrderRowItem implements Serializable {
     private long id;
+    private long orderItemId;
     private int icon;
     private String title;
     private String observations;
@@ -21,7 +22,8 @@ public class OrderRowItem implements Serializable {
     public OrderRowItem() {
     }
 
-    public OrderRowItem(long id, int icon, String title, String observations, int quantity, Double priceUnit) {
+    public OrderRowItem(long orderItemId, long id, int icon, String title, String observations, int quantity, Double priceUnit) {
+        this.orderItemId = orderItemId;
         this.id = id;
         this.icon = icon;
         this.title = title;
@@ -30,6 +32,14 @@ public class OrderRowItem implements Serializable {
         this.priceUnit = priceUnit;
         this.priceTotal = (priceUnit * quantity);
 
+    }
+
+    public long getOrderItemId() {
+        return orderItemId;
+    }
+
+    public void setOrderItemId(long orderItemId) {
+        this.orderItemId = orderItemId;
     }
 
     public long getId() {

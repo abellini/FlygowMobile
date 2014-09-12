@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.FunctionUtils;
+import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.activity.navigationdrawer.AccompanimentAdapter;
@@ -132,11 +134,11 @@ public class OrderService {
         for (OrderItem item : itemsList) {
             if(ProductTypeEnum.FOOD.getName().equals(item.getProductType())){
                 Food food = repositoryFood.findById(item.getFoodId());
-                OrderRowItem row = new OrderRowItem(item.getFoodId(), 0, food.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+                OrderRowItem row = new OrderRowItem(item.getOrderItemId(), item.getFoodId(), 0, food.getName(), item.getObservations(), item.getQuantity(), item.getValue());
                 orderRowItemList.add(row);
             } else if (ProductTypeEnum.PROMOTION.getName().equals(item.getProductType())){
                 Promotion promotion = repositoryPromotion.findById(item.getFoodId());
-                OrderRowItem row = new OrderRowItem(item.getFoodId(), 0, promotion.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+                OrderRowItem row = new OrderRowItem(item.getOrderItemId(), item.getFoodId(), 0, promotion.getName(), item.getObservations(), item.getQuantity(), item.getValue());
                 orderRowItemList.add(row);
             }
         }
@@ -219,7 +221,7 @@ public class OrderService {
                 DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                        if(selects != null && !selects.isEmpty()){
+                        if (selects != null && !selects.isEmpty()) {
                             selects.clear();
                         }
                     }
@@ -333,7 +335,9 @@ public class OrderService {
             //Refresh the actionBar total order
             ((MainActivity)activity).mainActionBarService.refreshActionBarPrice();
 
-            //TODO: GO TO THE CART ACTIVITY
+            Intent it = new Intent(activity, CartActivity.class);
+            activity.startActivity(it);
+
         }catch (Exception e){
             Log.e("OrderService", e.getMessage());
             progressOrderItemDialog.dismiss();
