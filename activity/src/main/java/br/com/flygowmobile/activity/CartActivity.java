@@ -123,7 +123,7 @@ public class CartActivity extends Activity {
         listView.setAdapter(new OrderAdapter(this, orderItemRow, selects));
 
         TextView txtTotal = (TextView) footer.findViewById(R.id.lbTotalPedido);
-        txtTotal.setText(StaticMessages.CART_TOTAL_VALUE.getName() + this.orderService.getFormatedTotalValue());
+        txtTotal.setText(StaticMessages.CART_TOTAL_VALUE.getName() + " " + this.orderService.getFormatedTotalValue());
     }
 
 }
