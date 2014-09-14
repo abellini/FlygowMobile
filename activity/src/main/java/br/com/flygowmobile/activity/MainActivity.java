@@ -14,6 +14,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +55,7 @@ import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildMainActionBarService;
 import br.com.flygowmobile.service.BuildMenuItemsService;
 import br.com.flygowmobile.service.ClickProductContentService;
+import br.com.flygowmobile.service.ExitApplicationService;
 
 public class MainActivity extends Activity {
 
@@ -65,6 +67,7 @@ public class MainActivity extends Activity {
     private ActionBarDrawerToggle mDrawerToggle;
     private BuildMenuItemsService menuItemsService;
     private ClickProductContentService clickProductContentService;
+    private ExitApplicationService exitApplicationService;
 
     public BuildMainActionBarService mainActionBarService;
 
@@ -117,6 +120,7 @@ public class MainActivity extends Activity {
         mDrawerLayout.openDrawer(Gravity.LEFT);
 
         clickProductContentService = new ClickProductContentService(MainActivity.this, mDrawerLayout, mDrawerList);
+        exitApplicationService = new ExitApplicationService(this);
 
         //Set the inicial fragment... promotions...
         //After this, load the foods and after advertisements. After all, change to the next activity
@@ -142,6 +146,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        super.onKeyDown(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exitApplicationService.onExitApplication();
+        }
+        return true;
     }
 
     private ActionBarDrawerToggle buildDrawerToggle(){

@@ -48,6 +48,9 @@ public enum StaticMessages {
     PRICE_DESCRIPTION(R.string.priceDescription),
     PRICE_SUBDESCRIPTION(R.string.priceSubdescription),
     SELECT_ONE(R.string.selectOne),
+    CANCEL_ITEM(R.string.cartCancelItemMsg),
+    EXIT_APP(R.string.exitAppMsg),
+    INVALID_PASSWORD(R.string.invalidPassword),
     GENERIC(R.string.generic, "");
 
     private int resId;

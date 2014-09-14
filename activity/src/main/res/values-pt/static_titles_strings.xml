@@ -30,4 +30,6 @@
     <string name="cartHeaderTotalValue">Val. Total</string>
     <string name="cartRowAccTitle">Clique Aqui!</string>
     <string name="cartRowAccSubTitle">Veja os Selecionados</string>
+    <string name="cartCancelItem">Cancelar Item</string>
+    <string name="exitApp">Sair da Aplicação</string>
 </resources>

@@ -14,6 +14,7 @@
     <string name="accompanimentPopup">Choose yours accompaniments!</string>
     <string name="continueTitle">Continue</string>
     <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
     <string name="quantityChoices">Choice the Quantity</string>
     <string name="enterObservations">Enter with Observations</string>
     <string name="mainAppTitle">Flygow - Digital Menu</string>
@@ -30,4 +31,6 @@
     <string name="cartHeaderTotalValue">Total. Val</string>
     <string name="cartRowAccTitle">Click Here!</string>
     <string name="cartRowAccSubTitle">View the selected</string>
+    <string name="cartCancelItem">Cancel Item</string>
+    <string name="exitApp">Exit Application</string>
 </resources>

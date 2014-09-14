@@ -1,7 +1,9 @@
 package br.com.flygowmobile.service;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -92,23 +94,43 @@ public class CartButtonActionsService {
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Map<Long, CheckBox> selecteds = ((CartActivity)activity).getCheckedItems();
-                if(!selecteds.isEmpty()){
-                    for(Long orderItemId : selecteds.keySet()){
-                        try{
-                            repositoryOrderItemAccompaniment.deleteByOrderItemId(orderItemId);
-                        }catch (Exception e){
-                            Log.w(CART_ACTIVITY, e);
-                        }
-                        try{
-                            repositoryOrderItem.delete(orderItemId);
-                        }catch (Exception e){
-                            Log.e(CART_ACTIVITY, e.getMessage(), e);
-                        }
-                        selecteds.remove(orderItemId);
-                    }
-                    activity.finish();
-                    activity.startActivity(activity.getIntent());
+                final Map<Long, CheckBox> selecteds = ((CartActivity)activity).getCheckedItems();
+                if(!selecteds.isEmpty()) {
+                    AlertDialog dialog = null;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    String popupTitle = StaticTitles.CART_CANCEL_ITEM.getName();
+                    builder.setTitle(popupTitle);
+                    builder.setMessage(StaticMessages.CANCEL_ITEM.getName());
+                    builder.setPositiveButton(StaticTitles.YES.getName(), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                                for(Long orderItemId : selecteds.keySet()){
+                                    try{
+                                        repositoryOrderItemAccompaniment.deleteByOrderItemId(orderItemId);
+                                    }catch (Exception e){
+                                        Log.w(CART_ACTIVITY, e);
+                                    }
+                                    try{
+                                        repositoryOrderItem.delete(orderItemId);
+                                    }catch (Exception e){
+                                        Log.e(CART_ACTIVITY, e.getMessage(), e);
+                                    }
+                                    selecteds.remove(orderItemId);
+                                }
+                                activity.finish();
+                                activity.startActivity(activity.getIntent());
+                            }
+                        });
+                    builder.setNegativeButton(StaticTitles.NO.getName(), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                    dialog = builder.create();
+                    dialog.setIcon(R.drawable.btn_cancel);
+                    dialog.show();
                 }else{
                     FlygowAlertDialog.createWarningPopup(activity, StaticTitles.WARNING, StaticMessages.SELECT_ONE);
                 }

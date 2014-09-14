@@ -21,6 +21,7 @@ public enum StaticTitles{
     ACCOMPANIMENT_POPUP(R.string.accompanimentPopup),
     CONTINUE(R.string.continueTitle),
     CANCEL(R.string.cancel),
+    OK(R.string.ok),
     QUANTITY_CHOICES(R.string.quantityChoices),
     ENTER_OBSERVATIONS(R.string.enterObservations),
     MAIN_APP_TITLE(R.string.mainAppTitle),
@@ -36,7 +37,9 @@ public enum StaticTitles{
     CART_HEADER_UNIT_VALUE(R.string.cartHeaderUnitValue),
     CART_HEADER_TOTAL_VALUE(R.string.cartHeaderTotalValue),
     CART_ROW_ACC_TITLE(R.string.cartRowAccTitle),
-    CART_ROW_ACC_SUBTITLE(R.string.cartRowAccSubTitle)
+    CART_ROW_ACC_SUBTITLE(R.string.cartRowAccSubTitle),
+    CART_CANCEL_ITEM(R.string.cartCancelItem),
+    EXIT_APPLICATION(R.string.exitApp)
     ;
 
     private int resourceId;
