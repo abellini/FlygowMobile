@@ -1,75 +1,82 @@
 package br.com.flygowmobile.enums;
 
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.activity.R;
 
 /**
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
 public enum StaticMessages {
-    TIMEOUT("Timeout Call! Please, ver ify the server!"),
-    NOT_SERVICE("Without Service!"),
-    WAIT("Please, wait. Application loading data..."),
-    LOCAL_LOAD("Getting data from server to the tablet database..."),
-    REGISTER_FROM_SERVER("Please, wait while register data into server!"),
-    SUCCESS_SAVE_IN_SERVER("Data saved with success in server!"),
-    CALL_CONFIGURATION_FROM_SERVER("Loading default settings previously..."),
-    EXCEPTION("An internal tablet exception occured! Please, verify the app log!"),
-    MISSING_CONFIGURATIONS("Currently, the settings that are NOT loaded are: \n"),
-    COIN_CONFIGURATION("Coin Configuration (*)"),
-    ATTENDANT_CONFIGURATION("Attendant Configuration (*)"),
-    ADVERTISEMENT_CONFIGURATION("Advertisement Configuration"),
-    MANDATORY_CONFIGURATIONS("(*) Mandatory Configurations."),
-    DEFINE_CHOICES("Default values ​​are displayed. Please set your choices to proceed!"),
-    MORE_DETAILS("+ details"),
-    LOADING_ADVERTISEMENTS("Loading advertisements from server..."),
-    LOADING_MEDIA_PRODUCTS("Loading product medias from server..."),
-    LOADING_MEDIA_PROMOTIONS("Loading promotion medias from server..."),
-    LOAD_PRODUCT("Load product information..."),
-    LOAD_PROMOTION("Load promotion information..."),
-    WARNING_LOAD_PRODUCTS("Some medias of products are not loaded from the server. Please, verify!"),
-    WARNING_LOAD_PROMOTIONS("Some medias of promotions are not loaded from the server. Please, verify!"),
-    WARNING_LOAD_ADVERTISEMENTS("Some medias of advertisements are not loaded from the server. Please, verify!"),
-    FREE("Free"),
-    MAXIMUM_OF("Maximum of"),
-    OPTIONS("options"),
-    QUANTITY_SUBTILE("Use the buttons to define the quantity of products in this order"),
-    OBSERVATIONS_SUBTITLE("Describe your observations about this order"),
-    OBSERVATIONS_EMPTY_TEXT("Click here and enter your observations..."),
-    NO_OBSERVATIONS("No Observations"),
-    DEFAULT_QTD_ORDER("01"),
-    LOAD_ORDER_ITEM("Adding order item..."),
-    CALLING_ATTENDANT("Calling attendant..."),
-    CONFIRM_CALL_ATTENDANT("Click in 'Yes' to call the attendant."),
-    CALL_ATTENDANT("The attendant was called. Wait, it will come to his table."),
-    CALL_ATTENDANT_ERROR("There was an error call attendant. Please call it the conventional way."),
-    CART_TOTAL_VALUE("The total value of order is: "),
-    SAVE_ORDER_FROM_SERVER("Please, wait while save order into server!"),
-    PRICE_DESCRIPTION("make your order..."),
-    PRICE_SUBDESCRIPTION("just click here!"),
-    SELECT_ONE("Select at least one item!"),
-    GENERIC("");
+    TIMEOUT(R.string.timeout),
+    NOT_SERVICE(R.string.notService),
+    WAIT(R.string.wait),
+    LOCAL_LOAD(R.string.localLoad),
+    REGISTER_FROM_SERVER(R.string.registerFromServer),
+    SUCCESS_SAVE_IN_SERVER(R.string.successSaveInServer),
+    CALL_CONFIGURATION_FROM_SERVER(R.string.callConfigurationFromServer),
+    EXCEPTION(R.string.exception),
+    MISSING_CONFIGURATIONS(R.string.missingConfigurations),
+    COIN_CONFIGURATION(R.string.coinConfiguration),
+    ATTENDANT_CONFIGURATION(R.string.attendantConfiguration),
+    ADVERTISEMENT_CONFIGURATION(R.string.advertisementConfiguration),
+    MANDATORY_CONFIGURATIONS(R.string.mandatoryConfigurations),
+    DEFINE_CHOICES(R.string.defineChoices),
+    MORE_DETAILS(R.string.moreDetails),
+    LOADING_ADVERTISEMENTS(R.string.loadingAdvertisements),
+    LOADING_MEDIA_PRODUCTS(R.string.loadingMediaProducts),
+    LOADING_MEDIA_PROMOTIONS(R.string.loadingMediaPromotions),
+    LOAD_PRODUCT(R.string.loadProduct),
+    LOAD_PROMOTION(R.string.loadPromotion),
+    WARNING_LOAD_PRODUCTS(R.string.warningLoadProducts),
+    WARNING_LOAD_PROMOTIONS(R.string.warningLoadPromotions),
+    WARNING_LOAD_ADVERTISEMENTS(R.string.warningLoadAdvertisements),
+    FREE(R.string.free),
+    MAXIMUM_OF(R.string.maximunOf),
+    OPTIONS(R.string.options),
+    QUANTITY_SUBTILE(R.string.quantitySubtitle),
+    OBSERVATIONS_SUBTITLE(R.string.observationsSubtitle),
+    OBSERVATIONS_EMPTY_TEXT(R.string.observationsEmptyTitle),
+    NO_OBSERVATIONS(R.string.noObservations),
+    DEFAULT_QTD_ORDER(R.string.defaultQtdOrder),
+    LOAD_ORDER_ITEM(R.string.loadOrderItem),
+    CALLING_ATTENDANT(R.string.callingAttendant),
+    CONFIRM_CALL_ATTENDANT(R.string.confirmCallAttendant),
+    CALL_ATTENDANT(R.string.calledAttendant),
+    CALL_ATTENDANT_ERROR(R.string.callAttendantError),
+    CART_TOTAL_VALUE(R.string.cartTotalValue),
+    SAVE_ORDER_FROM_SERVER(R.string.saveOrderFromServer),
+    PRICE_DESCRIPTION(R.string.priceDescription),
+    PRICE_SUBDESCRIPTION(R.string.priceSubdescription),
+    SELECT_ONE(R.string.selectOne),
+    GENERIC(R.string.generic, "");
 
-    private String name;
     private int resId;
-
-    StaticMessages(String name) {
-        this.name = name;
-    }
+    private String value;
 
     StaticMessages(int resId) {
         this.resId = resId;
     }
 
+    StaticMessages(int resId, String value) {
+        this.resId = resId;
+        this.value = value;
+    }
+
     public static StaticMessages getCustomMessage(String message) {
-        GENERIC.setName(message);
+        GENERIC.setValue(message);
         return StaticMessages.GENERIC;
     }
 
-    public String getName() {
-        return name;
+    public void setValue(String value) {
+        this.value = value;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getValue() {
+        return value;
+    }
+
+    public String getName(){
+        String resourceString = App.getContext().getResources().getString(resId);
+        return resourceString != null && !resourceString.equals("") ? resourceString : getValue();
     }
 }

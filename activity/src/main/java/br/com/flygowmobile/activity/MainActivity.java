@@ -31,8 +31,8 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
 
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.navigationdrawer.AdvertisementFragment;
@@ -319,7 +319,7 @@ public class MainActivity extends Activity {
     public class AdvertisementMediaTask extends AsyncTask<Void, Void, String> {
 
         private final List<Advertisement> advertisements;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        App serverAddressObj = (App) getApplication();
 
         public AdvertisementMediaTask(List<Advertisement> advertisements) {
             this.advertisements = advertisements;
@@ -403,7 +403,7 @@ public class MainActivity extends Activity {
     public class PromotionMediaTask extends AsyncTask<Void, Void, String> {
 
         private final List<Promotion> promotions;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        App serverAddressObj = (App) getApplication();
 
         public PromotionMediaTask(List<Promotion> promotions) {
             this.promotions = promotions;
@@ -495,7 +495,7 @@ public class MainActivity extends Activity {
     public class FoodMediaTask extends AsyncTask<Void, Void, String> {
 
         private final List<Food> foods;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        App serverAddressObj = (App) getApplication();
 
         public FoodMediaTask(List<Food> foods) {
             this.foods = foods;

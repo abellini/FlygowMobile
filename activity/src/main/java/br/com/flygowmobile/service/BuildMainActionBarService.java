@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.R;
 
@@ -158,7 +158,7 @@ public class BuildMainActionBarService {
 
     public class CallAttendantTask extends AsyncTask<Void, Void, String> {
 
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) activity.getApplication();
+        App serverAddressObj = (App) activity.getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.CALL_ATTENDANT);
 
         @Override

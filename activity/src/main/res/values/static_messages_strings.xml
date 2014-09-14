@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Global Strings of Application - Static Messages-->
+    <string name="timeout">Timeout Call! Please, verify the server!</string>
+    <string name="notService">Without Service!</string>
+    <string name="wait">Please, wait. Application loading data...</string>
+    <string name="localLoad">Getting data from server to the tablet database...</string>
+    <string name="registerFromServer">Please, wait while register data into server!</string>
+    <string name="successSaveInServer">Data saved with success in server!</string>
+    <string name="callConfigurationFromServer">Loading default settings previously...</string>
+    <string name="exception">An internal tablet exception occured! Please, verify the app log!</string>
+    <string name="missingConfigurations">Currently, the settings that are NOT loaded are: \n</string>
+    <string name="coinConfiguration">Coin Configuration (*)</string>
+    <string name="attendantConfiguration">Attendant Configuration (*)</string>
+    <string name="advertisementConfiguration">Advertisement Configuration</string>
+    <string name="mandatoryConfigurations">(*) Mandatory Configurations.</string>
+    <string name="defineChoices">Default values ​​are displayed. Please set your choices to proceed!</string>
+    <string name="moreDetails">+ details</string>
+    <string name="loadingAdvertisements">Loading advertisements from server...</string>
+    <string name="loadingMediaProducts">Loading product medias from server...</string>
+    <string name="loadingMediaPromotions">Loading promotion medias from server...</string>
+    <string name="loadProduct">Loading product information...</string>
+    <string name="loadPromotion">Loading promotion information...</string>
+    <string name="warningLoadProducts">Some medias of products are not loaded from the server. Please, verify!</string>
+    <string name="warningLoadPromotions">Some medias of promotions are not loaded from the server. Please, verify!</string>
+    <string name="warningLoadAdvertisements">Some medias of advertisements are not loaded from the server. Please, verify!</string>
+    <string name="free">Free</string>
+    <string name="maximunOf">Maximum of</string>
+    <string name="options">options</string>
+    <string name="quantitySubtitle">Use the buttons to define the quantity of products in this order</string>
+    <string name="observationsSubtitle">Describe your observations about this order</string>
+    <string name="observationsEmptyTitle">Click here and enter your observations...</string>
+    <string name="noObservations">No Observations</string>
+    <string name="defaultQtdOrder">01</string>
+    <string name="loadOrderItem">Adding order item...</string>
+    <string name="callingAttendant">Calling attendant...</string>
+    <string name="confirmCallAttendant">Click in \'Yes\' to call the attendant.</string>
+    <string name="calledAttendant">The attendant was called. Wait, it will come to his table.</string>
+    <string name="callAttendantError">There was an error call attendant. Please call it the conventional way.</string>
+    <string name="cartTotalValue">The total value of order is: </string>
+    <string name="saveOrderFromServer">Please, wait while save order into server!</string>
+    <string name="priceDescription">make your order...</string>
+    <string name="priceSubdescription">just click here!</string>
+    <string name="selectOne">Select at least one item!</string>
+    <string name="generic"></string>
+</resources>

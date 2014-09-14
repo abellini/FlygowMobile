@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Global Strings of Application - Static Titles-->
+    <string name="error">Error!</string>
+    <string name="warning">Warning!</string>
+    <string name="loading">Loading...</string>
+    <string name="successful">Successful!</string>
+    <string name="promotions">Promotions</string>
+    <string name="information">Information</string>
+    <string name="promotionInfo">The items included in this promotion are:</string>
+    <string name="menu">Menu</string>
+    <string name="subtitleMenu">Choose any menu options above!</string>
+    <string name="makeOrder">Complete your order!</string>
+    <string name="accompanimentPopup">Choose yours accompaniments!</string>
+    <string name="continueTitle">Continue</string>
+    <string name="cancel">Cancel</string>
+    <string name="quantityChoices">Choice the Quantity</string>
+    <string name="enterObservations">Enter with Observations</string>
+    <string name="mainAppTitle">Flygow - Digital Menu</string>
+    <string name="yourAccount">Your Account</string>
+    <string name="callAttendant">Calling Attendant</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="cartTitle">My Orders</string>
+    <string name="cartSubTitle">See your orders and confirm it clicking in \'Send Order\'</string>
+    <string name="cartHeaderDescription">Description</string>
+    <string name="cartHeaderAccompaniments">Accompaniments</string>
+    <string name="cartHeaderQuantity">Quantity</string>
+    <string name="cartHeaderUnitValue">Unit. Val</string>
+    <string name="cartHeaderTotalValue">Total. Val</string>
+    <string name="cartRowAccTitle">Click Here!</string>
+    <string name="cartRowAccSubTitle">View the selected</string>
+</resources>

@@ -3,41 +3,24 @@ package br.com.flygowmobile.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.activity.navigationdrawer.OrderAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.OrderRowItem;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
-import br.com.flygowmobile.entity.OrderItem;
-import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.service.CartButtonActionsService;
 import br.com.flygowmobile.service.OrderService;
-import br.com.flygowmobile.service.ServiceHandler;
 
 /**
  * Created by Tiago Rocha Gomes on 30/08/14.

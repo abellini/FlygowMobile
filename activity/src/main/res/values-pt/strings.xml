@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FlyGow</string>
+    <string name="action_settings">Configurações</string>
+    <string name="title_activity_main">FlyGow Digital Menu</string>
+    <string name="title_activity_splash_screen">FlyGow</string>
+    <string name="title_activity_register_detail">Detalhes Adicionais</string>
+    <string name="value">Valor</string>
+    <string name="description">Descrição</string>
+    <string name="nutritional">Nutricional</string>
+</resources>

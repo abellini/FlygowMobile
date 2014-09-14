@@ -1,0 +1,24 @@
+<resources>
+        <string name="title_activity_register">Register</string>
+
+    <!-- Strings related to register -->
+
+    <string name="data_tablet">Tablet</string>
+    <string name="data_server">Servidor</string>
+    <string name="prompt_ip_tablet">IP do Tablet</string>
+    <string name="prompt_number_tablet">Número do Tablet</string>
+    <string name="prompt_port_tablet">Porta do Tablet</string>
+    <string name="prompt_ip_server">IP do Servidor</string>
+    <string name="prompt_port_server">Porta do Servidor</string>
+    <string name="action_register">Registrar</string>
+
+    <!-- Strings related to register -->
+    <string name="data_coin">Moeda</string>
+    <string name="data_attendant">Atendente</string>
+    <string name="data_advertisements">Anúncios</string>
+
+    <string name="error_invalid_email">Este endereço de email é inválido</string>
+    <string name="error_invalid_password">Esta senha tem poucos caracteres!</string>
+    <string name="error_incorrect_password">A senha está incorreta!</string>
+    <string name="error_field_required">Este campo e obrigatório</string>
+</resources>

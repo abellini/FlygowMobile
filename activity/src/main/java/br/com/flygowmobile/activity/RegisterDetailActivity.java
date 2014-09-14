@@ -33,9 +33,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.ConversorUtil;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
 import br.com.flygowmobile.database.RepositoryAccompaniment;
 import br.com.flygowmobile.database.RepositoryAdvertisement;
@@ -624,7 +624,7 @@ public class RegisterDetailActivity extends Activity {
      */
     public class RegisterDetailsTabletTask extends AsyncTask<Void, Void, String> {
 
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        App serverAddressObj = (App) getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.REGISTER_DETAILS);
         private String coin;
         private String attendant;

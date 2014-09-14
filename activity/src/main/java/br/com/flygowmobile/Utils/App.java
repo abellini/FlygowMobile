@@ -1,30 +1,43 @@
 package br.com.flygowmobile.Utils;
 
 import android.app.Application;
+import android.content.Context;
 
 import br.com.flygowmobile.enums.ServerController;
 
 /**
  * Created by Tiago Rocha Gomes on 07/05/14.
  */
-public class FlygowServerUrl extends Application {
+public class App extends Application {
     private static String HTTP_HEADER = "http://";
     private static String APPLICATION_NAME = "flygow";
     private static String WEBSERVICE_PREFIX = "webservice";
     private static String PORT_SEPARATOR = ":";
     private static String PATH_SEPARATOR = "/";
 
+    private static Context mContext;
+
     private String serverIp;
     private int serverPort;
 
-    public FlygowServerUrl() {
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mContext = this;
+    }
+
+    public App() {
         this.serverIp = "127.0.0.1";
         this.serverPort = 8080;
     }
 
-    public FlygowServerUrl(String serverIp, int serverPort) {
+    public App(String serverIp, int serverPort) {
         this.serverIp = serverIp;
         this.serverPort = serverPort;
+    }
+
+    public static Context getContext(){
+        return mContext;
     }
 
     public String getServerIp() {

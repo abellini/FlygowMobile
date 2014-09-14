@@ -29,7 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.R;
@@ -342,7 +342,7 @@ public class ProductFragment extends Fragment {
         private byte[] photo;
         private ProgressDialog progressProductInfoDialog;
         private Activity activity;
-        private FlygowServerUrl serverAddressObj;
+        private App serverAddressObj;
 
         public PhotoWorkerTask(
                 Activity activity,
@@ -354,7 +354,7 @@ public class ProductFragment extends Fragment {
             this.rootView = rootView;
             this.item = item;
             this.progressProductInfoDialog = progressProductInfoDialog;
-            this.serverAddressObj = (FlygowServerUrl) activity.getApplication();
+            this.serverAddressObj = (App) activity.getApplication();
             if (this.item != null) {
                 this.photo = item.getPhoto();
             }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Global Strings of Application - Static Messages-->
+    <string name="timeout">Excedido limite de tempo! Por favor, verifique o servidor!</string>
+    <string name="notService">Fora de Serviço!</string>
+    <string name="wait">Por favor aguarde. A aplicação está carregando os dados...</string>
+    <string name="localLoad">Resgatando dados do servidor para a base de dados do tablet...</string>
+    <string name="registerFromServer">Por favor, aguarde enquanto é atualizado os dados vindos do servidor!</string>
+    <string name="successSaveInServer">Os dados foram salvos com sucesso no servidor!</string>
+    <string name="callConfigurationFromServer">Carregando configurações padrões definidas anteriormente...</string>
+    <string name="exception">Um erro interno foi encontrado na aplicação. Por favor, verifique o log da aplicação!</string>
+    <string name="missingConfigurations">Atualmente, as configurações que NÃO estão definidas são: \n</string>
+    <string name="coinConfiguration">Configurações de Moeda (*)</string>
+    <string name="attendantConfiguration">Configurações de Atendente (*)</string>
+    <string name="advertisementConfiguration">Configurações de Anúncios</string>
+    <string name="mandatoryConfigurations">(*) Configurações Obrigatórias.</string>
+    <string name="defineChoices">Valores padrões estão sendo exibidos. Por favor escolha suas opções para continuar!</string>
+    <string name="moreDetails">+ detalhes</string>
+    <string name="loadingAdvertisements">Carregando anúncios desde o servidor...</string>
+    <string name="loadingMediaProducts">Carregando mídias dos produtos desde o servidor...</string>
+    <string name="loadingMediaPromotions">Carregando mídias das promoções desde o servidor...</string>
+    <string name="loadProduct">Carregando informações do produto...</string>
+    <string name="loadPromotion">Carregando informação da promoção...</string>
+    <string name="warningLoadProducts">Algumas mídias de determinados produtos não foram carregadas desde o servidor. Por favor, verifique!</string>
+    <string name="warningLoadPromotions">Algumas mídias de determinadas promoções não foram carregadas desde o servidor. Por favor, verifique!</string>
+    <string name="warningLoadAdvertisements">Algumas mídias de determinados anúncios não foram carregadas desde o servidor. Por favor, verifique!</string>
+    <string name="free">Grátis</string>
+    <string name="maximunOf">Máximo de</string>
+    <string name="options">opções</string>
+    <string name="quantitySubtitle">Use os botoes para escolher a quantidade de produtos neste pedido.</string>
+    <string name="observationsSubtitle">Descreva suas observações sobre este pedido.</string>
+    <string name="observationsEmptyTitle">Clique aqui e escreva suas observações...</string>
+    <string name="noObservations">Sem observações</string>
+    <string name="defaultQtdOrder">01</string>
+    <string name="loadOrderItem">Adicionando item ao pedido...</string>
+    <string name="callingAttendant">Chamando atendente...</string>
+    <string name="confirmCallAttendant">Clique em \'Sim\' para chamar o atendente.</string>
+    <string name="calledAttendant">O atendente foi chamado. Por favor aguarde até que ele venha até sua mesa.</string>
+    <string name="callAttendantError">Houve um erro ao chamar o atendente. Por favor, chame-o da maneira convencional.</string>
+    <string name="cartTotalValue">O valor total deste pedido é: </string>
+    <string name="saveOrderFromServer">Por favor, aguarde enquanto é enviamos seu pedido!</string>
+    <string name="priceDescription">faça seu pedido...</string>
+    <string name="priceSubdescription">basta clicar aqui!</string>
+    <string name="selectOne">Selecione pelo menos um item!</string>
+    <string name="generic"></string>
+</resources>

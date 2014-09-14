@@ -20,10 +20,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.activity.CartActivity;
-import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
@@ -122,7 +121,7 @@ public class CartButtonActionsService {
      */
     private class RegisterOrderTask extends AsyncTask<Void, Void, String> {
 
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) activity.getApplication();
+        App serverAddressObj = (App) activity.getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.REGISTER_ORDER);
 
         public RegisterOrderTask() {

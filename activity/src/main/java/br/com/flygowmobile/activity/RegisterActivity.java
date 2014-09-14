@@ -25,7 +25,7 @@ import java.net.NetworkInterface;
 import java.util.Arrays;
 import java.util.Enumeration;
 
-import br.com.flygowmobile.Utils.FlygowServerUrl;
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
@@ -211,7 +211,7 @@ public class RegisterActivity extends Activity {
             int nport = Integer.parseInt(port);
             int nserverPort = Integer.parseInt(serverPort);
 
-            FlygowServerUrl url = (FlygowServerUrl) getApplication();
+            App url = (App) getApplication();
             url.setServerIp(serverIP);
             url.setServerPort(Integer.parseInt(serverPort));
             Tablet tabletToTask = null;
@@ -249,7 +249,7 @@ public class RegisterActivity extends Activity {
     public class RegisterTabletTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet tablet;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        App serverAddressObj = (App) getApplication();
         String url = serverAddressObj.getServerUrl(ServerController.CONNECT);
         private long previousTabletNumber;
         private boolean isReconnect, isChangeConfiguration;

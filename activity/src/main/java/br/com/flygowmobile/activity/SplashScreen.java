@@ -16,8 +16,8 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
-import br.com.flygowmobile.Utils.FlygowServerUrl;
 import br.com.flygowmobile.database.RepositoryScript;
 import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Tablet;
@@ -86,7 +86,7 @@ public class SplashScreen extends Activity implements Runnable {
     public class PingTask extends AsyncTask<Void, Void, String> {
 
         private final Tablet configs;
-        FlygowServerUrl serverAddressObj = (FlygowServerUrl) getApplication();
+        App serverAddressObj = (App) getApplication();
 
         public PingTask(Tablet configs) {
             serverAddressObj.setServerIp(configs.getServerIP());
