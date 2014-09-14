@@ -22,7 +22,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cartTitle">My Orders</string>
-    <string name="cartSubTitle">See your orders and confirm it clicking in \'Send Order\'</string>
+    <string name="cartSubTitle">See your orders and confirm it \n clicking in \'Send Order\'</string>
     <string name="cartHeaderDescription">Description</string>
     <string name="cartHeaderAccompaniments">Accompaniments</string>
     <string name="cartHeaderQuantity">Quantity</string>
