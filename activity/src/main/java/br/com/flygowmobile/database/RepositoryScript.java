@@ -46,6 +46,7 @@ public class RepositoryScript {
                     " )",
             "CREATE TABLE " + RepositoryOrder.Orders.TABLE_NAME + " (" +
                     RepositoryOrder.Orders.COLUMN_NAME_ORDER_ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
+                    RepositoryOrder.Orders.COLUMN_NAME_ORDER_SERVER_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_CLIENT_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_TABLET_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrder.Orders.COLUMN_NAME_TOTAL_VALUE + REAL_TYPE + COMMA_SEP +
@@ -55,6 +56,7 @@ public class RepositoryScript {
                     " )",
             "CREATE TABLE " + RepositoryOrderItem.OrderItems.TABLE_NAME + " (" +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
+                    RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_QUANTITY + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_OBSERVATIONS + TEXT_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
@@ -123,7 +125,7 @@ public class RepositoryScript {
                     RepositoryPromotion.Promotions.COLUMN_NAME_DESCRIPTION + TEXT_TYPE + COMMA_SEP +
                     RepositoryPromotion.Promotions.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
                     RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO + BLOB_TYPE + COMMA_SEP +
-                    RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO_NAME + TEXT_TYPE+ COMMA_SEP +
+                    RepositoryPromotion.Promotions.COLUMN_NAME_PHOTO_NAME + TEXT_TYPE + COMMA_SEP +
                     RepositoryPromotion.Promotions.COLUMN_NAME_VIDEO_NAME + TEXT_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryFoodPromotion.FoodPromotions.TABLE_NAME + " (" +

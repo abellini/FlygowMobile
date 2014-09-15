@@ -40,6 +40,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
     protected ContentValues populateContentValues(OrderItem orderItem) {
         ContentValues values = new ContentValues();
         values.put(OrderItems.COLUMN_NAME_ORDER_ID, orderItem.getOrderId());
+        values.put(OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID, orderItem.getOrderItemServerId());
         values.put(OrderItems.COLUMN_NAME_FOOD_ID, orderItem.getFoodId());
         values.put(OrderItems.COLUMN_NAME_OBSERVATIONS, orderItem.getObservations());
         values.put(OrderItems.COLUMN_NAME_QUANTITY, orderItem.getQuantity());
@@ -92,6 +93,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
+                int idxServerId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID);
                 int idxFood = c.getColumnIndex(OrderItems.COLUMN_NAME_FOOD_ID);
                 int idxObs = c.getColumnIndex(OrderItems.COLUMN_NAME_OBSERVATIONS);
                 int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
@@ -101,6 +103,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderItemId(c.getLong(idxId));
+                orderItem.setOrderItemServerId(c.getLong(idxServerId));
                 orderItem.setFoodId(c.getLong(idxFood));
                 orderItem.setObservations(c.getString(idxObs));
                 orderItem.setOrderId(c.getLong(idxOrderId));
@@ -121,6 +124,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
+                int idxServerId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID);
                 int idxFood = c.getColumnIndex(OrderItems.COLUMN_NAME_FOOD_ID);
                 int idxObs = c.getColumnIndex(OrderItems.COLUMN_NAME_OBSERVATIONS);
                 int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
@@ -130,6 +134,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderItemId(c.getLong(idxId));
+                orderItem.setOrderItemServerId(c.getLong(idxServerId));
                 orderItem.setFoodId(c.getLong(idxFood));
                 orderItem.setObservations(c.getString(idxObs));
                 orderItem.setOrderId(c.getLong(idxOrderId));
@@ -151,6 +156,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         List<OrderItem> orderItems = new ArrayList<OrderItem>();
         if (c.moveToFirst()) {
             int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
+            int idxServerId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID);
             int idxFood = c.getColumnIndex(OrderItems.COLUMN_NAME_FOOD_ID);
             int idxObs = c.getColumnIndex(OrderItems.COLUMN_NAME_OBSERVATIONS);
             int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
@@ -162,6 +168,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 OrderItem orderItem = new OrderItem();
                 orderItems.add(orderItem);
                 orderItem.setOrderItemId(c.getLong(idxId));
+                orderItem.setOrderItemServerId(c.getLong(idxServerId));
                 orderItem.setFoodId(c.getLong(idxFood));
                 orderItem.setObservations(c.getString(idxObs));
                 orderItem.setOrderId(c.getLong(idxOrderId));
@@ -178,6 +185,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         List<OrderItem> orderItems = new ArrayList<OrderItem>();
         if (c.moveToFirst()) {
             int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
+            int idxServerId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID);
             int idxFood = c.getColumnIndex(OrderItems.COLUMN_NAME_FOOD_ID);
             int idxObs = c.getColumnIndex(OrderItems.COLUMN_NAME_OBSERVATIONS);
             int idxOrderId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ID);
@@ -189,6 +197,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 OrderItem orderItem = new OrderItem();
                 orderItems.add(orderItem);
                 orderItem.setOrderItemId(c.getLong(idxId));
+                orderItem.setOrderItemServerId(c.getLong(idxServerId));
                 orderItem.setFoodId(c.getLong(idxFood));
                 orderItem.setObservations(c.getString(idxObs));
                 orderItem.setOrderId(c.getLong(idxOrderId));
@@ -210,6 +219,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         public static final String TABLE_NAME = "OrderItem";
 
         public static final String COLUMN_NAME_ORDER_ITEM_ID = "orderItemId";
+        public static final String COLUMN_NAME_ORDER_ITEM_SERVER_ID = "orderItemServerId";
         public static final String COLUMN_NAME_QUANTITY = "quantity";
         public static final String COLUMN_NAME_OBSERVATIONS = "observations";
         public static final String COLUMN_NAME_VALUE = "value";

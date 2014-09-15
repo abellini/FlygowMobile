@@ -1,14 +1,19 @@
 package br.com.flygowmobile.entity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.sql.Time;
 import java.util.Date;
 
+import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.database.RepositoryOrder;
 
 public class Order {
 
     public static String[] columns = new String[]{
             RepositoryOrder.Orders.COLUMN_NAME_ORDER_ID,
+            RepositoryOrder.Orders.COLUMN_NAME_ORDER_SERVER_ID,
             RepositoryOrder.Orders.COLUMN_NAME_CLIENT_ID,
             RepositoryOrder.Orders.COLUMN_NAME_TABLET_ID,
             RepositoryOrder.Orders.COLUMN_NAME_TOTAL_VALUE,
@@ -18,6 +23,7 @@ public class Order {
     };
 
     private long orderId;
+    private long orderServerId;
     private int clientId;
     private long tabletId;
     private Double totalValue;
@@ -25,8 +31,9 @@ public class Order {
     private long attendantId;
     private int statusType;
 
-    public Order(long orderId, int clientId, long tabletId, Double totalValue, Time hour, long attendantId) {
+    public Order(long orderId, long orderServerId, int clientId, long tabletId, Double totalValue, Time hour, long attendantId) {
         this.setOrderId(orderId);
+        this.setOrderServerId(orderServerId);
         this.setClientId(clientId);
         this.setTabletId(tabletId);
         this.setTotalValue(totalValue);
@@ -35,6 +42,14 @@ public class Order {
     }
 
     public Order() {
+    }
+
+    public long getOrderServerId() {
+        return orderServerId;
+    }
+
+    public void setOrderServerId(long orderServerId) {
+        this.orderServerId = orderServerId;
     }
 
     public long getOrderId() {
@@ -97,6 +112,7 @@ public class Order {
 
         return "{" +
                 "\"orderId\": " + getOrderId() + ", " +
+                "\"orderServerId\": " + getOrderServerId() + ", " +
                 "\"clientId\": " + "\"" + getClientId() + "\", " +
                 "\"tabletId\": " + getTabletId() + ", " +
                 "\"totalValue\": " + "\"" + getTotalValue() + "\", " +
@@ -104,5 +120,24 @@ public class Order {
                 "\"attendantId\": " + getAttendantId() + "\", " +
                 "\"statusType\": " + getStatusType() +
                 "}";
+    }
+
+    public JSONObject toJSONObject() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("orderId", getOrderServerId());
+            jsonObject.put("orderServerId", getOrderServerId());
+            jsonObject.put("clientId", getClientId());
+            jsonObject.put("tabletId", getTabletId());
+            jsonObject.put("totalValue", getTotalValue());
+            jsonObject.put("hour", StringUtils.parseString(getHour()));
+            jsonObject.put("attendantId", getAttendantId());
+            jsonObject.put("statusType", getStatusType());
+            return jsonObject;
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 }

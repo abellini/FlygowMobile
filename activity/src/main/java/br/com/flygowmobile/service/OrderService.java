@@ -147,7 +147,8 @@ public class OrderService {
 
 
     public List<OrderItem> getOrderListToServer() {
-        return this.repositoryOrderItem.listAll();
+        Order order = getCurrentOrder();
+        return this.repositoryOrderItem.listAllByOrder(order.getOrderId());
     }
 
     private void foodOrderAction(){
@@ -344,7 +345,7 @@ public class OrderService {
         }
     }
 
-    private Order getCurrentOrder(){
+    public Order getCurrentOrder() {
         Order order = null;
         try{
             order = repositoryOrder.getByStatusType(OrderStatusTypeEnum.OPENED.getId());

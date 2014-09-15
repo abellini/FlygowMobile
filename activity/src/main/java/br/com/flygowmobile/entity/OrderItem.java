@@ -9,6 +9,7 @@ public class OrderItem {
 
     public static String[] columns = new String[]{
             RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_ID,
+            RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ITEM_SERVER_ID,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_QUANTITY,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_OBSERVATIONS,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE,
@@ -18,18 +19,20 @@ public class OrderItem {
     };
 
     private long orderItemId;
+    private long orderItemServerId;
+    private long orderId;
     private int quantity;
     private String observations;
     private Double value;
     private long foodId;
-    private long orderId;
     private String productType;
 
     public OrderItem() {
     }
 
-    public OrderItem(long orderItemId, int quantity, String observations, Double value, long foodId, long orderId) {
+    public OrderItem(long orderItemId, long orderItemServerId, int quantity, String observations, Double value, long foodId, long orderId) {
         this.setOrderItemId(orderItemId);
+        this.setOrderItemServerId(orderItemServerId);
         this.setQuantity(quantity);
         this.setObservations(observations);
         this.setValue(value);
@@ -44,6 +47,14 @@ public class OrderItem {
 
     public void setOrderItemId(long orderItemId) {
         this.orderItemId = orderItemId;
+    }
+
+    public long getOrderItemServerId() {
+        return orderItemServerId;
+    }
+
+    public void setOrderItemServerId(long orderItemServerId) {
+        this.orderItemServerId = orderItemServerId;
     }
 
     public int getQuantity() {
@@ -97,6 +108,7 @@ public class OrderItem {
     public String toJSONInitialConfig() {
         return "{" +
                 "\"orderItemId\": " + getOrderItemId() + ", " +
+                "\"orderItemServerId\": " + getOrderItemServerId() + ", " +
                 "\"quantity\": " + "\"" + getQuantity() + "\", " +
                 "\"observations\": " + "\"" + null + "\", " +
                 "\"value\": " + "\"" + getValue() + "\", " +
@@ -110,6 +122,7 @@ public class OrderItem {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("orderItemId", getOrderItemId());
+            jsonObject.put("orderItemServerId", getOrderItemServerId());
             jsonObject.put("quantity", getQuantity());
             jsonObject.put("observations", getObservations());
             jsonObject.put("value", getValue());

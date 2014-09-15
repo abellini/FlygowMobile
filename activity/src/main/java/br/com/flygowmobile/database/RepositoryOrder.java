@@ -189,6 +189,7 @@ public class RepositoryOrder extends Repository<Order> {
         public static final String TABLE_NAME = "OrderTab";
 
         public static final String COLUMN_NAME_ORDER_ID = "orderId";
+        public static final String COLUMN_NAME_ORDER_SERVER_ID = "orderServerId";
         public static final String COLUMN_NAME_CLIENT_ID = "clientId";
         public static final String COLUMN_NAME_TABLET_ID = "tabletId";
         public static final String COLUMN_NAME_TOTAL_VALUE = "totalValue";

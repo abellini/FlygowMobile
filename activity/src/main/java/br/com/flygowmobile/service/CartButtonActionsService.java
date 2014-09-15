@@ -28,6 +28,7 @@ import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
+import br.com.flygowmobile.entity.Order;
 import br.com.flygowmobile.entity.OrderItem;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -37,17 +38,15 @@ import br.com.flygowmobile.enums.StaticTitles;
  * Created by Tiago Rocha Gomes on 11/09/14.
  */
 public class CartButtonActionsService {
+    private static final String CART_ACTIVITY = "CartActivity";
     private Activity activity;
     private View view;
     private OrderService orderService;
     private BuildMainActionBarService actionBarService;
     private ProgressDialog progressSaveDialog;
     private RegisterOrderTask mRegisterTask = null;
-
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
-
-    private static final String CART_ACTIVITY = "CartActivity";
 
     public CartButtonActionsService(Activity activity, View view){
         this.activity = activity;
@@ -153,20 +152,23 @@ public class CartButtonActionsService {
         @Override
         protected String doInBackground(Void... params) {
             try {
-                List<OrderItem> orderList = orderService.getOrderListToServer();
+
+                Order order = orderService.getCurrentOrder();
+                List<OrderItem> orderItemsList = orderService.getOrderListToServer();
+
+                JSONObject jsonOrderObject = new JSONObject();
                 JSONArray jsonArray = new JSONArray();
-                for (OrderItem orderItem : orderList) {
+
+                for (OrderItem orderItem : orderItemsList) {
                     jsonArray.put(orderItem.toJSONObject());
                 }
-                JSONObject orderTabletObj = new JSONObject();
-                Integer numberTablet = orderService.getNumberTablet();
                 try {
-                    orderTabletObj.put("numberTablet", numberTablet);
-                    orderTabletObj.put("orderItens", jsonArray);
+                    jsonOrderObject.put("order", order.toJSONObject());
+                    jsonOrderObject.put("orderItens", jsonArray);
                 } catch (JSONException e) {
                     Log.i(CART_ACTIVITY, "Erro" + e);
                 }
-                NameValuePair orderJsonPair = new BasicNameValuePair("orderJson", orderTabletObj.toString());
+                NameValuePair orderJsonPair = new BasicNameValuePair("orderJson", jsonOrderObject.toString());
                 Log.i(CART_ACTIVITY, "URL -->>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(orderJsonPair));
             } catch (HttpHostConnectException ex) {
