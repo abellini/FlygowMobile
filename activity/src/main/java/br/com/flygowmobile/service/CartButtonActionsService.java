@@ -116,8 +116,8 @@ public class CartButtonActionsService {
                                     }catch (Exception e){
                                         Log.e(CART_ACTIVITY, e.getMessage(), e);
                                     }
-                                    selecteds.remove(orderItemId);
                                 }
+                                selecteds.clear();
                                 activity.finish();
                                 activity.startActivity(activity.getIntent());
                             }
