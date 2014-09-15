@@ -45,5 +45,6 @@
     <string name="cartCancelItemMsg">Tem certeza que deseja remover este item de sua lista de pedidos?</string>
     <string name="exitAppMsg">Para sair da aplicação, por favor digite a senha de segurança…</string>
     <string name="invalidPassword">A senha informada é INVÁLIDA!</string>
+    <string name="emptyAccompaniments">Não existem acompanhamentos para este item.</string>
     <string name="generic"></string>
 </resources>

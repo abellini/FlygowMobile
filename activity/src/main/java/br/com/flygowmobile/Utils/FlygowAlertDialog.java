@@ -53,6 +53,21 @@ public class FlygowAlertDialog {
         alertDialog.show();
     }
 
+    public static void createInfoPopup(final Activity activity, StaticTitles title, StaticMessages message){
+        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setTitle(title.getName());
+        alertDialog.setMessage(message.getName());
+
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, TEXT_OK_BTN, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                alertDialog.dismiss();
+            }
+        });
+        // Set the Icon for the Dialog
+        alertDialog.setIcon(R.drawable.ic_dialog_info);
+        alertDialog.show();
+    }
+
     public static void createInfoPopup(final Activity activity, StaticTitles title, String message){
         final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
         alertDialog.setTitle(title.getName());

@@ -19,6 +19,7 @@ public enum StaticTitles{
     SUBTITLE_MENU(R.string.subtitleMenu),
     MAKE_ORDER(R.string.makeOrder),
     ACCOMPANIMENT_POPUP(R.string.accompanimentPopup),
+    ACCOMPANIMENT_INFO_POPUP(R.string.accompanimentsInfo),
     CONTINUE(R.string.continueTitle),
     CANCEL(R.string.cancel),
     OK(R.string.ok),

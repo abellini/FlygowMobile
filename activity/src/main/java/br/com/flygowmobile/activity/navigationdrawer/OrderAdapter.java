@@ -1,8 +1,6 @@
 package br.com.flygowmobile.activity.navigationdrawer;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +8,14 @@ import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.enums.StaticTitles;
-import br.com.flygowmobile.service.AccompanimentItemClickService;
+import br.com.flygowmobile.service.BuildAccompanimentInfoService;
 import br.com.flygowmobile.service.CartItemClickService;
 import br.com.flygowmobile.service.OrderService;
 
@@ -25,25 +23,27 @@ public class OrderAdapter extends BaseAdapter {
 
     private static final String ORDER_ADAPTER = "OrderAdapter";
 
-    private Context context;
+    private Activity activity;
     private List<OrderRowItem> rowItem;
     private Map<Long, CheckBox> selects;
     private OrderService orderService;
+    private BuildAccompanimentInfoService buildAccompanimentInfoService;
 
-    public OrderAdapter(Context context, List<OrderRowItem> rowItem, Map<Long, CheckBox> selects) {
-        this.context = context;
+    public OrderAdapter(Activity activity, List<OrderRowItem> rowItem, Map<Long, CheckBox> selects) {
+        this.activity = activity;
         this.rowItem = rowItem;
         this.selects = selects;
-        this.orderService = new OrderService(context);
+        this.orderService = new OrderService(activity);
+        this.buildAccompanimentInfoService = new BuildAccompanimentInfoService(activity);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater mInflater = (LayoutInflater) activity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
 
         if (rowItem != null) {
-            OrderRowItem row_pos = rowItem.get(position);
+            final OrderRowItem row_pos = rowItem.get(position);
             if (row_pos != null) {
                 convertView = mInflater.inflate(R.layout.basket_fragment, null);
 
@@ -74,6 +74,19 @@ public class OrderAdapter extends BaseAdapter {
                     }
                 });
 
+                List<View> accompanimentInfoElements = new ArrayList<View>();
+                accompanimentInfoElements.add(accIcon);
+                accompanimentInfoElements.add(titleAcc);
+                accompanimentInfoElements.add(subTitleAcc);
+
+                for(View view : accompanimentInfoElements){
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            buildAccompanimentInfoService.onAccompanimentInfoClick(row_pos.getOrderItemId());
+                        }
+                    });
+                }
             }
         }
         return convertView;

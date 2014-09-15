@@ -33,4 +33,5 @@
     <string name="cartRowAccSubTitle">View the selected</string>
     <string name="cartCancelItem">Cancel Item</string>
     <string name="exitApp">Exit Application</string>
+    <string name="accompanimentsInfo">Choosed Accompaniments</string>
 </resources>

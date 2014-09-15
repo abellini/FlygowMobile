@@ -51,6 +51,7 @@ public enum StaticMessages {
     CANCEL_ITEM(R.string.cartCancelItemMsg),
     EXIT_APP(R.string.exitAppMsg),
     INVALID_PASSWORD(R.string.invalidPassword),
+    EMPTY_ACCOMPANIMENTS(R.string.emptyAccompaniments),
     GENERIC(R.string.generic, "");
 
     private int resId;

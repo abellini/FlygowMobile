@@ -45,5 +45,6 @@
     <string name="cartCancelItemMsg">Are you sure you want to remove this item from your list?</string>
     <string name="exitAppMsg">To exit the application, please enter the security password…</string>
     <string name="invalidPassword">The entered password is INVALID!</string>
+    <string name="emptyAccompaniments">No accompaniments for this item.</string>
     <string name="generic"></string>
 </resources>
