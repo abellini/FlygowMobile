@@ -34,4 +34,8 @@
     <string name="cartCancelItem">Cancel Item</string>
     <string name="exitApp">Exit Application</string>
     <string name="accompanimentsInfo">Choosed Accompaniments</string>
+    <string name="choosePaymentForm">Choose your payment form!</string>
+    <string name="closingOrder">Closing your attendance…</string>
+    <string name="sending">Sending…</string>
+    <string name="newAttendance">Follow to new attendance…</string>
 </resources>

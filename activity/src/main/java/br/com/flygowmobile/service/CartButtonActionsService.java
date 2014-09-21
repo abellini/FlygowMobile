@@ -139,7 +139,7 @@ public class CartButtonActionsService {
     }
 
     /**
-     * Represents an asynchronous registration task used to salve Order
+     * Represents an asynchronous registration task used to save Order
      */
     private class RegisterOrderTask extends AsyncTask<Void, Void, String> {
 
@@ -198,7 +198,7 @@ public class CartButtonActionsService {
             } catch (Exception e) {
                 //FINISH LOADING...
                 progressSaveDialog.dismiss();
-                Log.i(CART_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Log.i(CART_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
                 Toast.makeText(activity, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }

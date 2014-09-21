@@ -40,7 +40,11 @@ public enum StaticTitles{
     CART_ROW_ACC_TITLE(R.string.cartRowAccTitle),
     CART_ROW_ACC_SUBTITLE(R.string.cartRowAccSubTitle),
     CART_CANCEL_ITEM(R.string.cartCancelItem),
-    EXIT_APPLICATION(R.string.exitApp)
+    EXIT_APPLICATION(R.string.exitApp),
+    PAYMENT_FORM_POPUP(R.string.choosePaymentForm),
+    CLOSING_ORDER(R.string.closingOrder),
+    SENDING(R.string.sending),
+    NEW_ATTENDANCE(R.string.newAttendance)
     ;
 
     private int resourceId;

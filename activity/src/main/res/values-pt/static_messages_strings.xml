@@ -46,5 +46,9 @@
     <string name="exitAppMsg">Para sair da aplicação, por favor digite a senha de segurança…</string>
     <string name="invalidPassword">A senha informada é INVÁLIDA!</string>
     <string name="emptyAccompaniments">Não existem acompanhamentos para este item.</string>
-    <string name="generic"></string>
+    <string name="confirmClosingAttendance">Você tem certeza que deseja fechar sua conta e encerrar seu atendimento?</string>
+    <string name="onlyCloseOrder">O pedido será encerrado sem notificação ao estabelecimento por não apresentar valor. Um novo atendimento será preparado e o cardápio digital poderá ser utilizado novamente para novos pedidos.</string>
+    <string name="sendCloseOrder">Aguarde, seu pedido está sendo encerrado…</string>
+    <string name="newAttendanceMsg">Para seguir a um novo atendimento, por favor digite a senha de segurança…</string>
+    <string name="generic"/>
 </resources>

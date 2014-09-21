@@ -21,6 +21,10 @@
             android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
+            android:name="br.com.flygowmobile.activity.ByeByeActivity"
+            android:windowSoftInputMode="stateHidden" >
+        </activity>
+        <activity
             android:name="br.com.flygowmobile.activity.RegisterActivity"
             android:label="@string/title_activity_register">
         </activity>

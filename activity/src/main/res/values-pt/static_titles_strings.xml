@@ -33,4 +33,8 @@
     <string name="cartCancelItem">Cancelar Item</string>
     <string name="exitApp">Sair da Aplicação</string>
     <string name="accompanimentsInfo">Acompanhamentos Escolhidos</string>
+    <string name="choosePaymentForm">Escolha sua forma de pagamento!"</string>
+    <string name="closingOrder">Encerrando seu atendimento…</string>
+    <string name="sending">Enviando…</string>
+    <string name="newAttendance">Seguir para um novo atendimento…</string>
 </resources>

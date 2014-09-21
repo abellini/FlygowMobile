@@ -10,9 +10,9 @@ import br.com.flygowmobile.activity.R;
 
 public class WelcomeFragment extends Fragment {
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
-        View rootView = inflater.inflate(R.layout.basket_fragment, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+        View rootView = inflater.inflate(R.layout.welcome_layout, container, false);
         return rootView;
     }
 }

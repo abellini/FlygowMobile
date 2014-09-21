@@ -46,5 +46,9 @@
     <string name="exitAppMsg">To exit the application, please enter the security password…</string>
     <string name="invalidPassword">The entered password is INVALID!</string>
     <string name="emptyAccompaniments">No accompaniments for this item.</string>
-    <string name="generic"></string>
+    <string name="confirmClosingAttendance">Are you sure you want to close your account and terminate your attendance?</string>
+    <string name="onlyCloseOrder">The application will be terminated without notice by the establishment does not present value. A new service will be prepared and the digital menu can be used again for new orders.</string>
+    <string name="sendCloseOrder">Please wait, your order is being closed…</string>
+    <string name="newAttendanceMsg">To follow a new attendance, please enter the security password…</string>
+    <string name="generic"/>
 </resources>

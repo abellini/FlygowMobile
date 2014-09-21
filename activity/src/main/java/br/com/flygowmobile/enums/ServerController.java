@@ -10,7 +10,8 @@ public enum ServerController {
     INITIALIZE_VIDEO_PRODUCTS("initializeProductVideo"),
     INITIALIZE_PHOTO_PRODUCTS("initializeProductImages"),
     CALL_ATTENDANT("callAttendant"),
-    REGISTER_ORDER("registerOrder");
+    REGISTER_ORDER("registerOrder"),
+    CLOSE_ATTENDANCE("closeAttendance");
 
     private String name;
 
