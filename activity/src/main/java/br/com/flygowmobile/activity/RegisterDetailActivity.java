@@ -426,7 +426,7 @@ public class RegisterDetailActivity extends Activity {
         repositoryOrder.removeAll();
     }
 
-    private void saveMenuInformations(JSONObject initialData) {
+    private void saveServerInformations(JSONObject initialData) {
         try {
             removeAllDetails();
         } catch (Exception e) {
@@ -620,7 +620,7 @@ public class RegisterDetailActivity extends Activity {
     }
 
     /**
-     * Represents an asynchronous registration task used to salve Tablet
+     * Represents an asynchronous registration task used to save Tablet
      */
     public class RegisterDetailsTabletTask extends AsyncTask<Void, Void, String> {
 
@@ -674,7 +674,7 @@ public class RegisterDetailActivity extends Activity {
                     saveTabletDetails();
 
                     JSONObject initialData = jsonObject.getJSONObject("initialData");
-                    saveMenuInformations(initialData);
+                    saveServerInformations(initialData);
 
                     progressLocalRegisterDialog.dismiss();
                     Toast.makeText(RegisterDetailActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
@@ -692,7 +692,7 @@ public class RegisterDetailActivity extends Activity {
                 //FINISH LOADING...
                 progressRegisterDialog.dismiss();
                 progressLocalRegisterDialog.dismiss();
-                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Log.i(REGISTER_DETAIL_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
                 Toast.makeText(RegisterDetailActivity.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }

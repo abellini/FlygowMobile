@@ -392,7 +392,7 @@ public class MainActivity extends Activity {
         protected void onPostExecute(String response) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                if(!jsonObject.getBoolean("success")){
+                if(jsonObject.length() == 0 || !jsonObject.getBoolean("success")){
                     FlygowAlertDialog.createWarningPopup(
                             MainActivity.this, StaticTitles.WARNING, StaticMessages.WARNING_LOAD_ADVERTISEMENTS);
                 }
@@ -409,7 +409,7 @@ public class MainActivity extends Activity {
                 }
                 progressAdvertisementDialog.dismiss();
             } catch (Exception e) {
-                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
                 progressAdvertisementDialog.dismiss();
             }
         }
@@ -493,7 +493,7 @@ public class MainActivity extends Activity {
 
                 progressPromotionDialog.dismiss();
             } catch (Exception e) {
-                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
                 progressPromotionDialog.dismiss();
             }
 
@@ -579,7 +579,7 @@ public class MainActivity extends Activity {
 
                 progressFoodDialog.dismiss();
             } catch (Exception e) {
-                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
                 progressFoodDialog.dismiss();
             }
 

@@ -52,6 +52,10 @@ public enum StaticMessages {
     EXIT_APP(R.string.exitAppMsg),
     INVALID_PASSWORD(R.string.invalidPassword),
     EMPTY_ACCOMPANIMENTS(R.string.emptyAccompaniments),
+    CONFIRM_CLOSING_ATTENDANCE(R.string.confirmClosingAttendance),
+    ONLY_CLOSE_ORDER(R.string.onlyCloseOrder),
+    SEND_CLOSE_ORDER(R.string.sendCloseOrder),
+    NEW_ATTENDANCE(R.string.newAttendanceMsg),
     GENERIC(R.string.generic, "");
 
     private int resId;

@@ -334,7 +334,7 @@ public class RegisterActivity extends Activity {
                 //FINISH LOADING...
                 progressRegisterDialog.dismiss();
                 progressLocalRegisterDialog.dismiss();
-                Log.i(REGISTER_ACTIVITY, StaticMessages.EXCEPTION.getName());
+                Log.i(REGISTER_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
                 Toast.makeText(RegisterActivity.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }

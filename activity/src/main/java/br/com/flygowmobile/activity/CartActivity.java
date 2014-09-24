@@ -19,6 +19,8 @@ import br.com.flygowmobile.activity.navigationdrawer.OrderAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.OrderRowItem;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.service.BuildCartActionBarService;
+import br.com.flygowmobile.service.BuildMainActionBarService;
 import br.com.flygowmobile.service.CartButtonActionsService;
 import br.com.flygowmobile.service.OrderService;
 
@@ -32,6 +34,7 @@ public class CartActivity extends Activity {
     private View cartView;
     private OrderService orderService;
     private CartButtonActionsService cartButtonActionsService;
+    private BuildCartActionBarService cartActionBarService;
     private Map<Long, CheckBox> selects = new HashMap<Long, CheckBox>();
 
     private ProgressDialog progressSaveDialog;
@@ -48,6 +51,12 @@ public class CartActivity extends Activity {
         this.footer = (ViewGroup) inflater.inflate(R.layout.footer_order, null, false);
         this.orderService = new OrderService(this);
         this.cartButtonActionsService = new CartButtonActionsService(this, this.cartView);
+
+        //Action Bar
+        LayoutInflater mInflater = LayoutInflater.from(this);
+        View actionBarView = mInflater.inflate(R.layout.cart_action_bar, null);
+        cartActionBarService = new BuildCartActionBarService(this, actionBarView);
+        cartActionBarService.buildActionBar();
 
         defineTexts();
         defineFonts();
