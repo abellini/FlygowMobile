@@ -25,6 +25,7 @@ public class OrderItem {
     private String observations;
     private Double value;
     private long foodId;
+
     private String productType;
 
     public OrderItem() {

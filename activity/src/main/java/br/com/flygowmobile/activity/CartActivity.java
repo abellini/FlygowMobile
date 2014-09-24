@@ -20,7 +20,6 @@ import br.com.flygowmobile.activity.navigationdrawer.OrderRowItem;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildCartActionBarService;
-import br.com.flygowmobile.service.BuildMainActionBarService;
 import br.com.flygowmobile.service.CartButtonActionsService;
 import br.com.flygowmobile.service.OrderService;
 
@@ -36,7 +35,6 @@ public class CartActivity extends Activity {
     private CartButtonActionsService cartButtonActionsService;
     private BuildCartActionBarService cartActionBarService;
     private Map<Long, CheckBox> selects = new HashMap<Long, CheckBox>();
-
     private ProgressDialog progressSaveDialog;
 
     @Override
@@ -64,11 +62,11 @@ public class CartActivity extends Activity {
         cartButtonActionsService.defineCartButtons();
     }
 
-    public Map<Long, CheckBox> getCheckedItems(){
+    public Map<Long, CheckBox> getCheckedItems() {
         return selects;
     }
 
-    private void defineTexts(){
+    private void defineTexts() {
         TextView cartTitle = (TextView) this.cartView.findViewById(R.id.cartTitle);
         TextView cartSubTitle = (TextView) this.cartView.findViewById(R.id.cartSubTitle);
 

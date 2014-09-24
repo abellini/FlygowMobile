@@ -117,7 +117,7 @@ public class Order {
                 "\"tabletId\": " + getTabletId() + ", " +
                 "\"totalValue\": " + "\"" + getTotalValue() + "\", " +
                 "\"hour\": " + "\"" + getHour() + "\", " +
-                "\"attendantId\": " + getAttendantId() + "\", " +
+                "\"attendantId\": " + getAttendantId() + "\",  " +
                 "\"statusType\": " + getStatusType() +
                 "}";
     }

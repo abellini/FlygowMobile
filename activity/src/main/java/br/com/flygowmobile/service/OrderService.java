@@ -316,6 +316,7 @@ public class OrderService {
                 orderItem.setFoodId(((Food)item).getFoodId());
                 orderItem.setProductType(ProductTypeEnum.FOOD.getName());
             } else if (item instanceof Promotion){
+
                 orderItem.setFoodId(((Promotion)item).getPromotionId());
                 orderItem.setProductType(ProductTypeEnum.PROMOTION.getName());
             }

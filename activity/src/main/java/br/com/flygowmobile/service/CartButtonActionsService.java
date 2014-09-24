@@ -169,7 +169,7 @@ public class CartButtonActionsService {
                     Log.i(CART_ACTIVITY, "Erro" + e);
                 }
                 NameValuePair orderJsonPair = new BasicNameValuePair("orderJson", jsonOrderObject.toString());
-                Log.i(CART_ACTIVITY, "URL -->>>>>>>> " + url);
+                Log.i(CART_ACTIVITY, "URL -->>>>>>>>> " + url);
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(orderJsonPair));
             } catch (HttpHostConnectException ex) {
                 Log.i(CART_ACTIVITY, StaticMessages.TIMEOUT.getName());
