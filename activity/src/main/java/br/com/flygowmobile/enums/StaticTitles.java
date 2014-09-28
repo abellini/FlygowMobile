@@ -44,7 +44,8 @@ public enum StaticTitles{
     PAYMENT_FORM_POPUP(R.string.choosePaymentForm),
     CLOSING_ORDER(R.string.closingOrder),
     SENDING(R.string.sending),
-    NEW_ATTENDANCE(R.string.newAttendance)
+    NEW_ATTENDANCE(R.string.newAttendance),
+    SEND_ORDER(R.string.sendOrder)
     ;
 
     private int resourceId;

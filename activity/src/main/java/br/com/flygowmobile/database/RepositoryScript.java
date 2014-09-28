@@ -62,6 +62,7 @@ public class RepositoryScript {
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE + REAL_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_FOOD_ID + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ID + INTEGER_TYPE + COMMA_SEP +
+                    RepositoryOrderItem.OrderItems.COLUMN_NAME_STATUS + INTEGER_TYPE + COMMA_SEP +
                     RepositoryOrderItem.OrderItems.COLUMN_NAME_PRODUCT_TYPE + TEXT_TYPE +
                     " )",
             "CREATE TABLE " + RepositoryCategory.Categories.TABLE_NAME + " (" +

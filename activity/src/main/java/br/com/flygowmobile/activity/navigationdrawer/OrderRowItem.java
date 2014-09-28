@@ -14,6 +14,7 @@ public class OrderRowItem implements Serializable {
     private String title;
     private String observations;
     private int quantity;
+    private int status;
     private Double priceUnit;
     private Double priceTotal;
 
@@ -96,5 +97,13 @@ public class OrderRowItem implements Serializable {
 
     public void setPriceTotal(Double priceTotal) {
         this.priceTotal = priceTotal;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

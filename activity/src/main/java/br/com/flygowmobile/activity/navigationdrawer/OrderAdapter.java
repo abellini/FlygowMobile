@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.enums.OrderItemStatusEnum;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildAccompanimentInfoService;
 import br.com.flygowmobile.service.CartItemClickService;
@@ -73,6 +74,12 @@ public class OrderAdapter extends BaseAdapter {
                         CartItemClickService.onMarkItemClick(selects, (CheckBox) v);
                     }
                 });
+                if(OrderItemStatusEnum.SENDED.getId() == row_pos.getStatus()){
+                   checkBox.setEnabled(false);
+                   checkBox.setVisibility(View.INVISIBLE);
+                   ImageView check = (ImageView) convertView.findViewById(R.id.checkOrder);
+                   check.setVisibility(View.VISIBLE);
+                }
 
                 List<View> accompanimentInfoElements = new ArrayList<View>();
                 accompanimentInfoElements.add(accIcon);

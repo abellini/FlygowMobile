@@ -46,6 +46,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         values.put(OrderItems.COLUMN_NAME_QUANTITY, orderItem.getQuantity());
         values.put(OrderItems.COLUMN_NAME_VALUE, orderItem.getValue());
         values.put(OrderItems.COLUMN_NAME_PRODUCT_TYPE, orderItem.getProductType());
+        values.put(OrderItems.COLUMN_NAME_STATUS, orderItem.getStatus());
         return values;
     }
 
@@ -100,6 +101,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
                 int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
                 int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
+                int idxStatus = c.getColumnIndex(OrderItems.COLUMN_NAME_STATUS);
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderItemId(c.getLong(idxId));
@@ -110,6 +112,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 orderItem.setQuantity(c.getInt(idxQuantity));
                 orderItem.setValue(c.getDouble(idxValue));
                 orderItem.setProductType(c.getString(idxProductType));
+                orderItem.setStatus(c.getInt(idxStatus));
                 return orderItem;
             }
         } catch (Exception e) {
@@ -131,6 +134,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
                 int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
                 int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
+                int idxStatus = c.getColumnIndex(OrderItems.COLUMN_NAME_STATUS);
 
                 OrderItem orderItem = new OrderItem();
                 orderItem.setOrderItemId(c.getLong(idxId));
@@ -141,6 +145,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 orderItem.setQuantity(c.getInt(idxQuantity));
                 orderItem.setValue(c.getDouble(idxValue));
                 orderItem.setProductType(c.getString(idxProductType));
+                orderItem.setStatus(c.getInt(idxStatus));
                 return orderItem;
             }
         } catch (Exception e) {
@@ -163,6 +168,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
             int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
             int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
             int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
+            int idxStatus = c.getColumnIndex(OrderItems.COLUMN_NAME_STATUS);
 
             do {
                 OrderItem orderItem = new OrderItem();
@@ -175,13 +181,14 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 orderItem.setQuantity(c.getInt(idxQuantity));
                 orderItem.setValue(c.getDouble(idxValue));
                 orderItem.setProductType(c.getString(idxProductType));
+                orderItem.setStatus(c.getInt(idxStatus));
             } while (c.moveToNext());
         }
         return orderItems;
     }
 
-    public List<OrderItem> listAllByOrder(long orderId) {
-        Cursor c = db.query(true, OrderItems.TABLE_NAME, OrderItem.columns, OrderItems.COLUMN_NAME_ORDER_ID + "=" + orderId, null, null, null, null, null);
+    public List<OrderItem> listAllByOrderAndStatus(long orderId, int statusId) {
+        Cursor c = db.query(true, OrderItems.TABLE_NAME, OrderItem.columns, OrderItems.COLUMN_NAME_ORDER_ID + "=" + orderId + " AND " + OrderItems.COLUMN_NAME_STATUS + "=" + statusId, null, null, null, null, null);
         List<OrderItem> orderItems = new ArrayList<OrderItem>();
         if (c.moveToFirst()) {
             int idxId = c.getColumnIndex(OrderItems.COLUMN_NAME_ORDER_ITEM_ID);
@@ -192,6 +199,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
             int idxQuantity = c.getColumnIndex(OrderItems.COLUMN_NAME_QUANTITY);
             int idxValue = c.getColumnIndex(OrderItems.COLUMN_NAME_VALUE);
             int idxProductType = c.getColumnIndex(OrderItems.COLUMN_NAME_PRODUCT_TYPE);
+            int idxStatus = c.getColumnIndex(OrderItems.COLUMN_NAME_STATUS);
 
             do {
                 OrderItem orderItem = new OrderItem();
@@ -204,6 +212,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
                 orderItem.setQuantity(c.getInt(idxQuantity));
                 orderItem.setValue(c.getDouble(idxValue));
                 orderItem.setProductType(c.getString(idxProductType));
+                orderItem.setStatus(c.getInt(idxStatus));
             } while (c.moveToNext());
         }
         return orderItems;
@@ -226,6 +235,7 @@ public class RepositoryOrderItem extends Repository<OrderItem> {
         public static final String COLUMN_NAME_FOOD_ID = "foodId";
         public static final String COLUMN_NAME_ORDER_ID = "orderId";
         public static final String COLUMN_NAME_PRODUCT_TYPE = "productType";
+        public static final String COLUMN_NAME_STATUS = "status";
 
     }
 }

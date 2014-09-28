@@ -1,7 +1,10 @@
 package br.com.flygowmobile.entity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import br.com.flygowmobile.database.RepositoryOrderItem;
 
@@ -15,7 +18,8 @@ public class OrderItem {
             RepositoryOrderItem.OrderItems.COLUMN_NAME_VALUE,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_FOOD_ID,
             RepositoryOrderItem.OrderItems.COLUMN_NAME_ORDER_ID,
-            RepositoryOrderItem.OrderItems.COLUMN_NAME_PRODUCT_TYPE
+            RepositoryOrderItem.OrderItems.COLUMN_NAME_PRODUCT_TYPE,
+            RepositoryOrderItem.OrderItems.COLUMN_NAME_STATUS,
     };
 
     private long orderItemId;
@@ -25,8 +29,10 @@ public class OrderItem {
     private String observations;
     private Double value;
     private long foodId;
+    private int status;
 
     private String productType;
+    private List<Accompaniment> accompanimentList;
 
     public OrderItem() {
     }
@@ -106,17 +112,20 @@ public class OrderItem {
         this.productType = productType;
     }
 
-    public String toJSONInitialConfig() {
-        return "{" +
-                "\"orderItemId\": " + getOrderItemId() + ", " +
-                "\"orderItemServerId\": " + getOrderItemServerId() + ", " +
-                "\"quantity\": " + "\"" + getQuantity() + "\", " +
-                "\"observations\": " + "\"" + null + "\", " +
-                "\"value\": " + "\"" + getValue() + "\", " +
-                "\"foodId\": " + "\"" + getFoodId() + "\", " +
-                "\"orderId\": " + getOrderId() + "\", " +
-                "\"productType\": " + "\"" + getProductType() + "\" " +
-                "}";
+    public List<Accompaniment> getAccompanimentList() {
+        return accompanimentList;
+    }
+
+    public void setAccompanimentList(List<Accompaniment> accompanimentList) {
+        this.accompanimentList = accompanimentList;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public JSONObject toJSONObject() {
@@ -130,13 +139,25 @@ public class OrderItem {
             jsonObject.put("foodId", getFoodId());
             jsonObject.put("orderId", getOrderId());
             jsonObject.put("productType", getProductType());
+            jsonObject.put("accompaniments", getAccompanimentsString());
+            jsonObject.put("status", getStatus());
             return jsonObject;
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
 
+    private String getAccompanimentsString() throws JSONException {
+        JSONArray accompanimentsArr = new JSONArray();
+        if(accompanimentList != null) {
+            for (Accompaniment acc : accompanimentList) {
+                JSONObject accompanimentObj = new JSONObject();
+                accompanimentObj.put("id", acc.getAccompanimentId());
+                accompanimentsArr.put(accompanimentObj);
+            }
+        }
+        return accompanimentsArr.toString();
+    }
 
 }

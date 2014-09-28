@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -36,11 +38,22 @@ public class CartActivity extends Activity {
     private BuildCartActionBarService cartActionBarService;
     private Map<Long, CheckBox> selects = new HashMap<Long, CheckBox>();
     private ProgressDialog progressSaveDialog;
+    private static final String CART_ACTIVITY = "CartActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         LayoutInflater inflater = LayoutInflater.from(this);
+
+        try{
+            boolean saved = this.getIntent().getExtras().getBoolean("saved");
+            if(saved){
+                Toast.makeText(this, StaticMessages.SUCCESS_SAVE_IN_SERVER.getName(), Toast.LENGTH_LONG).show();
+            }
+        }catch(Exception e){
+            Log.i(CART_ACTIVITY, "First Time");
+        }
+
 
         this.cartView = inflater.inflate(R.layout.cart_list_orders, null);
         setContentView(cartView);

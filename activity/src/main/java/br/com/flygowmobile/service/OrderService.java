@@ -46,6 +46,7 @@ import br.com.flygowmobile.entity.OrderItemAccompaniment;
 import br.com.flygowmobile.entity.Product;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.entity.Tablet;
+import br.com.flygowmobile.enums.OrderItemStatusEnum;
 import br.com.flygowmobile.enums.OrderStatusTypeEnum;
 import br.com.flygowmobile.enums.ProductTypeEnum;
 import br.com.flygowmobile.enums.StaticMessages;
@@ -135,10 +136,12 @@ public class OrderService {
             if(ProductTypeEnum.FOOD.getName().equals(item.getProductType())){
                 Food food = repositoryFood.findById(item.getFoodId());
                 OrderRowItem row = new OrderRowItem(item.getOrderItemId(), item.getFoodId(), 0, food.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+                row.setStatus(item.getStatus());
                 orderRowItemList.add(row);
             } else if (ProductTypeEnum.PROMOTION.getName().equals(item.getProductType())){
                 Promotion promotion = repositoryPromotion.findById(item.getFoodId());
                 OrderRowItem row = new OrderRowItem(item.getOrderItemId(), item.getFoodId(), 0, promotion.getName(), item.getObservations(), item.getQuantity(), item.getValue());
+                row.setStatus(item.getStatus());
                 orderRowItemList.add(row);
             }
         }
@@ -148,7 +151,7 @@ public class OrderService {
 
     public List<OrderItem> getOrderListToServer() {
         Order order = getCurrentOrder();
-        return this.repositoryOrderItem.listAllByOrder(order.getOrderId());
+        return this.repositoryOrderItem.listAllByOrderAndStatus(order.getOrderId(), OrderItemStatusEnum.OPENED.getId());
     }
 
     private void foodOrderAction(){
@@ -323,6 +326,7 @@ public class OrderService {
             orderItem.setQuantity(Integer.parseInt(quantityView.getText().toString()));
             orderItem.setValue(item.getValue());
             orderItem.setObservations(obsDescView.getText().toString().isEmpty() ? StaticMessages.NO_OBSERVATIONS.getName() : obsDescView.getText().toString());
+            orderItem.setStatus(OrderItemStatusEnum.OPENED.getId());
             orderItem.setOrderItemId(repositoryOrderItem.save(orderItem));
 
             if(orderItem.getOrderItemId() != -1 && selects != null && !selects.isEmpty()){

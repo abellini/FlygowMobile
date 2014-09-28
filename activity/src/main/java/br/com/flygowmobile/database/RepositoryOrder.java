@@ -46,7 +46,7 @@ public class RepositoryOrder extends Repository<Order> {
         values.put(Orders.COLUMN_NAME_TABLET_ID, order.getTabletId());
         values.put(Orders.COLUMN_NAME_TOTAL_VALUE, order.getTotalValue());
         values.put(Orders.COLUMN_NAME_STATUS_TYPE, order.getStatusType());
-
+        values.put(Orders.COLUMN_NAME_ORDER_SERVER_ID, order.getOrderServerId());
         return values;
     }
 
@@ -93,6 +93,7 @@ public class RepositoryOrder extends Repository<Order> {
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 int idxId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_ID);
+                int idxOrderServerId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_SERVER_ID);
                 int idxAttendantId = c.getColumnIndex(Orders.COLUMN_NAME_ATTENDANT_ID);
                 int idxClientId = c.getColumnIndex(Orders.COLUMN_NAME_CLIENT_ID);
                 int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
@@ -102,6 +103,7 @@ public class RepositoryOrder extends Repository<Order> {
 
                 Order order = new Order();
                 order.setOrderId(c.getLong(idxId));
+                order.setOrderServerId(c.getLong(idxOrderServerId));
                 order.setClientId(c.getInt(idxClientId));
                 order.setTotalValue(c.getDouble(idxTotalValue));
                 order.setHour(fm.parse(c.getString(idxOrderHour)));
@@ -123,6 +125,7 @@ public class RepositoryOrder extends Repository<Order> {
             if (c.getCount() > 0) {
                 c.moveToFirst();
                 int idxId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_ID);
+                int idxOrderServerId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_SERVER_ID);
                 int idxAttendantId = c.getColumnIndex(Orders.COLUMN_NAME_ATTENDANT_ID);
                 int idxClientId = c.getColumnIndex(Orders.COLUMN_NAME_CLIENT_ID);
                 int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
@@ -132,6 +135,7 @@ public class RepositoryOrder extends Repository<Order> {
 
                 Order order = new Order();
                 order.setOrderId(c.getLong(idxId));
+                order.setOrderServerId(c.getLong(idxOrderServerId));
                 order.setClientId(c.getInt(idxClientId));
                 order.setTotalValue(c.getDouble(idxTotalValue));
                 order.setHour(fm.parse(c.getString(idxOrderHour)));
@@ -153,6 +157,7 @@ public class RepositoryOrder extends Repository<Order> {
         List<Order> orders = new ArrayList<Order>();
         if (c.moveToFirst()) {
             int idxId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_ID);
+            int idxOrderServerId = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_SERVER_ID);
             int idxAttendantId = c.getColumnIndex(Orders.COLUMN_NAME_ATTENDANT_ID);
             int idxClientId = c.getColumnIndex(Orders.COLUMN_NAME_CLIENT_ID);
             int idxOrderHour = c.getColumnIndex(Orders.COLUMN_NAME_ORDER_HOUR);
@@ -164,6 +169,7 @@ public class RepositoryOrder extends Repository<Order> {
                 Order order = new Order();
                 orders.add(order);
                 order.setOrderId(c.getLong(idxId));
+                order.setOrderServerId(c.getLong(idxOrderServerId));
                 order.setClientId(c.getInt(idxClientId));
                 order.setTotalValue(c.getDouble(idxTotalValue));
                 try {

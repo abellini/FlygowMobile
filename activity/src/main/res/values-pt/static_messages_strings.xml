@@ -6,7 +6,7 @@
     <string name="wait">Por favor aguarde. A aplicação está carregando os dados…</string>
     <string name="localLoad">Resgatando dados do servidor para a base de dados do tablet…</string>
     <string name="registerFromServer">Por favor, aguarde enquanto é atualizado os dados vindos do servidor!</string>
-    <string name="successSaveInServer">Os dados foram salvos com sucesso no servidor!</string>
+    <string name="successSaveInServer">Os dados foram enviados com sucesso!</string>
     <string name="callConfigurationFromServer">Carregando configurações padrões definidas anteriormente…</string>
     <string name="exception">Um erro interno foi encontrado na aplicação. Por favor, verifique o log da aplicação!</string>
     <string name="missingConfigurations">Atualmente, as configurações que NÃO estão definidas são: \n</string>
@@ -38,7 +38,7 @@
     <string name="calledAttendant">O atendente foi chamado. Por favor aguarde até que ele venha a sua mesa.</string>
     <string name="callAttendantError">Houve um erro ao chamar o atendente. Por favor, chame-o da maneira convencional.</string>
     <string name="cartTotalValue">O valor total deste pedido é: </string>
-    <string name="saveOrderFromServer">Por favor, aguarde enquanto é enviamos seu pedido!</string>
+    <string name="saveOrderFromServer">Por favor, aguarde enquanto enviamos seu pedido!</string>
     <string name="priceDescription">faça seu pedido…</string>
     <string name="priceSubdescription">basta clicar aqui!</string>
     <string name="selectOne">Selecione pelo menos um item!</string>
@@ -50,5 +50,7 @@
     <string name="onlyCloseOrder">O pedido será encerrado sem notificação ao estabelecimento por não apresentar valor. Um novo atendimento será preparado e o cardápio digital poderá ser utilizado novamente para novos pedidos.</string>
     <string name="sendCloseOrder">Aguarde, seu pedido está sendo encerrado…</string>
     <string name="newAttendanceMsg">Para seguir a um novo atendimento, por favor digite a senha de segurança…</string>
+    <string name="allItemsSended">Todos os itens do atual pedido já foram enviados. \nPara selecionar mais produtos, clique em \'Pedir mais Produtos\', escolha seus itens e depois envie-os novamente clicando em \'Confirmar Pedido\'.</string>
+    <string name="confirmSendOrder">Confirma o pedido de suas escolhas?</string>
     <string name="generic"/>
 </resources>

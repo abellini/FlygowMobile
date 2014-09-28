@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
@@ -26,10 +27,14 @@ import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
+import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Order;
 import br.com.flygowmobile.entity.OrderItem;
+import br.com.flygowmobile.entity.OrderItemAccompaniment;
+import br.com.flygowmobile.enums.OrderItemStatusEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
@@ -45,6 +50,7 @@ public class CartButtonActionsService {
     private BuildMainActionBarService actionBarService;
     private ProgressDialog progressSaveDialog;
     private RegisterOrderTask mRegisterTask = null;
+    private RepositoryOrder repositoryOrder;
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
 
@@ -53,6 +59,7 @@ public class CartButtonActionsService {
         this.view = view;
         this.orderService = new OrderService(activity);
 
+        this.repositoryOrder = new RepositoryOrder(activity);
         this.repositoryOrderItem = new RepositoryOrderItem(activity);
         this.repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(activity);
     }
@@ -68,12 +75,31 @@ public class CartButtonActionsService {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog dialog = null;
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                String popupTitle = StaticTitles.SEND_ORDER.getName();
+                builder.setTitle(popupTitle);
+                builder.setMessage(StaticMessages.CONFIRM_SEND_ORDER.getName());
+                builder.setPositiveButton(StaticTitles.YES.getName(), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                    progressSaveDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
+                            StaticMessages.SAVE_ORDER_FROM_SERVER.getName(), true);
 
-                progressSaveDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
-                        StaticMessages.SAVE_ORDER_FROM_SERVER.getName(), true);
-
-                mRegisterTask = new RegisterOrderTask();
-                mRegisterTask.execute((Void) null);
+                    mRegisterTask = new RegisterOrderTask();
+                    mRegisterTask.execute((Void) null);
+                    dialog.dismiss();
+                        }
+                        });
+                builder.setNegativeButton(StaticTitles.NO.getName(), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                dialog = builder.create();
+                dialog.setIcon(R.drawable.question_title);
+                dialog.show();
             }
         });
     }
@@ -154,28 +180,37 @@ public class CartButtonActionsService {
             try {
 
                 Order order = orderService.getCurrentOrder();
+                order.setTotalValue(orderService.getTotalOrderValue());
                 List<OrderItem> orderItemsList = orderService.getOrderListToServer();
+                if(orderItemsList != null && !orderItemsList.isEmpty()){
+                    JSONObject jsonOrderObject = new JSONObject();
+                    JSONArray jsonArray = new JSONArray();
 
-                JSONObject jsonOrderObject = new JSONObject();
-                JSONArray jsonArray = new JSONArray();
+                    for (OrderItem orderItem : orderItemsList) {
+                        List<Accompaniment> oia = repositoryOrderItemAccompaniment.findByOrderItemId(orderItem.getOrderItemId());
+                        if(oia != null && !oia.isEmpty()){
+                            orderItem.setAccompanimentList(oia);
+                        }
+                        jsonArray.put(orderItem.toJSONObject());
+                    }
+                    try {
+                        jsonOrderObject.put("order", order.toJSONObject());
+                        jsonOrderObject.put("orderItens", jsonArray);
+                    } catch (JSONException e) {
+                        Log.i(CART_ACTIVITY, "Erro" + e);
+                    }
+                    NameValuePair orderJsonPair = new BasicNameValuePair("orderJson", jsonOrderObject.toString());
+                    Log.i(CART_ACTIVITY, "URL -->>>>>>>>> " + url);
+                    return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(orderJsonPair));
+                }else{
+                    return null;
+                }
 
-                for (OrderItem orderItem : orderItemsList) {
-                    jsonArray.put(orderItem.toJSONObject());
-                }
-                try {
-                    jsonOrderObject.put("order", order.toJSONObject());
-                    jsonOrderObject.put("orderItens", jsonArray);
-                } catch (JSONException e) {
-                    Log.i(CART_ACTIVITY, "Erro" + e);
-                }
-                NameValuePair orderJsonPair = new BasicNameValuePair("orderJson", jsonOrderObject.toString());
-                Log.i(CART_ACTIVITY, "URL -->>>>>>>>> " + url);
-                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(orderJsonPair));
             } catch (HttpHostConnectException ex) {
-                Log.i(CART_ACTIVITY, StaticMessages.TIMEOUT.getName());
+                Log.i(CART_ACTIVITY, StaticMessages.TIMEOUT.getName(), ex);
                 Toast.makeText(activity, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
-                Log.i(CART_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
+                Log.i(CART_ACTIVITY, StaticMessages.NOT_SERVICE.getName(), e);
                 Toast.makeText(activity, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
             }
             return "";
@@ -183,25 +218,53 @@ public class CartButtonActionsService {
 
         @Override
         protected void onPostExecute(final String response) {
+            if (response == null){
+                progressSaveDialog.dismiss();
+                FlygowAlertDialog.createInfoPopup(activity, StaticTitles.INFORMATION, StaticMessages.ALL_ITEMS_SENDED);
+            }else{
+                Log.i(CART_ACTIVITY, "Service: " + response);
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        //BEGIN of from/to of ids of orders and order items from the server to the tablet.
+                        JSONObject serverIds = jsonObject.getJSONObject("serverIds");
+                        Order tabletOrder = repositoryOrder.findById(serverIds.getLong("tabletOrderId"));
+                        if(tabletOrder.getOrderServerId() == 0){
+                            tabletOrder.setOrderServerId(serverIds.getLong("serverOrderId"));
+                            repositoryOrder.save(tabletOrder);
+                        }
+                        JSONArray serverOrderItemIds = serverIds.getJSONArray("orderItemIds");
+                        if(serverOrderItemIds != null && serverOrderItemIds.length() > 0){
+                            for(int i = 0; i < serverOrderItemIds.length(); i++){
+                                JSONObject orderItemIdsCompare = serverOrderItemIds.getJSONObject(i);
+                                OrderItem tabletOrderItem=
+                                        repositoryOrderItem.findById(orderItemIdsCompare.getLong("tabletOrderItemId"));
+                                if(tabletOrderItem.getOrderItemServerId() == 0){
+                                    tabletOrderItem.setOrderItemServerId(orderItemIdsCompare.getLong("serverOrderItemId"));
+                                    tabletOrderItem.setStatus(OrderItemStatusEnum.SENDED.getId());
+                                    repositoryOrderItem.save(tabletOrderItem);
+                                }
+                            }
+                        }
+                        //END of from/to of ids of orders and order items from the server to the tablet.
+                        progressSaveDialog.dismiss();
 
-            Log.i(CART_ACTIVITY, "Service: " + response);
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                Boolean success = jsonObject.getBoolean("success");
-                if (success) {
-                    progressSaveDialog.dismiss();
-                    Toast.makeText(activity, StaticMessages.SUCCESS_SAVE_IN_SERVER.getName(), Toast.LENGTH_LONG).show();
-
-                } else {
+                        Intent it = new Intent(activity, CartActivity.class);
+                        it.putExtra("saved", true);
+                        activity.startActivity(it);
+                        activity.finish();
+                    } else {
+                        //FINISH LOADING...
+                        progressSaveDialog.dismiss();
+                        Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
                     //FINISH LOADING...
                     progressSaveDialog.dismiss();
-                    Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    Log.i(CART_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
+                    Toast.makeText(activity, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
                 }
-            } catch (Exception e) {
-                //FINISH LOADING...
-                progressSaveDialog.dismiss();
-                Log.i(CART_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
-                Toast.makeText(activity, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }
 

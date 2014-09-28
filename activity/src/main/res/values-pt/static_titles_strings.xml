@@ -37,4 +37,5 @@
     <string name="closingOrder">Encerrando seu atendimento…</string>
     <string name="sending">Enviando…</string>
     <string name="newAttendance">Seguir para um novo atendimento…</string>
+    <string name="sendOrder">Enviando o pedido…</string>
 </resources>

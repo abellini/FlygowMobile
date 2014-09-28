@@ -108,34 +108,20 @@ public class Order {
         this.statusType = statusType;
     }
 
-    public String toJSONInitialConfig() {
-
-        return "{" +
-                "\"orderId\": " + getOrderId() + ", " +
-                "\"orderServerId\": " + getOrderServerId() + ", " +
-                "\"clientId\": " + "\"" + getClientId() + "\", " +
-                "\"tabletId\": " + getTabletId() + ", " +
-                "\"totalValue\": " + "\"" + getTotalValue() + "\", " +
-                "\"hour\": " + "\"" + getHour() + "\", " +
-                "\"attendantId\": " + getAttendantId() + "\",  " +
-                "\"statusType\": " + getStatusType() +
-                "}";
-    }
 
     public JSONObject toJSONObject() {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("orderId", getOrderServerId());
+            jsonObject.put("orderId", getOrderId());
             jsonObject.put("orderServerId", getOrderServerId());
             jsonObject.put("clientId", getClientId());
             jsonObject.put("tabletId", getTabletId());
             jsonObject.put("totalValue", getTotalValue());
-            jsonObject.put("hour", StringUtils.parseString(getHour()));
+            jsonObject.put("date", StringUtils.parseString(getHour()));
             jsonObject.put("attendantId", getAttendantId());
             jsonObject.put("statusType", getStatusType());
             return jsonObject;
         } catch (JSONException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
