@@ -50,7 +50,7 @@
     <string name="onlyCloseOrder">The application will be terminated without notice by the establishment does not present value. A new service will be prepared and the digital menu can be used again for new orders.</string>
     <string name="sendCloseOrder">Please wait, your order is being closed…</string>
     <string name="newAttendanceMsg">To follow a new attendance, please enter the security password…</string>
-    <string name="allItemsSended">All items in the current request has been sent. \nTo select more products, click on \'More Products\', choose your items and then send them again by clicking \'Send Order\'.</string>
-    <string name="confirmSendOrder">Confirms the order of your choices?</string>
+    <string name="allItemsSended">Don\'t have item to be send. \nTo select more products, click on \'More Products\', choose your items and then send them again by clicking \'Send Order\'.</string>
+    <string name="confirmSendOrder">Confirms the order of your choices above?</string>
     <string name="generic"/>
 </resources>

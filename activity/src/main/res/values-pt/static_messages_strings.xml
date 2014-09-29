@@ -50,7 +50,7 @@
     <string name="onlyCloseOrder">O pedido será encerrado sem notificação ao estabelecimento por não apresentar valor. Um novo atendimento será preparado e o cardápio digital poderá ser utilizado novamente para novos pedidos.</string>
     <string name="sendCloseOrder">Aguarde, seu pedido está sendo encerrado…</string>
     <string name="newAttendanceMsg">Para seguir a um novo atendimento, por favor digite a senha de segurança…</string>
-    <string name="allItemsSended">Todos os itens do atual pedido já foram enviados. \nPara selecionar mais produtos, clique em \'Pedir mais Produtos\', escolha seus itens e depois envie-os novamente clicando em \'Confirmar Pedido\'.</string>
-    <string name="confirmSendOrder">Confirma o pedido de suas escolhas?</string>
+    <string name="allItemsSended">Não há pedidos para serem enviados. \nPara selecionar mais produtos, clique em \'Pedir mais Produtos\', escolha seus itens e depois envie-os novamente clicando em \'Confirmar Pedido\'.</string>
+    <string name="confirmSendOrder">Confirma o pedido de suas escolhas abaixo?</string>
     <string name="generic"/>
 </resources>

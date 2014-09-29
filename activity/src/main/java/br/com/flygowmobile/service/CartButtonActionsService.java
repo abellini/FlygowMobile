@@ -27,14 +27,18 @@ import br.com.flygowmobile.Utils.App;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.database.RepositoryFood;
 import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
+import br.com.flygowmobile.database.RepositoryPromotion;
 import br.com.flygowmobile.entity.Accompaniment;
+import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Order;
 import br.com.flygowmobile.entity.OrderItem;
-import br.com.flygowmobile.entity.OrderItemAccompaniment;
+import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.enums.OrderItemStatusEnum;
+import br.com.flygowmobile.enums.ProductTypeEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
@@ -50,6 +54,8 @@ public class CartButtonActionsService {
     private BuildMainActionBarService actionBarService;
     private ProgressDialog progressSaveDialog;
     private RegisterOrderTask mRegisterTask = null;
+    private RepositoryFood repositoryFood;
+    private RepositoryPromotion repositoryPromotion;
     private RepositoryOrder repositoryOrder;
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
@@ -59,6 +65,8 @@ public class CartButtonActionsService {
         this.view = view;
         this.orderService = new OrderService(activity);
 
+        this.repositoryFood = new RepositoryFood(activity);
+        this.repositoryPromotion = new RepositoryPromotion(activity);
         this.repositoryOrder = new RepositoryOrder(activity);
         this.repositoryOrderItem = new RepositoryOrderItem(activity);
         this.repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(activity);
@@ -75,33 +83,53 @@ public class CartButtonActionsService {
         mRegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog dialog = null;
-                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                String popupTitle = StaticTitles.SEND_ORDER.getName();
-                builder.setTitle(popupTitle);
-                builder.setMessage(StaticMessages.CONFIRM_SEND_ORDER.getName());
-                builder.setPositiveButton(StaticTitles.YES.getName(), new
-                        DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                    progressSaveDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
-                            StaticMessages.SAVE_ORDER_FROM_SERVER.getName(), true);
+                final List<OrderItem> orderItemsList = orderService.getOrderListToServer();
+                if(orderItemsList != null && !orderItemsList.isEmpty()) {
+                    String messageItemsToServer = getProductNamesToServer(orderItemsList);
+                    AlertDialog dialog = null;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    String popupTitle = StaticTitles.SEND_ORDER.getName();
+                    builder.setTitle(popupTitle);
+                    builder.setMessage(StaticMessages.CONFIRM_SEND_ORDER.getName() + messageItemsToServer);
+                    builder.setPositiveButton(StaticTitles.YES.getName(), new
+                            DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progressSaveDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
+                                            StaticMessages.SAVE_ORDER_FROM_SERVER.getName(), true);
 
-                    mRegisterTask = new RegisterOrderTask();
-                    mRegisterTask.execute((Void) null);
-                    dialog.dismiss();
-                        }
-                        });
-                builder.setNegativeButton(StaticTitles.NO.getName(), new
-                        DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                dialog = builder.create();
-                dialog.setIcon(R.drawable.question_title);
-                dialog.show();
+                                    mRegisterTask = new RegisterOrderTask(orderItemsList);
+                                    mRegisterTask.execute((Void) null);
+                                    dialog.dismiss();
+                                }
+                            });
+                    builder.setNegativeButton(StaticTitles.NO.getName(), new
+                            DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    dialog = builder.create();
+                    dialog.setIcon(R.drawable.question_title);
+                    dialog.show();
+                } else {
+                    FlygowAlertDialog.createInfoPopup(activity, StaticTitles.INFORMATION, StaticMessages.ALL_ITEMS_SENDED);
+                }
             }
         });
+    }
+
+    private String getProductNamesToServer(List<OrderItem> orderItemsList){
+        String itemsToSend = "";
+        for(OrderItem orderItem : orderItemsList){
+            if(ProductTypeEnum.FOOD.equals(ProductTypeEnum.fromName(orderItem.getProductType()))){
+                Food food = repositoryFood.findById(orderItem.getFoodId());
+                itemsToSend +=  "\n" + " - " + food.getName() + " (" + orderItem.getQuantity()  + "un.)";
+            }else if (ProductTypeEnum.PROMOTION.equals(ProductTypeEnum.fromName(orderItem.getProductType()))){
+                Promotion promotion = repositoryPromotion.findById(orderItem.getFoodId());
+                itemsToSend += "\n" + " - " + promotion.getName() + " (" + orderItem.getQuantity()  + "un.)";
+            }
+        }
+        return itemsToSend;
     }
 
     private void onContinueClick(){
@@ -168,11 +196,12 @@ public class CartButtonActionsService {
      */
     private class RegisterOrderTask extends AsyncTask<Void, Void, String> {
 
-        App serverAddressObj = (App) activity.getApplication();
-        String url = serverAddressObj.getServerUrl(ServerController.REGISTER_ORDER);
+        private App serverAddressObj = (App) activity.getApplication();
+        private String url = serverAddressObj.getServerUrl(ServerController.REGISTER_ORDER);
+        private List<OrderItem> orderItemsList;
 
-        public RegisterOrderTask() {
-
+        public RegisterOrderTask(List<OrderItem> orderItemsList) {
+            this.orderItemsList = orderItemsList;
         }
 
         @Override
@@ -181,7 +210,6 @@ public class CartButtonActionsService {
 
                 Order order = orderService.getCurrentOrder();
                 order.setTotalValue(orderService.getTotalOrderValue());
-                List<OrderItem> orderItemsList = orderService.getOrderListToServer();
                 if(orderItemsList != null && !orderItemsList.isEmpty()){
                     JSONObject jsonOrderObject = new JSONObject();
                     JSONArray jsonArray = new JSONArray();
