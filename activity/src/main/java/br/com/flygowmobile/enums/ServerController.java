@@ -11,7 +11,8 @@ public enum ServerController {
     INITIALIZE_PHOTO_PRODUCTS("initializeProductImages"),
     CALL_ATTENDANT("callAttendant"),
     REGISTER_ORDER("registerOrder"),
-    CLOSE_ATTENDANCE("closeAttendance");
+    CLOSE_ATTENDANCE("closeAttendance"),
+    REFRESH_TABLET_STATUS("refreshTabletStatus");
 
     private String name;
 

@@ -47,6 +47,7 @@ public class ActionBarService {
     private Activity activity;
     private OrderService orderService;
     private EndOrderService endOrderService;
+    private CallAttendantService callAttendantService;
     private View actionBarView;
 
     private Map<Long, CheckBox> paymentFormSelects;
@@ -54,7 +55,6 @@ public class ActionBarService {
     private RepositoryTablet repositoryTablet;
     private RepositoryPaymentForm repositoryPaymentForm;
 
-    private ProgressDialog callAttendantDialog;
 
     private static final String MAIN_ACTIVITY = "MainActivity";
 
@@ -62,6 +62,7 @@ public class ActionBarService {
         this.activity = activity;
         this.actionBarView = actionBarView;
         this.orderService = new OrderService(activity);
+        this.callAttendantService = new CallAttendantService(activity);
         this.endOrderService = new EndOrderService(activity);
 
         repositoryTablet = new RepositoryTablet(activity);
@@ -172,10 +173,8 @@ public class ActionBarService {
                     DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            callAttendantDialog = ProgressDialog.show(activity, StaticTitles.LOAD.getName(),
-                                    StaticMessages.CALLING_ATTENDANT.getName(), true);
-                            CallAttendantTask callAttendantTask = new CallAttendantTask();
-                            callAttendantTask.execute((Void) null);
+                            callAttendantService.callAttendant();
+
                         }
                     });
                 builder.setNegativeButton(StaticTitles.NO.getName(), new
@@ -189,61 +188,5 @@ public class ActionBarService {
                 dialog.show();
             }
         });
-    }
-
-    public class CallAttendantTask extends AsyncTask<Void, Void, String> {
-
-        App serverAddressObj = (App) activity.getApplication();
-        String url = serverAddressObj.getServerUrl(ServerController.CALL_ATTENDANT);
-
-        @Override
-        protected String doInBackground(Void... params) {
-            try {
-                Tablet tablet = repositoryTablet.findLast();
-                Integer tabletNumber = tablet.getNumber();
-                Long attendantId = tablet.getAttendantId();
-                Long alertTypeId = AlertMessageTypeEnum.TO_ATTENDANCE.getId();
-
-                NameValuePair tabletIdPair = new BasicNameValuePair("tabletNumber", String.valueOf(tabletNumber));
-                NameValuePair attendantIdPair = new BasicNameValuePair("attendantId", String.valueOf(attendantId));
-                NameValuePair alertTypeIdPair = new BasicNameValuePair("alertTypeId", String.valueOf(alertTypeId));
-
-                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST,
-                        Arrays.asList(tabletIdPair, attendantIdPair, alertTypeIdPair));
-            } catch (HttpHostConnectException ex) {
-                callAttendantDialog.dismiss();
-                Log.i(MAIN_ACTIVITY, StaticMessages.TIMEOUT.getName());
-            } catch (Exception e) {
-                callAttendantDialog.dismiss();
-                Log.i(MAIN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
-            }
-            return "";
-        }
-
-        @Override
-        protected void onPostExecute(final String response) {
-
-            Log.i(MAIN_ACTIVITY, "Call Attendant Service: " + response);
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                Boolean success = jsonObject.getBoolean("success");
-                if (success) {
-                    callAttendantDialog.dismiss();
-                    Toast.makeText(activity, StaticMessages.CALL_ATTENDANT.getName(), Toast.LENGTH_LONG).show();
-                } else {
-                    callAttendantDialog.dismiss();
-                    Toast.makeText(activity, StaticMessages.CALL_ATTENDANT_ERROR.getName(), Toast.LENGTH_LONG).show();
-                }
-            } catch (Exception e) {
-                callAttendantDialog.dismiss();
-                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
-                Toast.makeText(activity, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            callAttendantDialog.dismiss();
-        }
     }
 }

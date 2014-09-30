@@ -52,10 +52,12 @@ import br.com.flygowmobile.enums.PositionsEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.enums.TabletStatusEnum;
 import br.com.flygowmobile.service.BuildMainActionBarService;
 import br.com.flygowmobile.service.BuildMenuItemsService;
 import br.com.flygowmobile.service.ClickProductContentService;
 import br.com.flygowmobile.service.ExitApplicationService;
+import br.com.flygowmobile.service.TabletStatusService;
 
 public class MainActivity extends Activity {
 
@@ -68,6 +70,7 @@ public class MainActivity extends Activity {
     private BuildMenuItemsService menuItemsService;
     private ClickProductContentService clickProductContentService;
     private ExitApplicationService exitApplicationService;
+    private TabletStatusService tabletStatusService;
 
     public BuildMainActionBarService mainActionBarService;
 
@@ -121,6 +124,7 @@ public class MainActivity extends Activity {
 
         clickProductContentService = new ClickProductContentService(MainActivity.this, mDrawerLayout, mDrawerList);
         exitApplicationService = new ExitApplicationService(this);
+        tabletStatusService = new TabletStatusService(this);
 
         //Set the inicial fragment... promotions...
         //After this, load the foods and after advertisements. After all, change to the next activity
@@ -331,7 +335,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public class AdvertisementMediaTask extends AsyncTask<Void, Void, String> {
+    private class AdvertisementMediaTask extends AsyncTask<Void, Void, String> {
 
         private final List<Advertisement> advertisements;
         App serverAddressObj = (App) getApplication();
@@ -407,6 +411,9 @@ public class MainActivity extends Activity {
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
                 }
+                // Change the status tablet
+                tabletStatusService.changeTabletStatus(TabletStatusEnum.IN_ATTENDANCE, true);
+
                 progressAdvertisementDialog.dismiss();
             } catch (Exception e) {
                 Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
@@ -415,7 +422,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    public class PromotionMediaTask extends AsyncTask<Void, Void, String> {
+    private class PromotionMediaTask extends AsyncTask<Void, Void, String> {
 
         private final List<Promotion> promotions;
         App serverAddressObj = (App) getApplication();
@@ -507,7 +514,7 @@ public class MainActivity extends Activity {
     }
 
 
-    public class FoodMediaTask extends AsyncTask<Void, Void, String> {
+    private class FoodMediaTask extends AsyncTask<Void, Void, String> {
 
         private final List<Food> foods;
         App serverAddressObj = (App) getApplication();

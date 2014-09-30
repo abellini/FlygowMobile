@@ -41,12 +41,13 @@ public class Tablet implements Serializable {
         this.attendantId = attendantId;
     }
 
-    public Tablet(int number, String ip, int port, String serverIP, int serverPort) {
+    public Tablet(int number, String ip, int port, String serverIP, int serverPort, int statusId) {
         this.number = number;
         this.ip = ip;
         this.port = port;
         this.serverIP = serverIP;
         this.serverPort = serverPort;
+        this.statusId = statusId;
     }
 
 
@@ -131,7 +132,11 @@ public class Tablet implements Serializable {
                 "\"ip\": " + "\"" + getIp() + "\", " +
                 "\"port\": " + getPort() + ", " +
                 "\"serverIP\": " + "\"" + getServerIP() + "\", " +
-                "\"serverPort\": " + getServerPort() +
+                "\"serverPort\": " + getServerPort() + ", " +
+                "\"serviceStatus\": " +
+                    "{" +
+                        "\"id\": " + getStatusId() +
+                    "}" +
                 "}";
     }
 

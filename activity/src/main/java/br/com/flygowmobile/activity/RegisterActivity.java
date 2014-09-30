@@ -31,6 +31,7 @@ import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
+import br.com.flygowmobile.enums.TabletStatusEnum;
 import br.com.flygowmobile.service.ServiceHandler;
 
 public class RegisterActivity extends Activity {
@@ -216,7 +217,7 @@ public class RegisterActivity extends Activity {
             url.setServerPort(Integer.parseInt(serverPort));
             Tablet tabletToTask = null;
             if (!isReconnect) {
-                tabletToTask = new Tablet(nNumber, ip, nport, serverIP, nserverPort);
+                tabletToTask = new Tablet(nNumber, ip, nport, serverIP, nserverPort, TabletStatusEnum.AVALIABLE.getId());
             } else {
                 tabletToTask = repositoryTablet.findLast();
                 previousTabletNumber = tabletToTask.getNumber();
@@ -225,6 +226,7 @@ public class RegisterActivity extends Activity {
                 tabletToTask.setPort(nport);
                 tabletToTask.setServerIP(serverIP);
                 tabletToTask.setServerPort(nserverPort);
+                tabletToTask.setStatusId(TabletStatusEnum.AVALIABLE.getId());
             }
 
             //LOADING

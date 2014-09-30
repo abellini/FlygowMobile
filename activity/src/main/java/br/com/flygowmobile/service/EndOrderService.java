@@ -109,7 +109,7 @@ public class EndOrderService {
         }
     }
 
-    public class CloseAttendanceTask extends AsyncTask<Void, Void, String> {
+    private class CloseAttendanceTask extends AsyncTask<Void, Void, String> {
 
         private App serverAddressObj = (App) activity.getApplication();
         private String url = serverAddressObj.getServerUrl(ServerController.CLOSE_ATTENDANCE);
@@ -137,8 +137,6 @@ public class EndOrderService {
                 }
                 String closeAttendanceJson =
                     "{" +
-                            "tabletNumber: " + tablet.getNumber() + ", " +
-                            "attendantId: " + tablet.getAttendantId() + ", " +
                             "tabletId: " + tablet.getTabletId() + ", " +
                             "paymentFormIds: \'" + listOfChoosedPaymentForms + "\', " +
                             "alertType: " + AlertMessageTypeEnum.TO_PAYMENT.getId() +
