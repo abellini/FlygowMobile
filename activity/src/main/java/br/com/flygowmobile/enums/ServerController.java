@@ -12,7 +12,8 @@ public enum ServerController {
     CALL_ATTENDANT("callAttendant"),
     REGISTER_ORDER("registerOrder"),
     CLOSE_ATTENDANCE("closeAttendance"),
-    REFRESH_TABLET_STATUS("refreshTabletStatus");
+    REFRESH_TABLET_STATUS("refreshTabletStatus"),
+    EXIT_APPLICATION("exitApplication");
 
     private String name;
 

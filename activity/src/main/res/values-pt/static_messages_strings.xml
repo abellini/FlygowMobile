@@ -42,6 +42,7 @@
     <string name="priceDescription">faça seu pedido…</string>
     <string name="priceSubdescription">basta clicar aqui!</string>
     <string name="selectOne">Selecione pelo menos um item!</string>
+    <string name="selectOnePaymentForm">Selecione pelo menos uma forma de pagamento!</string>
     <string name="cartCancelItemMsg">Tem certeza que deseja remover este item de sua lista de pedidos?</string>
     <string name="exitAppMsg">Para sair da aplicação, por favor digite a senha de segurança…</string>
     <string name="invalidPassword">A senha informada é INVÁLIDA!</string>

@@ -48,6 +48,7 @@ public enum StaticMessages {
     PRICE_DESCRIPTION(R.string.priceDescription),
     PRICE_SUBDESCRIPTION(R.string.priceSubdescription),
     SELECT_ONE(R.string.selectOne),
+    SELECT_ONE_PAYMENT_FORM(R.string.selectOnePaymentForm),
     CANCEL_ITEM(R.string.cartCancelItemMsg),
     EXIT_APP(R.string.exitAppMsg),
     INVALID_PASSWORD(R.string.invalidPassword),

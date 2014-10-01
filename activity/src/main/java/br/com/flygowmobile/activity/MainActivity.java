@@ -150,9 +150,9 @@ public class MainActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        tabletStatusService.changeTabletStatus(TabletStatusEnum.UNAVALIABLE, true);
+        exitApplicationService.refreshOrdersInServerOnExitApplication();
     }
-
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

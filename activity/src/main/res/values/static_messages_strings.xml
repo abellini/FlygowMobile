@@ -42,6 +42,7 @@
     <string name="priceDescription">make your order…</string>
     <string name="priceSubdescription">just click here!</string>
     <string name="selectOne">Select at least one item!</string>
+    <string name="selectOnePaymentForm">Select at least one payment form!</string>
     <string name="cartCancelItemMsg">Are you sure you want to remove this item from your list?</string>
     <string name="exitAppMsg">To exit the application, please enter the security password…</string>
     <string name="invalidPassword">The entered password is INVALID!</string>

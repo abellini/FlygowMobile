@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.App;
+import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.activity.ByeByeActivity;
 import br.com.flygowmobile.activity.MainActivity;
 import br.com.flygowmobile.activity.R;
@@ -123,57 +124,64 @@ public class EndOrderService {
 
         @Override
         protected String doInBackground(Void... params) {
-            try {
-                Tablet tablet = repositoryTablet.findLast();
-                String listOfChoosedPaymentForms = "";
-                int i = 0;
-                for(Long paymentForm : paymentFormSelects.keySet()){
-                    if(i != paymentFormSelects.keySet().size()-1){
-                        listOfChoosedPaymentForms += paymentForm + ",";
-                    }else{
-                        listOfChoosedPaymentForms += paymentForm;
+            if (paymentFormSelects != null && !paymentFormSelects.isEmpty()) {
+                try {
+                    Tablet tablet = repositoryTablet.findLast();
+                    String listOfChoosedPaymentForms = "";
+                    int i = 0;
+                    for (Long paymentForm : paymentFormSelects.keySet()) {
+                        if (i != paymentFormSelects.keySet().size() - 1) {
+                            listOfChoosedPaymentForms += paymentForm + ",";
+                        } else {
+                            listOfChoosedPaymentForms += paymentForm;
+                        }
+                        i++;
                     }
-                    i++;
+                    String closeAttendanceJson =
+                            "{" +
+                                "tabletNumber: " + tablet.getNumber() + ", " +
+                                "paymentFormIds: \'" + listOfChoosedPaymentForms + "\', " +
+                                "alertType: " + AlertMessageTypeEnum.TO_PAYMENT.getId() +
+                            "}";
+                    NameValuePair valuePair = new BasicNameValuePair("closeAttendanceJson", closeAttendanceJson);
+                    return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
+                }catch(HttpHostConnectException ex){
+                    progressCloseOrderDialog.dismiss();
+                    Log.i(MAIN_ACTIVITY, StaticMessages.TIMEOUT.getName());
+                }catch(Exception e){
+                    progressCloseOrderDialog.dismiss();
+                    Log.i(MAIN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
                 }
-                String closeAttendanceJson =
-                    "{" +
-                            "tabletId: " + tablet.getTabletId() + ", " +
-                            "paymentFormIds: \'" + listOfChoosedPaymentForms + "\', " +
-                            "alertType: " + AlertMessageTypeEnum.TO_PAYMENT.getId() +
-                    "}";
-                NameValuePair valuePair = new BasicNameValuePair("closeAttendanceJson", closeAttendanceJson);
-                return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(valuePair));
-            } catch (HttpHostConnectException ex) {
-                progressCloseOrderDialog.dismiss();
-                Log.i(MAIN_ACTIVITY, StaticMessages.TIMEOUT.getName());
-            } catch (Exception e) {
-                progressCloseOrderDialog.dismiss();
-                Log.i(MAIN_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
             }
-            return "";
+            return null;
         }
 
         @Override
         protected void onPostExecute(final String response) {
             Log.i(MAIN_ACTIVITY, "Service: " + response);
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                Boolean success = jsonObject.getBoolean("success");
-                if (success) {
-                    progressCloseOrderDialog.dismiss();
-                    Intent it = new Intent(activity, ByeByeActivity.class);
-                    activity.startActivity(it);
-                    activity.finish();
-                } else {
+            if(response == null){
+                progressCloseOrderDialog.dismiss();
+                FlygowAlertDialog.createWarningPopup(activity, StaticTitles.WARNING, StaticMessages.SELECT_ONE_PAYMENT_FORM);
+            }else{
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        progressCloseOrderDialog.dismiss();
+                        Intent it = new Intent(activity, ByeByeActivity.class);
+                        activity.startActivity(it);
+                        activity.finish();
+                    } else {
+                        //FINISH LOADING...
+                        progressCloseOrderDialog.dismiss();
+                        Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    }
+                } catch (Exception e) {
                     //FINISH LOADING...
                     progressCloseOrderDialog.dismiss();
-                    Toast.makeText(activity, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                    Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
+                    Toast.makeText(activity, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
                 }
-            } catch (Exception e) {
-                //FINISH LOADING...
-                progressCloseOrderDialog.dismiss();
-                Log.i(MAIN_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
-                Toast.makeText(activity, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
             }
         }
 
