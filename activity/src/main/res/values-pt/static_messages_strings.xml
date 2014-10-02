@@ -53,5 +53,7 @@
     <string name="newAttendanceMsg">Para seguir a um novo atendimento, por favor digite a senha de segurança…</string>
     <string name="allItemsSended">Não há pedidos para serem enviados. \nPara selecionar mais produtos, clique em \'Pedir mais Produtos\', escolha seus itens e depois envie-os novamente clicando em \'Confirmar Pedido\'.</string>
     <string name="confirmSendOrder">Confirma o pedido de suas escolhas abaixo?</string>
+    <string name="orderItemsNotSended">Nem todos os pedidos foram enviados para o atendimento. Para fechar sua conta, será necessário que primeiro você cancele os itens que não estão marcados com o ícone verde.</string>
+    <string name="withoutOrder">É necessário fazer um pedido para realizar o fechamento da conta.</string>
     <string name="generic"/>
 </resources>

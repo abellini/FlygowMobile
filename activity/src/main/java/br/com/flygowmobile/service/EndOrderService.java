@@ -16,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.App;
@@ -27,8 +28,12 @@ import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
 import br.com.flygowmobile.database.RepositoryTablet;
+import br.com.flygowmobile.entity.Order;
+import br.com.flygowmobile.entity.OrderItem;
 import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.AlertMessageTypeEnum;
+import br.com.flygowmobile.enums.OrderItemStatusEnum;
+import br.com.flygowmobile.enums.OrderStatusTypeEnum;
 import br.com.flygowmobile.enums.ServerController;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
@@ -58,45 +63,56 @@ public class EndOrderService {
     }
 
     public void endOrder(final boolean onlyCloseOrder, final Map<Long, CheckBox> paymentFormSelects){
-        AlertDialog dialog = null;
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        String popupTitle = StaticTitles.CLOSING_ORDER.getName();
-        builder.setTitle(popupTitle);
-        builder.setMessage(StaticMessages.CONFIRM_CLOSING_ATTENDANCE.getName());
-        builder.setPositiveButton(StaticTitles.YES.getName(), new
-            DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    if(onlyCloseOrder){
-                        final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
-                        alertDialog.setTitle(StaticTitles.INFORMATION.getName());
-                        alertDialog.setMessage(StaticMessages.ONLY_CLOSE_ORDER.getName());
-                        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, StaticTitles.OK.getName(), new DialogInterface.OnClickListener() {
+        Order order = repositoryOrder.getByStatusType(OrderStatusTypeEnum.OPENED.getId());
+        if(order != null){
+            List<OrderItem> items =
+                    repositoryOrderItem.listAllByOrderAndStatus(order.getOrderId(), OrderItemStatusEnum.OPENED.getId());
+            if(!onlyCloseOrder && items != null && !items.isEmpty()){
+                FlygowAlertDialog.createInfoPopup(activity, StaticTitles.INFORMATION, StaticMessages.ORDER_ITEMS_NOT_SENDED);
+            }else{
+                AlertDialog dialog = null;
+                AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                String popupTitle = StaticTitles.CLOSING_ORDER.getName();
+                builder.setTitle(popupTitle);
+                builder.setMessage(StaticMessages.CONFIRM_CLOSING_ATTENDANCE.getName());
+                builder.setPositiveButton(StaticTitles.YES.getName(), new
+                        DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                resetTabletOrder(true);
-                                alertDialog.dismiss();
+                                if(onlyCloseOrder){
+                                    final AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+                                    alertDialog.setTitle(StaticTitles.INFORMATION.getName());
+                                    alertDialog.setMessage(StaticMessages.ONLY_CLOSE_ORDER.getName());
+                                    alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, StaticTitles.OK.getName(), new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            resetTabletOrder(true);
+                                            alertDialog.dismiss();
+                                        }
+                                    });
+                                    // Set the Icon for the Dialog
+                                    alertDialog.setIcon(R.drawable.ic_dialog_info);
+                                    alertDialog.show();
+                                }else{
+                                    progressCloseOrderDialog = ProgressDialog.show(activity, StaticTitles.SENDING.getName(),
+                                            StaticMessages.SEND_CLOSE_ORDER.getName(), true);
+                                    mCloseAttendanceTask = new CloseAttendanceTask(paymentFormSelects);
+                                    mCloseAttendanceTask.execute((Void) null);
+                                }
+                                dialog.dismiss();
                             }
                         });
-                        // Set the Icon for the Dialog
-                        alertDialog.setIcon(R.drawable.ic_dialog_info);
-                        alertDialog.show();
-                    }else{
-                        progressCloseOrderDialog = ProgressDialog.show(activity, StaticTitles.SENDING.getName(),
-                                StaticMessages.SEND_CLOSE_ORDER.getName(), true);
-                        mCloseAttendanceTask = new CloseAttendanceTask(paymentFormSelects);
-                        mCloseAttendanceTask.execute((Void) null);
-                    }
-                    dialog.dismiss();
-                }
-            });
-        builder.setNegativeButton(StaticTitles.NO.getName(), new
-            DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                }
-            });
-        dialog = builder.create();
-        dialog.setIcon(R.drawable.question_title);
-        dialog.show();
+                builder.setNegativeButton(StaticTitles.NO.getName(), new
+                        DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                dialog = builder.create();
+                dialog.setIcon(R.drawable.question_title);
+                dialog.show();
+            }
+        }else{
+            FlygowAlertDialog.createInfoPopup(activity, StaticTitles.INFORMATION, StaticMessages.WITHOUT_ORDER);
+        }
     }
 
     public void resetTabletOrder(boolean toMainActivity){

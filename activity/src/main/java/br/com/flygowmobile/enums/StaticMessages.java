@@ -59,6 +59,8 @@ public enum StaticMessages {
     NEW_ATTENDANCE(R.string.newAttendanceMsg),
     ALL_ITEMS_SENDED(R.string.allItemsSended),
     CONFIRM_SEND_ORDER(R.string.confirmSendOrder),
+    ORDER_ITEMS_NOT_SENDED(R.string.orderItemsNotSended),
+    WITHOUT_ORDER(R.string.withoutOrder),
     GENERIC(R.string.generic, "");
 
     private int resId;

@@ -53,5 +53,7 @@
     <string name="newAttendanceMsg">To follow a new attendance, please enter the security password…</string>
     <string name="allItemsSended">Don\'t have item to be send. \nTo select more products, click on \'More Products\', choose your items and then send them again by clicking \'Send Order\'.</string>
     <string name="confirmSendOrder">Confirms the order of your choices above?</string>
+    <string name="orderItemsNotSended">Not all items were sent to the service. To close your account, first you will need to cancel items that are not marked with a green icon.</string>
+    <string name="withoutOrder">You must make a order to perform the closure of the account.</string>
     <string name="generic"/>
 </resources>
