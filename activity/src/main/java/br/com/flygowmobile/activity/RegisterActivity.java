@@ -292,52 +292,58 @@ public class RegisterActivity extends Activity {
                 return ServiceHandler.makeServiceCall(url, ServiceHandler.POST, Arrays.asList(tabletJsonPair, isReconnectPair, isChangeConfigurationPair, previousTabletNumberPair));
             } catch (HttpHostConnectException ex) {
                 Log.i(REGISTER_ACTIVITY, StaticMessages.TIMEOUT.getName());
-                Toast.makeText(RegisterActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
+                return StaticMessages.TIMEOUT.getName();
             } catch (Exception e) {
                 Log.i(REGISTER_ACTIVITY, StaticMessages.NOT_SERVICE.getName());
-                Toast.makeText(RegisterActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
+                return StaticMessages.NOT_SERVICE.getName();
             }
-            return "";
         }
 
         @Override
         protected void onPostExecute(final String response) {
             mRegisterTask = null;
-
             Log.i(REGISTER_ACTIVITY, "Service: " + response);
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-                Boolean success = jsonObject.getBoolean("success");
-                if (success) {
-                    progressRegisterDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, StaticMessages.SUCCESS_SAVE_IN_SERVER.getName(), Toast.LENGTH_LONG).show();
-                    progressLocalRegisterDialog = ProgressDialog.show(RegisterActivity.this, StaticTitles.LOAD.getName(),
-                            StaticMessages.LOCAL_LOAD.getName(), true);
-
-                    saveTablet(tablet);
-                    Log.i(REGISTER_ACTIVITY, "Salved record(s)");
-
-                    //FINISH LOADING...
-                    progressLocalRegisterDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-
-                    Intent it = new Intent(RegisterActivity.this, RegisterDetailActivity.class);
-                    it.putExtra("jsonDetailDomain", jsonObject.toString());
-                    startActivity(it);
-
-                    finish();
-                } else {
-                    //FINISH LOADING...
-                    progressRegisterDialog.dismiss();
-                    Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
-                    mNumero.requestFocus();
-                }
-            } catch (Exception e) {
-                //FINISH LOADING...
+            if(StaticMessages.TIMEOUT.getName().equals(response)){
                 progressRegisterDialog.dismiss();
-                progressLocalRegisterDialog.dismiss();
-                Log.i(REGISTER_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
-                Toast.makeText(RegisterActivity.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this, StaticMessages.TIMEOUT.getName(), Toast.LENGTH_LONG).show();
+            }else if(StaticMessages.NOT_SERVICE.getName().equals(response)){
+                progressRegisterDialog.dismiss();
+                Toast.makeText(RegisterActivity.this, StaticMessages.NOT_SERVICE.getName(), Toast.LENGTH_LONG).show();
+            }else{
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    Boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        progressRegisterDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, StaticMessages.SUCCESS_SAVE_IN_SERVER.getName(), Toast.LENGTH_LONG).show();
+                        progressLocalRegisterDialog = ProgressDialog.show(RegisterActivity.this, StaticTitles.LOAD.getName(),
+                                StaticMessages.LOCAL_LOAD.getName(), true);
+
+                        saveTablet(tablet);
+                        Log.i(REGISTER_ACTIVITY, "Salved record(s)");
+
+                        //FINISH LOADING...
+                        progressLocalRegisterDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+
+                        Intent it = new Intent(RegisterActivity.this, RegisterDetailActivity.class);
+                        it.putExtra("jsonDetailDomain", jsonObject.toString());
+                        startActivity(it);
+
+                        finish();
+                    } else {
+                        //FINISH LOADING...
+                        progressRegisterDialog.dismiss();
+                        Toast.makeText(RegisterActivity.this, jsonObject.getString("message"), Toast.LENGTH_LONG).show();
+                        mNumero.requestFocus();
+                    }
+                } catch (Exception e) {
+                    //FINISH LOADING...
+                    progressRegisterDialog.dismiss();
+                    progressLocalRegisterDialog.dismiss();
+                    Log.i(REGISTER_ACTIVITY, StaticMessages.EXCEPTION.getName(), e);
+                    Toast.makeText(RegisterActivity.this, StaticMessages.EXCEPTION.getName(), Toast.LENGTH_LONG).show();
+                }
             }
         }
 

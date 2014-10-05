@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Global Strings of Application - Static Messages-->
-    <string name="timeout">Timeout Call! Please, verify the server!</string>
+    <string name="timeout">Timeout Call/IP-Port missing server. Please, verify the server!</string>
     <string name="notService">Without Service!</string>
     <string name="wait">Please, wait. Application loading data…</string>
     <string name="localLoad">Getting data from server to the tablet database…</string>

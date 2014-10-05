@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Global Strings of Application - Static Messages-->
-    <string name="timeout">Excedido limite de tempo! Por favor, verifique o servidor!</string>
+    <string name="timeout">Excedido limite de tempo/IP-Porta do servidor inexistentes. Por favor, verifique o servidor!</string>
     <string name="notService">Fora de Serviço!</string>
     <string name="wait">Por favor aguarde. A aplicação está carregando os dados…</string>
     <string name="localLoad">Resgatando dados do servidor para a base de dados do tablet…</string>
