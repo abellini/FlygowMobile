@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -207,11 +208,13 @@ public class MainActivity extends Activity {
     private void alignFragmentToCenter(){
         alignAdvertisementFragmentToCenter();
         alignProductDetailsToCenter();
+        alignWelcomeTextToCenter();
     }
 
     private void alignFragmentToRight(){
         alignAdvertisementFragmentToRight();
         alignProductDetailsToRight();
+        alignWelcomeTextToRight();
     }
 
 
@@ -238,6 +241,28 @@ public class MainActivity extends Activity {
             view.setLayoutParams(layout);
         }catch(Exception e){
             Log.w(MAIN_ACTIVITY, "Dont Align Advertisement to CENTER");
+        }
+    }
+
+    private void alignWelcomeTextToCenter(){
+        try{
+            ImageView imageView = (ImageView)findViewById(R.id.text_welcome_screen);
+            ImageView imageViewCenter = (ImageView)findViewById(R.id.text_welcome_screen_center);
+            imageView.setVisibility(View.INVISIBLE);
+            imageViewCenter.setVisibility(View.VISIBLE);
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Welcome Text to CENTER");
+        }
+    }
+
+    private void alignWelcomeTextToRight(){
+        try{
+            ImageView imageView = (ImageView)findViewById(R.id.text_welcome_screen);
+            ImageView imageViewCenter = (ImageView)findViewById(R.id.text_welcome_screen_center);
+            imageView.setVisibility(View.VISIBLE);
+            imageViewCenter.setVisibility(View.INVISIBLE);
+        }catch(Exception e){
+            Log.w(MAIN_ACTIVITY, "Dont Align Welcome Text to RIGHT");
         }
     }
 
