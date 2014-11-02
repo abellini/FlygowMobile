@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import br.com.flygowmobile.Utils.FontUtils;
 import br.com.flygowmobile.Utils.FunctionUtils;
 import br.com.flygowmobile.activity.CartActivity;
 import br.com.flygowmobile.activity.MainActivity;
@@ -46,6 +46,7 @@ import br.com.flygowmobile.entity.OrderItemAccompaniment;
 import br.com.flygowmobile.entity.Product;
 import br.com.flygowmobile.entity.Promotion;
 import br.com.flygowmobile.entity.Tablet;
+import br.com.flygowmobile.enums.FontTypeEnum;
 import br.com.flygowmobile.enums.OrderItemStatusEnum;
 import br.com.flygowmobile.enums.OrderStatusTypeEnum;
 import br.com.flygowmobile.enums.ProductTypeEnum;
@@ -74,6 +75,7 @@ public class OrderService {
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
     private RepositoryFood repositoryFood;
     private RepositoryPromotion repositoryPromotion;
+    private FontUtils fontUtils;
 
     public OrderService(Context ctx){
         this.accompanimentMapper = new AccompanimentMapper(ctx);
@@ -85,6 +87,7 @@ public class OrderService {
         this.repositoryOrderItem = new RepositoryOrderItem(ctx);
         this.repositoryFood = new RepositoryFood(ctx);
         this.repositoryPromotion = new RepositoryPromotion(ctx);
+        this.fontUtils = new FontUtils(ctx);
     }
 
     public void orderAction(
@@ -241,11 +244,6 @@ public class OrderService {
                 .getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         qtdObservationsPopup = mInflater.inflate(R.layout.qtd_observations_popup_layout, null);
 
-        String fontChillerPath = "fonts/CHILLER.TTF";
-        String fontErasMediumPath = "fonts/ERASMD.TTF";
-
-        Typeface chiller = Typeface.createFromAsset(activity.getAssets(), fontChillerPath );
-        Typeface erasMedium = Typeface.createFromAsset(activity.getAssets(), fontErasMediumPath);
 
         TextView qtdTitleView = (TextView)qtdObservationsPopup.findViewById(R.id.qtdTitle);
         TextView qtdObsView = (TextView)qtdObservationsPopup.findViewById(R.id.obsTitle);
@@ -254,10 +252,8 @@ public class OrderService {
         TextView obsSubTitleView = (TextView)qtdObservationsPopup.findViewById(R.id.obsSubTitle);
         EditText obsDescView = (EditText)qtdObservationsPopup.findViewById(R.id.obsDesc);
 
-        qtdTitleView.setTypeface(chiller);
-        qtdObsView.setTypeface(chiller);
-        quantityView.setTypeface(erasMedium);
-        obsDescView.setTypeface(erasMedium);
+        fontUtils.applyFont(FontTypeEnum.LOGOTYPE, qtdTitleView, qtdObsView);
+        fontUtils.applyFont(FontTypeEnum.GENERAL_DESCRIPTIONS, quantityView, obsDescView);
 
         qtdTitleView.setText(StaticTitles.QUANTITY_CHOICES.getName());
         qtdObsView.setText(StaticTitles.ENTER_OBSERVATIONS.getName());

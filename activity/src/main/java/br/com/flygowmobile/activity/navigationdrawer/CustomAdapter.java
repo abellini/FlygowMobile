@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,16 +15,20 @@ import android.widget.TextView;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import br.com.flygowmobile.Utils.FontUtils;
 import br.com.flygowmobile.activity.R;
+import br.com.flygowmobile.enums.FontTypeEnum;
 
 public class CustomAdapter extends BaseAdapter {
 
-    Context context;
-    List<RowItem> rowItem;
+    private Context context;
+    private List<RowItem> rowItem;
+    private FontUtils fontUtils;
 
     public CustomAdapter(Context context, List<RowItem> rowItem) {
         this.context = context;
         this.rowItem = rowItem;
+        this.fontUtils = new FontUtils(this.context);
     }
 
 
@@ -66,11 +69,12 @@ public class CustomAdapter extends BaseAdapter {
         } else {
             if (row_pos.isTitle()) {
                 convertView = mInflater.inflate(R.layout.drawer_menu_title_item, null);
-                String fontChillerPath = "fonts/CHILLER.TTF";
-                Typeface chiller = Typeface.createFromAsset(context.getAssets(), fontChillerPath);
+
                 TextView txtTitle = (TextView) convertView.findViewById(R.id.menu_title);
                 TextView txtDescr = (TextView) convertView.findViewById(R.id.menu_description);
-                txtTitle.setTypeface(chiller);
+
+                fontUtils.applyFont(FontTypeEnum.LOGOTYPE, txtTitle);
+
                 txtTitle.setText(row_pos.getTitle());
                 txtDescr.setText(row_pos.getSubtitle());
             } else {

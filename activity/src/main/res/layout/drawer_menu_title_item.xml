@@ -1,32 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
 >
     <!-- title -->
     <TextView
         android:id="@+id/menu_title"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:gravity="center_horizontal"
-        android:textSize="70px"
-        android:textColor="#6f2020"
-        android:clickable="false"
-        android:layout_marginTop="10px"
-        />
-
-    <!-- Image -->
-    <ImageView
-        android:id="@+id/titleMenuIcon"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
+        android:textSize="56px"
+        android:textColor="#083248"
         android:clickable="false"
-        android:layout_alignParentLeft="true"
-        android:background="@drawable/food_identifier"
-        android:layout_marginTop="20px"
-        android:layout_marginLeft="30px"
-    />
+        android:layout_marginTop="12dp"
+        />
+
 
     <!-- description -->
     <TextView
@@ -35,7 +23,7 @@
         android:layout_height="fill_parent"
         android:gravity="center_horizontal"
         android:textSize="15px"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/menu_title"
         android:textStyle="italic"
         android:textColor="#545454"
         android:clickable="false"

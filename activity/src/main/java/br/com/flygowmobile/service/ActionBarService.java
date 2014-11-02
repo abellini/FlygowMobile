@@ -3,39 +3,23 @@ package br.com.flygowmobile.service;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Typeface;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.conn.HttpHostConnectException;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.flygowmobile.Utils.App;
-import br.com.flygowmobile.activity.CartActivity;
+import br.com.flygowmobile.Utils.FontUtils;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.activity.navigationdrawer.PaymentFormAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.PaymentFormRowItem;
 import br.com.flygowmobile.database.RepositoryPaymentForm;
-import br.com.flygowmobile.database.RepositoryTablet;
-import br.com.flygowmobile.entity.Tablet;
-import br.com.flygowmobile.enums.AlertMessageTypeEnum;
-import br.com.flygowmobile.enums.ServerController;
+import br.com.flygowmobile.enums.FontTypeEnum;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.mapper.PaymentFormMapper;
@@ -49,12 +33,9 @@ public class ActionBarService {
     private EndOrderService endOrderService;
     private CallAttendantService callAttendantService;
     private View actionBarView;
-
     private Map<Long, CheckBox> paymentFormSelects;
-
-    private RepositoryTablet repositoryTablet;
     private RepositoryPaymentForm repositoryPaymentForm;
-
+    private FontUtils fontUtils;
 
     private static final String MAIN_ACTIVITY = "MainActivity";
 
@@ -64,10 +45,8 @@ public class ActionBarService {
         this.orderService = new OrderService(activity);
         this.callAttendantService = new CallAttendantService(activity);
         this.endOrderService = new EndOrderService(activity);
-
-        repositoryTablet = new RepositoryTablet(activity);
+        this.fontUtils = new FontUtils(activity);
         repositoryPaymentForm = new RepositoryPaymentForm(activity);
-
         paymentFormSelects = new HashMap<Long, CheckBox>();
     }
 
@@ -90,9 +69,7 @@ public class ActionBarService {
     }
 
     private void defineTitleFont(TextView mTitleTextView){
-        String fontChillerPath = "fonts/CHILLER.TTF";
-        Typeface chiller = Typeface.createFromAsset(activity.getAssets(), fontChillerPath );
-        mTitleTextView.setTypeface(chiller);
+        fontUtils.applyFont(FontTypeEnum.LOGOTYPE, mTitleTextView);
     }
 
     public void defineActionButtons(){

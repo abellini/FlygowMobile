@@ -5,7 +5,6 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -30,11 +29,13 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.flygowmobile.Utils.App;
+import br.com.flygowmobile.Utils.FontUtils;
 import br.com.flygowmobile.Utils.MediaUtils;
 import br.com.flygowmobile.Utils.StringUtils;
 import br.com.flygowmobile.activity.R;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Product;
+import br.com.flygowmobile.enums.FontTypeEnum;
 import br.com.flygowmobile.enums.PositionsEnum;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
@@ -52,12 +53,14 @@ public class ProductFragment extends Fragment {
     private GestureDetector gestureDetector;
     private Activity activity;
     private OrderService orderService;
+    private FontUtils fontUtils;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        activity = getActivity();
-        orderService = new OrderService(activity);
+        this.activity = getActivity();
+        this.orderService = new OrderService(activity);
+        this.fontUtils = new FontUtils(activity);
         return null;
     }
 
@@ -70,17 +73,6 @@ public class ProductFragment extends Fragment {
     }
 
     protected void defineFonts(View rootView) {
-        // Font path
-        String fontGabriolaPath = "fonts/GABRIOLA.TTF";
-        String fontErasBoldPath = "fonts/ERASBD.TTF";
-        String fontErasMediumPath = "fonts/ERASMD.TTF";
-
-        // Loading Font Face
-        Typeface gabriola = Typeface.createFromAsset(activity.getAssets(), fontGabriolaPath);
-        Typeface erasBold = Typeface.createFromAsset(activity.getAssets(), fontErasBoldPath);
-        Typeface erasMedium = Typeface.createFromAsset(activity.getAssets(), fontErasMediumPath);
-
-
         // text view label
         TextView priceView = (TextView) rootView.findViewById(R.id.price);
         TextView clickHereView = (TextView) rootView.findViewById(R.id.clickHere);
@@ -88,13 +80,10 @@ public class ProductFragment extends Fragment {
         TextView titleView = (TextView) rootView.findViewById(R.id.title);
         TextView descriptionView = (TextView) rootView.findViewById(R.id.description);
 
-        // Applying font
-        priceView.setTypeface(gabriola);
-        clickHereView.setTypeface(gabriola);
-        pecaView.setTypeface(gabriola);
-
-        titleView.setTypeface(erasBold);
-        descriptionView.setTypeface(erasMedium);
+        // Applying fonts
+        fontUtils.applyFont(FontTypeEnum.PRICE_DESCRIPTIONS, priceView, clickHereView, pecaView);
+        fontUtils.applyFont(FontTypeEnum.PRODUCT_TITLE, titleView);
+        fontUtils.applyFont(FontTypeEnum.GENERAL_DESCRIPTIONS, descriptionView);
     }
 
     protected void defineDirectionalArrows(

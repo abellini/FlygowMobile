@@ -15,13 +15,13 @@
             android:layout_height="110dp"
             android:background="@drawable/title_round_shape"
             android:gravity="top|center_horizontal"
-            android:paddingTop="5dp"
+            android:paddingTop="13dp"
             android:paddingLeft="60dp"
             android:paddingRight="20dp"
             android:layout_centerInParent="true"
             android:layout_marginTop="20dp"
             android:textColor="#6f2020"
-            android:textSize="45dp"
+            android:textSize="28px"
             android:textStyle="bold"
         />
         <TextView

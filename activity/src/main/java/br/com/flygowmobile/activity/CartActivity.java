@@ -1,8 +1,6 @@
 package br.com.flygowmobile.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,8 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.flygowmobile.Utils.FontUtils;
 import br.com.flygowmobile.activity.navigationdrawer.OrderAdapter;
 import br.com.flygowmobile.activity.navigationdrawer.OrderRowItem;
+import br.com.flygowmobile.enums.FontTypeEnum;
 import br.com.flygowmobile.enums.StaticMessages;
 import br.com.flygowmobile.enums.StaticTitles;
 import br.com.flygowmobile.service.BuildCartActionBarService;
@@ -37,7 +37,7 @@ public class CartActivity extends Activity {
     private CartButtonActionsService cartButtonActionsService;
     private BuildCartActionBarService cartActionBarService;
     private Map<Long, CheckBox> selects = new HashMap<Long, CheckBox>();
-    private ProgressDialog progressSaveDialog;
+    private FontUtils fontUtils;
     private static final String CART_ACTIVITY = "CartActivity";
 
     @Override
@@ -62,6 +62,7 @@ public class CartActivity extends Activity {
         this.footer = (ViewGroup) inflater.inflate(R.layout.footer_order, null, false);
         this.orderService = new OrderService(this);
         this.cartButtonActionsService = new CartButtonActionsService(this, this.cartView);
+        this.fontUtils = new FontUtils(this);
 
         //Action Bar
         LayoutInflater mInflater = LayoutInflater.from(this);
@@ -101,18 +102,9 @@ public class CartActivity extends Activity {
     }
 
     private void defineFonts() {
-        // Font path
-        String fontChillerPath = "fonts/CHILLER.TTF";
-        Typeface chiller = Typeface.createFromAsset(getAssets(), fontChillerPath);
-
-        String fontErasPath = "fonts/ERASMD.TTF";
-        Typeface eras = Typeface.createFromAsset(getAssets(), fontErasPath);
-
         //Title
         TextView cartTitle = (TextView) this.cartView.findViewById(R.id.cartTitle);
         TextView cartSubTitle = (TextView) this.cartView.findViewById(R.id.cartSubTitle);
-        cartTitle.setTypeface(chiller);
-        cartSubTitle.setTypeface(eras);
 
         //Header
         TextView txtDescription = (TextView) this.header.findViewById(R.id.lblDescriptionOrder);
@@ -121,16 +113,19 @@ public class CartActivity extends Activity {
         TextView txtPriceUnit = (TextView) this.header.findViewById(R.id.lblPriceUnit);
         TextView txtPriceTotal = (TextView) this.header.findViewById(R.id.lblPriceTotal);
 
-        txtDescription.setTypeface(chiller);
-        txtQtde.setTypeface(chiller);
-        txtAccompaniments.setTypeface(chiller);
-        txtPriceUnit.setTypeface(chiller);
-        txtPriceTotal.setTypeface(chiller);
-
         // Footer
         TextView txtVlTotal = (TextView) this.footer.findViewById(R.id.lbTotalPedido);
-        txtVlTotal.setTypeface(chiller);
 
+        fontUtils.applyFont(FontTypeEnum.LOGOTYPE,
+                cartTitle,
+                txtDescription,
+                txtQtde,
+                txtAccompaniments,
+                txtPriceUnit,
+                txtPriceTotal,
+                txtVlTotal
+        );
+        fontUtils.applyFont(FontTypeEnum.GENERAL_DESCRIPTIONS, cartSubTitle);
     }
 
     private void fillCartOrders() {

@@ -8,11 +8,11 @@
         android:id="@+id/title_text"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:textColor="#6f2020"
+        android:textColor="#0c587f"
         android:layout_alignParentLeft="true"
         android:layout_marginTop="3dp"
         android:gravity="center_vertical"
-        android:textSize="40dp"
+        android:textSize="26px"
         android:textStyle="bold"
     />
 

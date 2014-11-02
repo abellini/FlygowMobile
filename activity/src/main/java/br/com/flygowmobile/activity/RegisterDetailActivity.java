@@ -34,7 +34,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import br.com.flygowmobile.Utils.App;
-import br.com.flygowmobile.Utils.ConversorUtil;
+import br.com.flygowmobile.Utils.ConversorUtils;
 import br.com.flygowmobile.Utils.FlygowAlertDialog;
 import br.com.flygowmobile.custom.MultiSelectionSpinner;
 import br.com.flygowmobile.database.RepositoryAccompaniment;
@@ -464,7 +464,7 @@ public class RegisterDetailActivity extends Activity {
                 Food food = new Food();
                 food.setFoodId(obj.getInt("id"));
                 food.setName(obj.getString("name"));
-                food.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                food.setValue(ConversorUtils.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
                 food.setDescription(obj.getString("description"));
                 food.setNutritionalInfo(obj.getString("nutritionalInfo"));
                 food.setMaxQtdAccompaniments(obj.getInt("maxQtdAccompaniments"));
@@ -485,7 +485,7 @@ public class RegisterDetailActivity extends Activity {
                 promotion.setPromotionId(obj.getInt("id"));
                 promotion.setName(obj.getString("name"));
                 promotion.setDescription(obj.getString("description"));
-                promotion.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                promotion.setValue(ConversorUtils.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
                 promotion.setPhotoName(obj.getString("photoName"));
                 promotion.setVideoName(obj.getString("videoName"));
 
@@ -502,7 +502,7 @@ public class RegisterDetailActivity extends Activity {
                     Food food = new Food();
                     food.setFoodId(obj.getInt("id"));
                     food.setName(obj.getString("name"));
-                    food.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                    food.setValue(ConversorUtils.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
                     food.setDescription(obj.getString("description"));
                     food.setNutritionalInfo(obj.getString("nutritionalInfo"));
                     food.setActive(Boolean.parseBoolean(obj.getString("active")));
@@ -545,7 +545,7 @@ public class RegisterDetailActivity extends Activity {
                 Accompaniment accompaniment = new Accompaniment();
                 accompaniment.setAccompanimentId(obj.getInt("id"));
                 accompaniment.setName(obj.getString("name"));
-                accompaniment.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                accompaniment.setValue(ConversorUtils.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
                 accompaniment.setDescription(obj.getString("description"));
                 accompaniment.setActive(obj.getBoolean("active"));
                 accompaniment.setCategoryId(obj.getInt("categoryId"));
@@ -563,7 +563,7 @@ public class RegisterDetailActivity extends Activity {
                     Accompaniment accompaniment = new Accompaniment();
                     accompaniment.setAccompanimentId(obj.getInt("id"));
                     accompaniment.setName(obj.getString("name"));
-                    accompaniment.setValue(ConversorUtil.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
+                    accompaniment.setValue(ConversorUtils.convertFromBaseCoin(obj.getDouble("value"), coin.getConversion()));
                     accompaniment.setDescription(obj.getString("description"));
                     accompaniment.setActive(obj.getBoolean("active"));
                     accompaniment.setCategoryId(obj.getInt("categoryId"));
