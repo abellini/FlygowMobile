@@ -12,7 +12,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="67dp"
-            android:textSize="30px"/>
+            android:textSize="18px"/>
 
         <TextView
             android:id="@+id/lblAccompaniments"
@@ -22,7 +22,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="231dp"
-            android:textSize="35dp" />
+            android:textSize="18dp" />
 
 
         <TextView
@@ -33,7 +33,7 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:layout_marginLeft="9dp"
-            android:textSize="35dp" />
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/lblPriceUnit"
@@ -42,8 +42,8 @@
             android:background="@drawable/title_round_shape"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:layout_marginLeft="9dp"
-            android:textSize="35dp" />
+            android:layout_marginLeft="30dp"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/lblPriceTotal"
@@ -52,6 +52,6 @@
             android:background="@drawable/title_round_shape"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:layout_marginLeft="9dp"
-            android:textSize="35dp" />
+            android:layout_marginLeft="27dp"
+            android:textSize="18dp" />
 </LinearLayout>

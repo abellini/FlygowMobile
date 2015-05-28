@@ -2,12 +2,12 @@
 <resources>
     <!-- Global Strings of Application - Static Titles-->
     <string name="error">Erro!</string>
-    <string name="warning">Atençao!</string>
+    <string name="warning">Cuidado!</string>
     <string name="loading">Carregando...</string>
     <string name="successful">Com sucesso!!</string>
     <string name="promotions">Promoções</string>
     <string name="information">Informaçao</string>
-    <string name="promotionInfo">Os itens inclusos nesta promoçao são:</string>
+    <string name="promotionInfo">Itens inclusos:</string>
     <string name="menu">Menu</string>
     <string name="subtitleMenu">Escolha a partir das opções abaixo!</string>
     <string name="makeOrder">Finalize seu pedido!</string>
@@ -15,7 +15,7 @@
     <string name="continueTitle">Continuar</string>
     <string name="cancel">Cancelar</string>
     <string name="quantityChoices">Escolha a Quantidade</string>
-    <string name="enterObservations">Escreva as Observaçoes</string>
+    <string name="enterObservations">Mais detalhes...</string>
     <string name="mainAppTitle">Digital Menu</string>
     <string name="yourAccount">Sua conta</string>
     <string name="callAttendant">Chamando Atendente</string>
@@ -23,15 +23,15 @@
     <string name="no">Não</string>
     <string name="cartTitle">Meus Pedidos</string>
     <string name="cartSubTitle">Confira seus pedidos e confirme-os \n clicando em \'Confirmar Pedido\'</string>
-    <string name="cartHeaderDescription">Descrição</string>
+    <string name="cartHeaderDescription">Descritivo</string>
     <string name="cartHeaderAccompaniments">Acompanhamentos</string>
     <string name="cartHeaderQuantity">Quantidade</string>
     <string name="cartHeaderUnitValue">Val. Unit</string>
-    <string name="cartHeaderTotalValue">Val. Total</string>
+    <string name="cartHeaderTotalValue">Total</string>
     <string name="cartRowAccTitle">Clique Aqui!</string>
     <string name="cartRowAccSubTitle">Veja os Selecionados</string>
     <string name="cartCancelItem">Cancelar Item</string>
-    <string name="exitApp">Sair da Aplicação</string>
+    <string name="exitApp">Sair do Digital Menu</string>
     <string name="accompanimentsInfo">Acompanhamentos Escolhidos</string>
     <string name="choosePaymentForm">Escolha sua forma de pagamento!"</string>
     <string name="closingOrder">Encerrando seu atendimento…</string>

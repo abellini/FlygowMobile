@@ -116,7 +116,7 @@ public class CartActivity extends Activity {
         // Footer
         TextView txtVlTotal = (TextView) this.footer.findViewById(R.id.lbTotalPedido);
 
-        fontUtils.applyFont(FontTypeEnum.LOGOTYPE,
+        fontUtils.applyFont(FontTypeEnum.PRODUCT_TITLE,
                 cartTitle,
                 txtDescription,
                 txtQtde,
@@ -125,6 +125,7 @@ public class CartActivity extends Activity {
                 txtPriceTotal,
                 txtVlTotal
         );
+
         fontUtils.applyFont(FontTypeEnum.GENERAL_DESCRIPTIONS, cartSubTitle);
     }
 

@@ -28,7 +28,7 @@
     <string name="cartHeaderAccompaniments">Accompaniments</string>
     <string name="cartHeaderQuantity">Quantity</string>
     <string name="cartHeaderUnitValue">Unit. Val</string>
-    <string name="cartHeaderTotalValue">Total. Val</string>
+    <string name="cartHeaderTotalValue">Total</string>
     <string name="cartRowAccTitle">Click Here!</string>
     <string name="cartRowAccSubTitle">View the selected</string>
     <string name="cartCancelItem">Cancel Item</string>

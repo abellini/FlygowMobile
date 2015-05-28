@@ -37,7 +37,7 @@
     <string name="confirmCallAttendant">Clique em \'Sim\' para chamar o atendente.</string>
     <string name="calledAttendant">O atendente foi chamado. Por favor aguarde até que ele venha a sua mesa.</string>
     <string name="callAttendantError">Houve um erro ao chamar o atendente. Por favor, chame-o da maneira convencional.</string>
-    <string name="cartTotalValue">O valor total deste pedido é: </string>
+    <string name="cartTotalValue">Valor total do pedido: </string>
     <string name="saveOrderFromServer">Por favor, aguarde enquanto enviamos seu pedido!</string>
     <string name="priceDescription">faça seu pedido…</string>
     <string name="priceSubdescription">basta clicar aqui!</string>
