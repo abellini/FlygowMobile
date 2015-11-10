@@ -32,11 +32,13 @@ import br.com.flygowmobile.database.RepositoryOrder;
 import br.com.flygowmobile.database.RepositoryOrderItem;
 import br.com.flygowmobile.database.RepositoryOrderItemAccompaniment;
 import br.com.flygowmobile.database.RepositoryPromotion;
+import br.com.flygowmobile.database.RepositoryTablet;
 import br.com.flygowmobile.entity.Accompaniment;
 import br.com.flygowmobile.entity.Food;
 import br.com.flygowmobile.entity.Order;
 import br.com.flygowmobile.entity.OrderItem;
 import br.com.flygowmobile.entity.Promotion;
+import br.com.flygowmobile.entity.Tablet;
 import br.com.flygowmobile.enums.OrderItemStatusEnum;
 import br.com.flygowmobile.enums.ProductTypeEnum;
 import br.com.flygowmobile.enums.ServerController;
@@ -56,6 +58,7 @@ public class CartButtonActionsService {
     private RegisterOrderTask mRegisterTask = null;
     private RepositoryFood repositoryFood;
     private RepositoryPromotion repositoryPromotion;
+    private RepositoryTablet repositoryTablet;
     private RepositoryOrder repositoryOrder;
     private RepositoryOrderItem repositoryOrderItem;
     private RepositoryOrderItemAccompaniment repositoryOrderItemAccompaniment;
@@ -67,6 +70,7 @@ public class CartButtonActionsService {
 
         this.repositoryFood = new RepositoryFood(activity);
         this.repositoryPromotion = new RepositoryPromotion(activity);
+        this.repositoryTablet = new RepositoryTablet(activity);
         this.repositoryOrder = new RepositoryOrder(activity);
         this.repositoryOrderItem = new RepositoryOrderItem(activity);
         this.repositoryOrderItemAccompaniment = new RepositoryOrderItemAccompaniment(activity);
@@ -207,8 +211,8 @@ public class CartButtonActionsService {
         @Override
         protected String doInBackground(Void... params) {
             try {
-
                 Order order = orderService.getCurrentOrder();
+                Tablet tablet = repositoryTablet.findById(order.getTabletId());
                 order.setTotalValue(orderService.getTotalOrderValue());
                 if(orderItemsList != null && !orderItemsList.isEmpty()){
                     JSONObject jsonOrderObject = new JSONObject();
@@ -222,7 +226,7 @@ public class CartButtonActionsService {
                         jsonArray.put(orderItem.toJSONObject());
                     }
                     try {
-                        jsonOrderObject.put("order", order.toJSONObject());
+                        jsonOrderObject.put("order", order.toJSONObject().put("tabletNumber", tablet.getNumber()));
                         jsonOrderObject.put("orderItens", jsonArray);
                     } catch (JSONException e) {
                         Log.i(CART_ACTIVITY, "Erro" + e);
