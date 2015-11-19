@@ -63,7 +63,7 @@ public class BuildMainActionBarService extends ActionBarService{
     }
 
     public void buildActionBar(){
-        super.buildActionBar();
+        super.buildActionBar(true);
         refreshActionBarPrice();
     }
 

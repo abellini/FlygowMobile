@@ -68,7 +68,7 @@ public class CartActivity extends Activity {
         LayoutInflater mInflater = LayoutInflater.from(this);
         View actionBarView = mInflater.inflate(R.layout.cart_action_bar, null);
         cartActionBarService = new BuildCartActionBarService(this, actionBarView);
-        cartActionBarService.buildActionBar();
+        cartActionBarService.buildActionBar(false);
 
         defineTexts();
         defineFonts();

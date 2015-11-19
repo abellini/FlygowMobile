@@ -50,10 +50,10 @@ public class ActionBarService {
         paymentFormSelects = new HashMap<Long, CheckBox>();
     }
 
-    public void buildActionBar(){
+    public void buildActionBar(boolean enableHomeBtn){
         ActionBar actionBar = activity.getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(enableHomeBtn);
+        actionBar.setHomeButtonEnabled(enableHomeBtn);
 
         defineActionTitle();
         defineActionButtons();
