@@ -576,7 +576,7 @@ public class MainActivity extends Activity {
                                         MainActivity.this,
                                         serverUrl,
                                         Food.class.getSimpleName(),
-                                        Integer.parseInt(food.getFoodId() + ""),
+                                        Integer.valueOf(food.getFoodId() + ""),
                                         food.getVideoName()
                                 );
                             } catch (IOException e) {
